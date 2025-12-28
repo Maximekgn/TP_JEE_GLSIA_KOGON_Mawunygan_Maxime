@@ -5,45 +5,42 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "comptes")
-public class Compte {
+@Table(name = "accounts")
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String numeroCompte;
+    @Column(name = "account_number", unique = true, nullable = false)
+    private String accountNumber;
 
-    private String typeCompte;
+    @Column(name = "account_type")
+    private String accountType;
 
-    private LocalDate dateCreation;
+    @Column(name = "creation_date")
+    private LocalDate creationDate;
 
-    private Double solde = 0.0;
+    @Column(name = "balance")
+    private Double balance = 0.0;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
-    private Client proprietaire;
+    private Client owner;
 
-    public Compte() {
+    // --- Constructors ---
+
+    public Account() {
     }
 
-    public Compte(LocalDate dateCreation, Long id, String numeroCompte, Client proprietaire, String typeCompte) {
-        this.dateCreation = dateCreation;
-        this.id = id;
-        this.numeroCompte = numeroCompte;
-        this.proprietaire = proprietaire;
-
-        this.typeCompte = typeCompte;
+    public Account(LocalDate creationDate, String accountNumber, Client owner, String accountType) {
+        this.creationDate = creationDate;
+        this.accountNumber = accountNumber;
+        this.owner = owner;
+        this.accountType = accountType;
     }
 
-    public LocalDate getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(LocalDate dateCreation) {
-        this.dateCreation = dateCreation;
-    }
+    // --- Getters & Setters ---
 
     public Long getId() {
         return id;
@@ -53,47 +50,59 @@ public class Compte {
         this.id = id;
     }
 
-    public String getNumeroCompte() {
-        return numeroCompte;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setNumeroCompte(String numeroCompte) {
-        this.numeroCompte = numeroCompte;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
-    public Client getProprietaire() {
-        return proprietaire;
+    public String getAccountType() {
+        return accountType;
     }
 
-    public void setProprietaire(Client proprietaire) {
-        this.proprietaire = proprietaire;
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
-    public Double getSolde() {
-        return solde;
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
-    public void setSolde(Double solde) {
-        this.solde = solde;
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public String getTypeCompte() {
-        return typeCompte;
+    public Double getBalance() {
+        return balance;
     }
 
-    public void setTypeCompte(String typeCompte) {
-        this.typeCompte = typeCompte;
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
+
+    public Client getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Client owner) {
+        this.owner = owner;
+    }
+
+    // --- equals & hashCode ---
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Compte compte = (Compte) o;
-        return Objects.equals(id, compte.id) && Objects.equals(numeroCompte, compte.numeroCompte) && Objects.equals(typeCompte, compte.typeCompte) && Objects.equals(dateCreation, compte.dateCreation) && Objects.equals(solde, compte.solde) && Objects.equals(proprietaire, compte.proprietaire);
+        Account account = (Account) o;
+        return Objects.equals(id, account.id)
+                && Objects.equals(accountNumber, account.accountNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, numeroCompte, typeCompte, dateCreation, solde, proprietaire);
+        return Objects.hash(id, accountNumber);
     }
 }

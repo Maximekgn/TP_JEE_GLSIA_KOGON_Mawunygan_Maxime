@@ -1,7 +1,7 @@
 package com.backend.ega.services;
 
-import com.backend.ega.entities.Compte;
-import com.backend.ega.repositories.ComptesRepository;
+import com.backend.ega.entities.Account;
+import com.backend.ega.repositories.AccountsRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,52 +10,54 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ComptesService {
-    private final ComptesRepository comptesRepository;
+public class AccountsService {
 
-    public ComptesService(ComptesRepository comptesRepository) {
-        this.comptesRepository = comptesRepository;
+    private final AccountsRepository accountsRepository;
+
+    public AccountsService(AccountsRepository accountsRepository) {
+        this.accountsRepository = accountsRepository;
     }
 
-    public List<Compte> getAllComptes() {
-        return comptesRepository.findAll();
+    public List<Account> getAllAccounts() {
+        return accountsRepository.findAll();
     }
 
-    public ResponseEntity<Compte> getCompteById(Long id) {
-        return this.comptesRepository.findById(id)
-                .map(compte -> new ResponseEntity<>(compte, HttpStatus.OK))
+    public ResponseEntity<Account> getAccountById(Long id) {
+        return accountsRepository.findById(id)
+                .map(account -> new ResponseEntity<>(account, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    public ResponseEntity<Compte> createCompte(Compte compte) {
-        Compte compteSauvegarde = this.comptesRepository.save(compte);
-        return new ResponseEntity<>(compteSauvegarde, HttpStatus.CREATED);
+    public ResponseEntity<Account> createAccount(Account account) {
+        Account savedAccount = accountsRepository.save(account);
+        return new ResponseEntity<>(savedAccount, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Compte> updateCompte(Long id, Compte compteDetails) {
-        return this.comptesRepository.findById(id)
-                .map(compte -> {
-                    compte.setNumeroCompte(compteDetails.getNumeroCompte());
-                    compte.setTypeCompte(compteDetails.getTypeCompte());
-                    compte.setDateCreation(compteDetails.getDateCreation());
-                    compte.setSolde(compteDetails.getSolde());
-                    Compte compteMaj = this.comptesRepository.save(compte);
-                    return new ResponseEntity<>(compteMaj, HttpStatus.OK);
+    public ResponseEntity<Account> updateAccount(Long id, Account accountDetails) {
+        return accountsRepository.findById(id)
+                .map(account -> {
+                    account.setAccountNumber(accountDetails.getAccountNumber());
+                    account.setAccountType(accountDetails.getAccountType());
+                    account.setCreationDate(accountDetails.getCreationDate());
+                    account.setBalance(accountDetails.getBalance());
+
+                    Account updatedAccount = accountsRepository.save(account);
+                    return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    public ResponseEntity<Void> deleteCompte(Long id) {
-        if (this.comptesRepository.existsById(id)) {
-            this.comptesRepository.deleteById(id);
+    public ResponseEntity<Void> deleteAccount(Long id) {
+        if (accountsRepository.existsById(id)) {
+            accountsRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    public List<Compte> getComptesParClient(Long clientId) {
-        return this.comptesRepository.findAll().stream()
-                .filter(compte -> compte.getProprietaire().getId().equals(clientId))
+    public List<Account> getAccountsByClient(Long clientId) {
+        return accountsRepository.findAll().stream()
+                .filter(account -> account.getOwner().getId().equals(clientId))
                 .collect(Collectors.toList());
     }
 }

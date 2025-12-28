@@ -14,72 +14,46 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String nom;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
-    @Column(nullable = false)
-    private String prenom;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
 
-    private LocalDate dateNaissance;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
-    private String sexe;
+    @Column(name = "gender")
+    private String gender;
 
-    private String adresse;
+    @Column(name = "address")
+    private String address;
 
-    private String telephone;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-    @Column(unique = true)
-    private String courriel;
+    @Column(name = "email", unique = true)
+    private String email;
 
-    private String nationalite;
+    @Column(name = "nationality")
+    private String nationality;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Account> accounts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "proprietaire", cascade = CascadeType.ALL)
-    private List<Compte> comptes = new ArrayList<>();
-
-
+    // --- Constructors ---
 
     public Client() {
     }
 
-    public Client(String nom, String prenom, String courriel, String telephone) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.courriel = courriel;
-        this.telephone = telephone;
+    public Client(String lastName, String firstName, String email, String phoneNumber) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
-
-    public List<Compte> getComptes() {
-        return comptes;
-    }
-
-    public void setComptes(List<Compte> comptes) {
-        this.comptes = comptes;
-    }
-
-    public String getCourriel() {
-        return courriel;
-    }
-
-    public void setCourriel(String courriel) {
-        this.courriel = courriel;
-    }
-
-    public LocalDate getDateNaissance() {
-        return dateNaissance;
-    }
-
-    public void setDateNaissance(LocalDate dateNaissance) {
-        this.dateNaissance = dateNaissance;
-    }
+    // --- Getters & Setters ---
 
     public Long getId() {
         return id;
@@ -89,55 +63,91 @@ public class Client {
         this.id = id;
     }
 
-    public String getNationalite() {
-        return nationalite;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setNationalite(String nationalite) {
-        this.nationalite = nationalite;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getNom() {
-        return nom;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public String getSexe() {
-        return sexe;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSexe(String sexe) {
-        this.sexe = sexe;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getAddress() {
+        return address;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setAddress(String address) {
+        this.address = address;
     }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    // --- equals & hashCode ---
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(nom, client.nom) && Objects.equals(prenom, client.prenom) && Objects.equals(dateNaissance, client.dateNaissance) && Objects.equals(sexe, client.sexe) && Objects.equals(adresse, client.adresse) && Objects.equals(telephone, client.telephone) && Objects.equals(courriel, client.courriel) && Objects.equals(nationalite, client.nationalite) && Objects.equals(comptes, client.comptes);
+        return Objects.equals(id, client.id)
+                && Objects.equals(email, client.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nom, prenom, dateNaissance, sexe, adresse, telephone, courriel, nationalite, comptes);
+        return Objects.hash(id, email);
     }
 }

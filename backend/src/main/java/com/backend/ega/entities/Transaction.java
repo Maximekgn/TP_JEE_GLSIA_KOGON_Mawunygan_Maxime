@@ -1,5 +1,6 @@
 package com.backend.ega.entities;
 
+import com.backend.ega.entities.enums.TransactionType;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,57 +13,88 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double montant;
+    @Column(name = "amount", nullable = false)
+    private Double amount;
 
-    private LocalDateTime dateTransaction;
+    @Column(name = "transaction_date", nullable = false)
+    private LocalDateTime transactionDate;
 
-    private String typeTransaction; // Ex: "VERSEMENT", "RETRAIT", "VIREMENT"
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_type", nullable = false)
+    private TransactionType transactionType;
 
     @ManyToOne
-    @JoinColumn(name = "compte_source_id", nullable = false)
-    private Compte compteSource;
+    @JoinColumn(name = "source_account_id", nullable = false)
+    private Account sourceAccount;
 
     @ManyToOne
-    @JoinColumn(name = "compte_destination_id")
-    private Compte compteDestination; // Utilisé uniquement pour les virements
+    @JoinColumn(name = "destination_account_id")
+    private Account destinationAccount; // Used only for transfers
 
+    @Column(name = "description")
     private String description;
 
-    // --- Constructeurs ---
+    // --- Constructors ---
 
     public Transaction() {
-        this.dateTransaction = LocalDateTime.now();
+        this.transactionDate = LocalDateTime.now();
     }
 
-    public Transaction(Double montant, String typeTransaction, Compte compteSource) {
-        this.montant = montant;
-        this.typeTransaction = typeTransaction;
-        this.compteSource = compteSource;
-        this.dateTransaction = LocalDateTime.now();
+    public Transaction(Double amount, TransactionType transactionType, Account sourceAccount) {
+        this.amount = amount;
+        this.transactionType = transactionType;
+        this.sourceAccount = sourceAccount;
+        this.transactionDate = LocalDateTime.now();
     }
 
-    public Compte getCompteDestination() {
-        return compteDestination;
+    // --- Getters & Setters ---
+
+    public Long getId() {
+        return id;
     }
 
-    public void setCompteDestination(Compte compteDestination) {
-        this.compteDestination = compteDestination;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Compte getCompteSource() {
-        return compteSource;
+    public Double getAmount() {
+        return amount;
     }
 
-    public void setCompteSource(Compte compteSource) {
-        this.compteSource = compteSource;
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
-    public LocalDateTime getDateTransaction() {
-        return dateTransaction;
+    public LocalDateTime getTransactionDate() {
+        return transactionDate;
     }
 
-    public void setDateTransaction(LocalDateTime dateTransaction) {
-        this.dateTransaction = dateTransaction;
+    public void setTransactionDate(LocalDateTime transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public Account getSourceAccount() {
+        return sourceAccount;
+    }
+
+    public void setSourceAccount(Account sourceAccount) {
+        this.sourceAccount = sourceAccount;
+    }
+
+    public Account getDestinationAccount() {
+        return destinationAccount;
+    }
+
+    public void setDestinationAccount(Account destinationAccount) {
+        this.destinationAccount = destinationAccount;
     }
 
     public String getDescription() {
@@ -73,39 +105,18 @@ public class Transaction {
         this.description = description;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Double getMontant() {
-        return montant;
-    }
-
-    public void setMontant(Double montant) {
-        this.montant = montant;
-    }
-
-    public String getTypeTransaction() {
-        return typeTransaction;
-    }
-
-    public void setTypeTransaction(String typeTransaction) {
-        this.typeTransaction = typeTransaction;
-    }
+    // --- equals & hashCode ---
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && Objects.equals(montant, that.montant) && Objects.equals(dateTransaction, that.dateTransaction) && Objects.equals(typeTransaction, that.typeTransaction) && Objects.equals(compteSource, that.compteSource) && Objects.equals(compteDestination, that.compteDestination) && Objects.equals(description, that.description);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, montant, dateTransaction, typeTransaction, compteSource, compteDestination, description);
+        return Objects.hash(id);
     }
 }
