@@ -1,0 +1,103 @@
+  <!-- Hero Section -->
+  <header class="relative pt-16 pb-32 flex content-center items-center justify-center min-h-[85vh]">
+    <div class="absolute top-0 w-full h-full bg-center bg-cover" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1600&q=80');">
+      <span id="blackOverlay" class="w-full h-full absolute opacity-50 bg-slate-900"></span>
+    </div>
+    <div class="container relative mx-auto">
+      <div class="items-center flex flex-wrap">
+        <div class="w-full lg:w-8/12 px-4 ml-auto mr-auto text-center">
+          <div class="pr-12">
+            <h1 class="text-white font-bold text-5xl md:text-6xl leading-tight mb-6 animate-fade-in-up">
+              La banque de demain, <br/>
+              <span class="text-red-500">aujourd'hui.</span>
+            </h1>
+            <p class="mt-4 text-lg text-slate-200 mb-8 max-w-2xl mx-auto">
+              Une expérience bancaire réinventée pour votre succès. 
+              Gérez votre argent avec simplicité, sécurité et élégance. 
+              Rejoignez des milliers de clients satisfaits.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+               <a routerLink="/register" class="px-8 py-4 bg-red-600 text-white font-bold rounded-full shadow-lg shadow-red-600/40 hover:bg-red-700 transition-all transform hover:-translate-y-1 cursor-pointer">
+                 Devenir client
+               </a>
+               <a href="#" class="px-8 py-4 bg-white text-slate-900 font-bold rounded-full shadow-lg hover:bg-slate-100 transition-all transform hover:-translate-y-1">
+                 Découvrir nos offres
+               </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Decorative curve -->
+    <div class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-20" style="transform: translateZ(0);">
+      <svg class="absolute bottom-0 overflow-hidden" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" version="1.1" viewBox="0 0 2560 100" x="0" y="0">
+        <polygon class="text-neutral-50 fill-current" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section class="pb-20 bg-neutral-50 -mt-24 relative z-10">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap justify-center">
+        <!-- Feature Cards -->
+        <div *ngFor="let feature of features" class="w-full md:w-4/12 px-4 text-center">
+          <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-xl hover:shadow-2xl transition-shadow rounded-2xl py-10 px-8">
+            <div class="p-3 w-20 h-20 shadow-lg rounded-full bg-red-50 text-red-600 mx-auto mb-6 flex items-center justify-center transform transition-transform hover:scale-110 duration-300">
+              <div [innerHTML]="feature.icon"></div>
+            </div>
+            <h6 class="text-xl font-bold text-slate-800 mb-3">{{ feature.title }}</h6>
+            <p class="mt-2 text-slate-500 leading-relaxed">{{ feature.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Info / Trust Section -->
+      <div class="flex flex-wrap items-center mt-32">
+        <div class="w-full md:w-5/12 px-4 mr-auto ml-auto">
+          <div class="text-slate-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-red-100">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-red-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+            </svg>
+          </div>
+          <h3 class="text-3xl mb-2 font-bold leading-normal text-slate-800">
+            Une technologie de pointe
+          </h3>
+          <p class="text-lg font-light leading-relaxed mt-4 mb-4 text-slate-600">
+            Notre plateforme E-Banking a été conçue pour vous offrir une rapidité et une fiabilité inégalées.
+            Consultez votre solde en temps réel, effectuez des virements instantanés et gérez votre épargne du bout des doigts.
+          </p>
+          <a href="#" class="font-bold text-red-600 hover:text-red-700 mt-4 inline-flex items-center gap-1 group">
+             En savoir plus 
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transform group-hover:translate-x-1 transition-transform">
+               <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+             </svg>
+          </a>
+        </div>
+        <div class="w-full md:w-4/12 px-4 mr-auto ml-auto mt-12 md:mt-0">
+          <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-2xl rounded-2xl overflow-hidden transform rotate-2 hover:rotate-0 transition-transform duration-500">
+            <img alt="..." src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" class="w-full align-middle rounded-t-lg"/>
+            <blockquote class="relative p-8 mb-4">
+              <h4 class="text-xl font-bold text-slate-800">
+                Service Premium
+              </h4>
+              <p class="text-md font-light mt-2 text-slate-600">
+                "Depuis que j'ai rejoint cette banque, la gestion de mes finances est devenue un plaisir. L'interface est magnifique et le service client est top."
+              </p>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section Footer -->
+  <section class="relative py-20 bg-slate-900 text-white">
+      <div class="container mx-auto px-4 text-center">
+          <h2 class="text-3xl font-bold mb-4">Prêt à changer de banque ?</h2>
+          <p class="text-lg text-slate-400 mb-8 max-w-xl mx-auto">Rejoignez-nous dès aujourd'hui et profitez de nos offres exclusives de bienvenue.</p>
+          <a routerLink="/register" class="inline-block px-8 py-4 bg-red-600 text-white font-bold rounded-full shadow-lg shadow-red-900/40 hover:bg-red-700 transition-colors cursor-pointer">
+              Ouvrir mon compte gratuit
+          </a>
+      </div>
+  </section>
