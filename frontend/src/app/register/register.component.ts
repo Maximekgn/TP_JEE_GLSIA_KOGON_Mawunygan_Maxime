@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
 import countriesData from '../../assets/data/countries.json';
 
 @Component({
@@ -23,6 +25,7 @@ export class RegisterComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = this.fb.group(
       {
@@ -72,7 +75,12 @@ export class RegisterComponent {
       nationality: this.form.value.nationality,
     };
 
-    this.authService.register(payload).subscribe({
+    this.authService.register(payload).pipe(
+      finalize(() => {
+        this.submitting = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
       next: () => {
         this.success = 'Inscription réussie ! Redirection vers votre espace...';
         setTimeout(() => {
@@ -80,8 +88,7 @@ export class RegisterComponent {
         }, 2000);
       },
       error: (err) => {
-        this.error = err?.error?.message || "Erreur lors de l'inscription";
-        this.submitting = false;
+        this.error = err.message || "Erreur lors de l'inscription";
       },
     });
   }

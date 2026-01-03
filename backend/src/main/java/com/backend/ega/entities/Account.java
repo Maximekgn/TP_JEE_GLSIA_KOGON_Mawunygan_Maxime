@@ -29,7 +29,7 @@ public class Account {
     private Double balance = 0.0;
 
     @JsonIgnoreProperties({"accounts"})
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "client_id", nullable = false)
     private Client owner;
 

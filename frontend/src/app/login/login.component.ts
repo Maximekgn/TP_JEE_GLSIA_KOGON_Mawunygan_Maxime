@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
+import { finalize } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +23,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -38,7 +41,12 @@ export class LoginComponent {
     this.error = null;
     this.success = null;
 
-    this.authService.login(this.form.value).subscribe({
+    this.authService.login(this.form.value).pipe(
+      finalize(() => {
+        this.submitting = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
       next: () => {
         this.success = 'Connexion réussie ! Redirection...';
         setTimeout(() => {
@@ -46,8 +54,7 @@ export class LoginComponent {
         }, 1000);
       },
       error: (err) => {
-        this.error = err?.error?.message || 'Email ou mot de passe incorrect';
-        this.submitting = false;
+        this.error = err.message || 'Identifiants incorrects';
       },
     });
   }

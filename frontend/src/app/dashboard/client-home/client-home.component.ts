@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { BankService, Account, Transaction } from '../../core/services/bank.service';
+import { AuthService } from '../../core/services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client-home',
@@ -9,23 +13,87 @@ import { RouterLink } from '@angular/router';
   templateUrl: './client-home.component.html',
   styleUrls: []
 })
-export class ClientHomeComponent {
-  accounts = [
-    { type: 'Compte Courant', iban: 'FR76 ... 4321', balance: 2543.50, trend: '+150.00' },
-    { type: 'Livret A', iban: 'FR76 ... 9876', balance: 12050.00, trend: '+50.00' },
-    { type: 'Compte Épargne Logement', iban: 'FR76 ... 1122', balance: 5000.00, trend: '+0.00' }
-  ];
+export class ClientHomeComponent implements OnInit {
+  accounts: Account[] = [];
+  clientName: string = 'Client';
+  lastTransaction: Transaction | null = null;
+  loading = true;
 
-  get totalBalance() {
-    return this.accounts.reduce((acc, curr) => acc + curr.balance, 0);
+  constructor(
+    private bankService: BankService,
+    private authService: AuthService,
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    const userId = this.authService.getUserId();
+    console.log('Dashboard Init - User ID:', userId);
+    if (userId) {
+      this.fetchClientProfile(userId);
+      this.fetchAccounts(userId);
+    } else {
+      this.loading = false;
+    }
   }
 
-  // Mock last transaction
-  lastTransaction = {
-    date: '31/12/2024',
-    label: 'Virement reçu - Salaire',
-    amount: 2800.00,
-    type: 'credit',
-    account: 'Compte Courant'
-  };
+  fetchClientProfile(userId: number): void {
+    this.bankService.getClientProfile(userId).subscribe({
+      next: (client) => {
+        console.log('Client profile response:', client);
+        if (client) {
+          this.clientName = `${client.firstName} ${client.lastName}`;
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching client profile', err);
+      }
+    });
+  }
+
+  fetchAccounts(userId: number): void {
+    this.loading = true;
+    this.bankService.getAccountsByClient(userId).pipe(
+      finalize(() => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
+      next: (accounts: Account[]) => {
+        console.log('Accounts response:', accounts);
+        this.accounts = accounts || [];
+        if (this.accounts.length > 0) {
+          this.fetchLastTransaction(this.accounts[0].id);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching accounts', err);
+      }
+    });
+  }
+
+  fetchLastTransaction(accountId: number): void {
+    this.bankService.getTransactionsByAccount(accountId).subscribe({
+      next: (transactions: Transaction[]) => {
+        console.log(`Transactions for account ${accountId}:`, transactions);
+        if (transactions && transactions.length > 0) {
+          // Sort safe
+          this.lastTransaction = [...transactions].sort((a, b) => {
+            const dateA = a.transactionDate ? new Date(a.transactionDate).getTime() : 0;
+            const dateB = b.transactionDate ? new Date(b.transactionDate).getTime() : 0;
+            return dateB - dateA;
+          })[0];
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err: any) => {
+        console.error('Error fetching transactions', err);
+      }
+    });
+  }
+
+  get totalBalance() {
+    return this.accounts.reduce((acc, curr) => acc + (curr.balance || 0), 0);
+  }
 }

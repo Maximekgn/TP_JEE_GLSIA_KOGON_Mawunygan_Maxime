@@ -13,6 +13,7 @@ import org.iban4j.Iban;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -20,9 +21,11 @@ import java.util.stream.Collectors;
 public class AccountsService {
 
     private final AccountsRepository accountsRepository;
+    private final com.backend.ega.repositories.ClientsRepository clientsRepository;
 
-    public AccountsService(AccountsRepository accountsRepository) {
+    public AccountsService(AccountsRepository accountsRepository, com.backend.ega.repositories.ClientsRepository clientsRepository) {
         this.accountsRepository = accountsRepository;
+        this.clientsRepository = clientsRepository;
     }
 
     public List<Account> getAllAccounts() {
@@ -35,18 +38,30 @@ public class AccountsService {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    public ResponseEntity<Account> createAccount(Account account) {
-        // Forcer la balance à 0 pour tout nouveau compte
-        account.setBalance(0.0);
-        
-        // Fixer la date de création à aujourd'hui si elle n'est pas déjà définie
-        if (account.getCreationDate() == null) {
-            account.setCreationDate(LocalDate.now());
+    public ResponseEntity<Account> createAccount(Account input) {
+        if (input.getOwner() == null || input.getOwner().getId() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        // Si le numéro de compte n'est pas fourni, on en génère un au format IBAN
-        if (account.getAccountNumber() == null || account.getAccountNumber().isBlank()) {
+        // Fetch Managed Client
+        Optional<Client> clientOpt = clientsRepository.findById(input.getOwner().getId());
+        if (clientOpt.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Client owner = clientOpt.get();
+
+        // Create Fresh Account Entity
+        Account account = new Account();
+        account.setOwner(owner);
+        account.setAccountType(input.getAccountType());
+        account.setBalance(0.0);
+        account.setCreationDate(input.getCreationDate() != null ? input.getCreationDate() : LocalDate.now());
+        
+        // Generate IBAN if missing
+        if (input.getAccountNumber() == null || input.getAccountNumber().isBlank()) {
             account.setAccountNumber(generateAccountNumber());
+        } else {
+            account.setAccountNumber(input.getAccountNumber());
         }
         
         Account savedAccount = accountsRepository.save(account);
@@ -107,8 +122,14 @@ public class AccountsService {
      * Utilise iban4j pour garantir la validité du format
      */
     private String generateAccountNumber() {
-        // On utilise strictement le code pays Togo (TG) pour l'IBAN
-        // car le projet est localisé dans la zone UEMOA
-        return Iban.random(CountryCode.TG).toString();
+        // Le code pays Togo (TG) n'est pas supporté par la bibliothèque iban4j.
+        // On génère donc un numéro de compte aléatoire respectant le format local.
+        StringBuilder sb = new StringBuilder("TG");
+        String chars = "0123456789";
+        java.util.Random rnd = new java.util.Random();
+        for (int i = 0; i < 26; i++) {
+            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+        }
+        return sb.toString();
     }
 }

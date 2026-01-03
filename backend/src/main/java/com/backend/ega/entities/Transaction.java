@@ -23,11 +23,11 @@ public class Transaction {
     @Column(name = "transaction_type", nullable = false)
     private TransactionType transactionType;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "source_account_id", nullable = false)
     private Account sourceAccount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "destination_account_id")
     private Account destinationAccount; // Used only for transfers
 
