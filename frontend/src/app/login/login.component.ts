@@ -1,19 +1,54 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class LoginComponent {
-  constructor(private router: Router) {}
+  form: FormGroup;
+  submitting = false;
+  error: string | null = null;
+  success: string | null = null;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+  ) {
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+  }
 
   login() {
-    // Mock authentication
-    this.router.navigate(['/dashboard']);
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.submitting = true;
+    this.error = null;
+    this.success = null;
+
+    this.authService.login(this.form.value).subscribe({
+      next: () => {
+        this.success = 'Connexion réussie ! Redirection...';
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1000);
+      },
+      error: (err) => {
+        this.error = err?.error?.message || 'Email ou mot de passe incorrect';
+        this.submitting = false;
+      },
+    });
   }
 }

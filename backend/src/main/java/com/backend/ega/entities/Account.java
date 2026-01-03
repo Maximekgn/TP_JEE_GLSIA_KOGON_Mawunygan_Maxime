@@ -1,7 +1,10 @@
 package com.backend.ega.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import com.backend.ega.entities.enums.AccountType;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -15,8 +18,9 @@ public class Account {
     @Column(name = "account_number", unique = true, nullable = false)
     private String accountNumber;
 
-    @Column(name = "account_type")
-    private String accountType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type", nullable = false)
+    private AccountType accountType;
 
     @Column(name = "creation_date")
     private LocalDate creationDate;
@@ -24,20 +28,40 @@ public class Account {
     @Column(name = "balance")
     private Double balance = 0.0;
 
+    @JsonIgnoreProperties({"accounts"})
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client owner;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     // --- Constructors ---
 
     public Account() {
     }
 
-    public Account(LocalDate creationDate, String accountNumber, Client owner, String accountType) {
+    public Account(LocalDate creationDate, String accountNumber, Client owner, AccountType accountType) {
         this.creationDate = creationDate;
         this.accountNumber = accountNumber;
         this.owner = owner;
         this.accountType = accountType;
+    }
+
+    // --- Lifecycle callbacks pour timestamps automatiques ---
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     // --- Getters & Setters ---
@@ -58,11 +82,11 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    public String getAccountType() {
+    public AccountType getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
     }
 
@@ -88,6 +112,22 @@ public class Account {
 
     public void setOwner(Client owner) {
         this.owner = owner;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     // --- equals & hashCode ---

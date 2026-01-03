@@ -1,8 +1,5 @@
 package com.backend.ega.services;
 
-import org.springframework.stereotype.Service;
-
-@Service
-class UserDetailsService {
-
+// Deprecated placeholder. See UserDetailsServiceImpl.java for the real implementation.
+class LegacyUserDetailsServicePlaceholder {
 }
