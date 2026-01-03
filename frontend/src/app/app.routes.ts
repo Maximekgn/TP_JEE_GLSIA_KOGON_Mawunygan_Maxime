@@ -81,6 +81,28 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./dashboard/support/support.component').then((m) => m.SupportComponent),
       },
+      // Admin Routes
+      {
+        path: 'admin/clients',
+        loadComponent: () =>
+          import('./dashboard/admin/clients-list/clients-list.component').then(
+            (m) => m.AdminClientsListComponent
+          ),
+      },
+      {
+        path: 'admin/accounts',
+        loadComponent: () =>
+          import('./dashboard/admin/accounts-list/accounts-list.component').then(
+            (m) => m.AdminAccountsListComponent
+          ),
+      },
+      {
+        path: 'admin/deposit',
+        loadComponent: () =>
+          import('./dashboard/admin/deposit/deposit.component').then(
+            (m) => m.AdminDepositComponent
+          ),
+      },
     ],
   },
 ];

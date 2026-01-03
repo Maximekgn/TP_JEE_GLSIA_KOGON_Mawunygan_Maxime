@@ -7,87 +7,217 @@
   <div *ngIf="!loading">
     <!-- Top Summary Section -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <!-- Welcome & Balance -->
-      <div class="col-span-1 md:col-span-2 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
+      <!-- Welcome & Balance (Dynamic for Admin/Client) -->
+      <div
+        [class]="
+          (authService.getUserType() === 'ADMIN' ? 'md:col-span-3' : 'md:col-span-2') +
+          ' col-span-1 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden'
+        "
+      >
         <!-- Decorative circles -->
-        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white/5 blur-3xl"></div>
-        <div class="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 rounded-full bg-red-600/20 blur-2xl"></div>
-        
+        <div
+          class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white/5 blur-3xl"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 -ml-10 -mb-10 w-40 h-40 rounded-full bg-red-600/20 blur-2xl"
+        ></div>
+
         <div class="relative z-10 flex flex-col justify-between h-full">
           <div>
-             <div class="flex items-center gap-3 mb-6">
-               <div class="w-12 h-12 rounded-full border-2 border-white/20 overflow-hidden">
-                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Profile" class="w-full h-full object-cover">
-               </div>
-               <div>
-                 <h2 class="text-xl font-bold">Bonjour, {{ clientName }}</h2>
-                 <p class="text-slate-400 text-sm">Bon retour sur votre espace.</p>
-               </div>
-             </div>
-             
-             <div class="mb-1">
-               <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Solde Total</p>
-               <h1 class="text-4xl font-bold mt-1 text-white">{{ totalBalance | number:'1.2-2' }} FCFA</h1>
-             </div>
+            <div class="flex items-center gap-3 mb-6">
+              <div
+                class="w-12 h-12 rounded-full border-2 border-white/20 overflow-hidden bg-red-600 flex items-center justify-center"
+              >
+                <span class="text-xl font-bold">{{ clientName[0] }}</span>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold">Bonjour, {{ clientName }}</h2>
+                <p class="text-slate-400 text-sm">
+                  {{
+                    authService.getUserType() === 'ADMIN'
+                      ? 'Espace de gestion administrative'
+                      : 'Bon retour sur votre espace.'
+                  }}
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="authService.getUserType() !== 'ADMIN'" class="mb-1">
+              <p class="text-slate-400 text-sm font-medium uppercase tracking-wider">Solde Total</p>
+              <h1 class="text-4xl font-bold mt-1 text-white">
+                {{ totalBalance | number: '1.2-2' }} FCFA
+              </h1>
+            </div>
+
+            <div
+              *ngIf="authService.getUserType() === 'ADMIN'"
+              class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"
+            >
+              <div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm">
+                <p class="text-slate-400 text-xs uppercase font-bold tracking-widest mb-1">
+                  Actions
+                </p>
+                <p class="text-lg font-bold">Gestion Système</p>
+              </div>
+              <div class="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm">
+                <p class="text-slate-400 text-xs uppercase font-bold tracking-widest mb-1">
+                  Statut
+                </p>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                  <p class="text-lg font-bold">Opérationnel</p>
+                </div>
+              </div>
+            </div>
           </div>
-          
+
           <div class="mt-8 flex gap-3">
-            <a routerLink="/dashboard/transactions" class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-colors shadow-lg shadow-red-600/30">
-              Faire un virement
-            </a>
-            <a routerLink="/dashboard/accounts" class="px-5 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-bold rounded-lg transition-colors backdrop-blur-sm">
-              Mes Comptes
-            </a>
+            <ng-container *ngIf="authService.getUserType() !== 'ADMIN'">
+              <a
+                routerLink="/dashboard/transactions"
+                class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-colors shadow-lg shadow-red-600/30"
+              >
+                Faire un virement
+              </a>
+              <a
+                routerLink="/dashboard/accounts"
+                class="px-5 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-bold rounded-lg transition-colors backdrop-blur-sm"
+              >
+                Mes Comptes
+              </a>
+            </ng-container>
+            <ng-container *ngIf="authService.getUserType() === 'ADMIN'">
+              <a
+                routerLink="/dashboard/admin/clients"
+                class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-colors shadow-lg shadow-red-600/30"
+              >
+                Gérer les Clients
+              </a>
+              <a
+                routerLink="/dashboard/admin/deposit"
+                class="px-5 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-bold rounded-lg transition-colors backdrop-blur-sm"
+              >
+                Nouveau Dépôt
+              </a>
+            </ng-container>
           </div>
         </div>
       </div>
 
-      <!-- Last Transaction Widget -->
-      <div class="col-span-1 bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col">
+      <!-- Last Transaction Widget (Clients Only) -->
+      <div
+        *ngIf="authService.getUserType() !== 'ADMIN'"
+        class="col-span-1 bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col"
+      >
         <h3 class="text-slate-800 font-bold mb-4 flex items-center justify-between">
           Dernière activité
-          <span class="text-xs font-normal text-slate-500 bg-slate-100 px-2 py-1 rounded-full">Recente</span>
+          <span class="text-xs font-normal text-slate-500 bg-slate-100 px-2 py-1 rounded-full"
+            >Recente</span
+          >
         </h3>
-        
-        <div *ngIf="lastTransaction" class="flex-1 flex flex-col justify-center items-center text-center p-4 border border-slate-100 border-dashed rounded-xl bg-slate-50/50">
-           <div [class]="'w-12 h-12 rounded-full flex items-center justify-center mb-3 ' + (lastTransaction.amount > 0 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600')">
-              <svg *ngIf="lastTransaction.amount > 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-              <svg *ngIf="lastTransaction.amount <= 0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
-              </svg>
-           </div>
-           <p class="text-slate-900 font-bold truncate w-full">{{ lastTransaction.description || lastTransaction.transactionType }}</p>
-           <p [class]="'font-bold text-lg mt-1 ' + (lastTransaction.amount > 0 ? 'text-green-600' : 'text-red-600')">
-            {{ (lastTransaction.amount > 0 ? '+' : '') }}{{ lastTransaction.amount | number:'1.2-2' }} FCFA
-           </p>
-           <p class="text-xs text-slate-400 mt-2">{{ lastTransaction.transactionDate | date:'dd/MM/yyyy' }}</p>
+
+        <div
+          *ngIf="lastTransaction"
+          class="flex-1 flex flex-col justify-center items-center text-center p-4 border border-slate-100 border-dashed rounded-xl bg-slate-50/50"
+        >
+          <div
+            [class]="
+              'w-12 h-12 rounded-full flex items-center justify-center mb-3 ' +
+              (lastTransaction.amount > 0
+                ? 'bg-green-100 text-green-600'
+                : 'bg-red-100 text-red-600')
+            "
+          >
+            <svg
+              *ngIf="lastTransaction.amount > 0"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <svg
+              *ngIf="lastTransaction.amount <= 0"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+            </svg>
+          </div>
+          <p class="text-slate-900 font-bold truncate w-full">
+            {{ lastTransaction.description || lastTransaction.transactionType }}
+          </p>
+          <p
+            [class]="
+              'font-bold text-lg mt-1 ' +
+              (lastTransaction.amount > 0 ? 'text-green-600' : 'text-red-600')
+            "
+          >
+            {{ lastTransaction.amount > 0 ? '+' : ''
+            }}{{ lastTransaction.amount | number: '1.2-2' }} FCFA
+          </p>
+          <p class="text-xs text-slate-400 mt-2">
+            {{ lastTransaction.transactionDate | date: 'dd/MM/yyyy' }}
+          </p>
         </div>
 
-        <div *ngIf="!lastTransaction" class="flex-1 flex flex-col justify-center items-center text-center p-4 border border-slate-100 border-dashed rounded-xl bg-slate-50/50">
+        <div
+          *ngIf="!lastTransaction"
+          class="flex-1 flex flex-col justify-center items-center text-center p-4 border border-slate-100 border-dashed rounded-xl bg-slate-50/50"
+        >
           <p class="text-slate-400 text-sm">Aucune transaction récente</p>
         </div>
-        
+
         <div class="mt-4 pt-4 border-t border-slate-50 text-center">
-           <a routerLink="/dashboard/transactions" class="text-sm text-red-600 font-bold hover:underline">Voir l'historique complet</a>
+          <a
+            routerLink="/dashboard/transactions"
+            class="text-sm text-red-600 font-bold hover:underline"
+            >Voir l'historique complet</a
+          >
         </div>
       </div>
     </div>
 
-    <!-- Accounts List -->
-    <div class="mb-10">
+    <!-- Accounts List (Clients Only) -->
+    <div *ngIf="authService.getUserType() !== 'ADMIN'" class="mb-10">
       <div class="flex justify-between items-end mb-6">
         <h2 class="text-xl font-bold text-slate-800">Mes Comptes</h2>
-        <a routerLink="/dashboard/accounts" class="text-sm font-medium text-red-600 hover:text-red-700">Gérer mes comptes &rarr;</a>
+        <a
+          routerLink="/dashboard/accounts"
+          class="text-sm font-medium text-red-600 hover:text-red-700"
+          >Gérer mes comptes &rarr;</a
+        >
       </div>
 
       <div class="grid grid-cols-1 gap-4">
-        <div *ngFor="let account of accounts" class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 hover:shadow-md transition-shadow group">
+        <div
+          *ngFor="let account of accounts"
+          class="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 hover:shadow-md transition-shadow group"
+        >
           <div class="flex items-center gap-4 w-full md:w-auto">
-            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-red-50 group-hover:text-red-600 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+            <div
+              class="w-12 h-12 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-red-50 group-hover:text-red-600 transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
+                />
               </svg>
             </div>
             <div>
@@ -95,21 +225,91 @@
               <p class="text-sm text-slate-400 font-mono">{{ account.accountNumber }}</p>
             </div>
           </div>
-          
+
           <div class="flex items-center justify-between w-full md:w-auto gap-8">
-             <div class="text-right">
-               <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Solde</p>
-               <p class="text-lg font-bold text-slate-900">{{ account.balance | number:'1.2-2' }} FCFA</p>
-             </div>
-             <button class="px-4 py-2 border border-slate-200 text-slate-600 text-sm font-bold rounded-lg hover:bg-slate-50 hover:border-slate-300 hover:text-red-600 transition-colors">
-               Détails
-             </button>
+            <div class="text-right">
+              <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Solde</p>
+              <p class="text-lg font-bold text-slate-900">
+                {{ account.balance | number: '1.2-2' }} FCFA
+              </p>
+            </div>
+            <button
+              class="px-4 py-2 border border-slate-200 text-slate-600 text-sm font-bold rounded-lg hover:bg-slate-50 hover:border-slate-300 hover:text-red-600 transition-colors"
+            >
+              Détails
+            </button>
           </div>
         </div>
 
-        <div *ngIf="accounts.length === 0" class="text-center py-10 bg-white rounded-xl border border-dashed border-slate-200">
+        <div
+          *ngIf="accounts.length === 0"
+          class="text-center py-10 bg-white rounded-xl border border-dashed border-slate-200"
+        >
           <p class="text-slate-400">Vous n'avez pas encore de compte.</p>
-          <a routerLink="/dashboard/accounts" class="text-red-600 font-bold mt-2 inline-block">Créer un compte</a>
+          <a routerLink="/dashboard/accounts" class="text-red-600 font-bold mt-2 inline-block"
+            >Créer un compte</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Quick Stats (Admins Only) -->
+    <div
+      *ngIf="authService.getUserType() === 'ADMIN'"
+      class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10"
+    >
+      <div
+        class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between group hover:border-red-200 transition-all cursor-pointer"
+        routerLink="/dashboard/admin/clients"
+      >
+        <div>
+          <p class="text-slate-500 font-medium mb-1">Total Clients</p>
+          <h3 class="text-3xl font-bold text-slate-900">Accéder à la liste</h3>
+        </div>
+        <div
+          class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-red-50 group-hover:text-red-600 transition-all"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-8 h-8"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-3.833-6.233 4.125 4.125 0 00-3.833 6.233z"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between group hover:border-red-200 transition-all cursor-pointer"
+        routerLink="/dashboard/admin/accounts"
+      >
+        <div>
+          <p class="text-slate-500 font-medium mb-1">Total Comptes</p>
+          <h3 class="text-3xl font-bold text-slate-900">Voir les comptes</h3>
+        </div>
+        <div
+          class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-red-50 group-hover:text-red-600 transition-all"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-8 h-8"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
+            />
+          </svg>
         </div>
       </div>
     </div>

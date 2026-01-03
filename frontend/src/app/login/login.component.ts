@@ -18,6 +18,7 @@ export class LoginComponent {
   submitting = false;
   error: string | null = null;
   success: string | null = null;
+  isAdminMode = false;
 
   constructor(
     private fb: FormBuilder,
@@ -57,5 +58,10 @@ export class LoginComponent {
         this.error = err.message || 'Identifiants incorrects';
       },
     });
+  }
+
+  toggleAdminMode() {
+    this.isAdminMode = !this.isAdminMode;
+    this.error = null;
   }
 }

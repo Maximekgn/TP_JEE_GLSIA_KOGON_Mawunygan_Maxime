@@ -21,14 +21,24 @@ export class ClientHomeComponent implements OnInit {
 
   constructor(
     private bankService: BankService,
-    private authService: AuthService,
+    public authService: AuthService,
     private http: HttpClient,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     const userId = this.authService.getUserId();
-    console.log('Dashboard Init - User ID:', userId);
+    const userType = this.authService.getUserType();
+    
+    console.log('Dashboard Init - User ID:', userId, 'User Type:', userType);
+    
+    if (userType === 'ADMIN') {
+      this.clientName = 'Administrateur';
+      this.loading = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
     if (userId) {
       this.fetchClientProfile(userId);
       this.fetchAccounts(userId);

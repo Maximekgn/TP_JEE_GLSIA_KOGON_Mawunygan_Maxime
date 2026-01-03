@@ -2,6 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface Client {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  address: string;
+  gender: string;
+  birthDate: string;
+  nationality: string;
+  active?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  accounts?: Account[];
+}
+
 export interface Account {
   id: number;
   accountNumber: string;
@@ -10,6 +26,7 @@ export interface Account {
   creationDate: string;
   createdAt?: string;
   updatedAt?: string;
+  owner?: Client;
 }
 
 export interface Transaction {
@@ -25,12 +42,24 @@ export interface Transaction {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BankService {
   private readonly API_BASE = '/api';
 
   constructor(private http: HttpClient) {}
+
+  // --- Admin Methods ---
+
+  getAllClients(): Observable<Client[]> {
+    return this.http.get<Client[]>(`${this.API_BASE}/clients`);
+  }
+
+  getAllAccounts(): Observable<Account[]> {
+    return this.http.get<Account[]>(`${this.API_BASE}/accounts`);
+  }
+
+  // --- User Methods ---
 
   getAccountsByClient(clientId: number): Observable<Account[]> {
     return this.http.get<Account[]>(`${this.API_BASE}/accounts/client/${clientId}`);

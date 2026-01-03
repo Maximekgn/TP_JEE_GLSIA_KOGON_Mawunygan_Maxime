@@ -23,6 +23,7 @@ export class AuthService {
   private readonly API_BASE = '/api/auth';
   private readonly USER_ID_KEY = 'auth_user_id';
   private readonly USER_TYPE_KEY = 'auth_user_type';
+  private readonly USER_EMAIL_KEY = 'auth_email';
 
   constructor(
     private http: HttpClient,
@@ -87,6 +88,7 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, res.token);
     localStorage.setItem(this.USER_ID_KEY, res.userId.toString());
     localStorage.setItem(this.USER_TYPE_KEY, res.userType);
+    localStorage.setItem(this.USER_EMAIL_KEY, res.email);
     this.authStatusSub.next(true);
   }
 
@@ -97,6 +99,7 @@ export class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_ID_KEY);
     localStorage.removeItem(this.USER_TYPE_KEY);
+    localStorage.removeItem(this.USER_EMAIL_KEY);
     this.authStatusSub.next(false);
     this.router.navigate(['/login']);
   }

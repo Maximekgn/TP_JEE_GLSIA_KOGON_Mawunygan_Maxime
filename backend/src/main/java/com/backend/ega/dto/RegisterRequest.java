@@ -37,24 +37,15 @@ public class RegisterRequest {
     @Pattern(regexp = "CLIENT|ADMIN", message = "Le type d'utilisateur doit être CLIENT ou ADMIN")
     private String userType;
 
-    // Champs obligatoires pour CLIENT uniquement
-    @NotBlank(message = "Le numéro de téléphone est obligatoire pour un client")
-    @Size(min = 10, max = 20, message = "Le numéro de téléphone doit avoir entre 10 et 20 caractères")
+    // Champs obligatoires pour CLIENT uniquement (Validation manuelle dans le contrôleur)
     private String phoneNumber;
     
-    @NotBlank(message = "L'adresse est obligatoire pour un client")
-    @Size(min = 5, max = 100, message = "L'adresse doit avoir entre 5 et 100 caractères")
     private String address;
     
-    @NotBlank(message = "Le genre est obligatoire pour un client")
-    @Pattern(regexp = "M|F|AUTRE", message = "Le genre doit être M (Masculin), F (Féminin) ou AUTRE")
     private String gender;
     
-    @NotNull(message = "La date de naissance est obligatoire pour un client")
     private LocalDate birthDate;
 
-    @NotBlank(message = "La nationalité est obligatoire pour un client")
-    @Size(min = 2, max = 50, message = "La nationalité doit avoir entre 2 et 50 caractères")
     private String nationality;
 
     // --- Constructors ---

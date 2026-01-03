@@ -88,12 +88,16 @@ public class AuthController {
             if (adminOpt.isPresent()) {
                 userType = "ADMIN";
                 userId = adminOpt.get().getId();
+                logger.info("Admin trouvé pour l'email: {}", authRequest.getEmail());
             } else {
                 // Chercher dans Client
                 Optional<Client> clientOpt = clientsService.findByEmail(authRequest.getEmail());
                 if (clientOpt.isPresent()) {
                     userType = "CLIENT";
                     userId = clientOpt.get().getId();
+                    logger.info("Client trouvé pour l'email: {}", authRequest.getEmail());
+                } else {
+                    logger.warn("Aucun utilisateur (Admin ou Client) trouvé pour l'email dans la base de données: {}", authRequest.getEmail());
                 }
             }
 
@@ -104,7 +108,7 @@ public class AuthController {
                     userId
             );
 
-            logger.info("Login réussi pour l'utilisateur: {} ({})", authRequest.getEmail(), userType);
+            logger.info("Génération du token réussie pour: {} avec type: {}", authRequest.getEmail(), userType);
 
             // Retourner la réponse avec les informations du token
             AuthResponse response = new AuthResponse(

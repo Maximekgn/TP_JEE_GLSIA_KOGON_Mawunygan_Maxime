@@ -42,9 +42,24 @@
 
     <!-- Right Side (Form) -->
     <div class="w-full md:w-1/2 p-8 md:p-12">
+      <div class="flex justify-end mb-4">
+        <button 
+          (click)="toggleAdminMode()" 
+          type="button"
+          class="text-xs font-semibold px-3 py-1.5 rounded-full transition-all border"
+          [ngClass]="isAdminMode ? 'bg-red-50 text-red-600 border-red-200' : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-red-300'"
+        >
+          {{ isAdminMode ? 'Passer au Client' : 'Connexion Admin' }}
+        </button>
+      </div>
+
       <div class="mt-4 mb-8">
-        <h3 class="text-2xl font-bold text-slate-800">Connexion</h3>
-        <p class="text-slate-500 text-sm mt-1">Entrez vos identifiants pour continuer.</p>
+        <h3 class="text-2xl font-bold text-slate-800">
+          {{ isAdminMode ? 'Espace Administrateur' : 'Connexion' }}
+        </h3>
+        <p class="text-slate-500 text-sm mt-1">
+          {{ isAdminMode ? 'Identifiants de gestion requis.' : 'Entrez vos identifiants pour continuer.' }}
+        </p>
       </div>
 
       <form [formGroup]="form" (ngSubmit)="login()" class="space-y-5">
