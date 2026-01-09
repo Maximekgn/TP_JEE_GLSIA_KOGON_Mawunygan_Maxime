@@ -18,16 +18,16 @@ export class LoginComponent {
   submitting = false;
   error: string | null = null;
   success: string | null = null;
-  isAdminMode = false;
+
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
@@ -48,7 +48,7 @@ export class LoginComponent {
         finalize(() => {
           this.submitting = false;
           this.cdr.detectChanges();
-        }),
+        })
       )
       .subscribe({
         next: () => {
@@ -63,8 +63,5 @@ export class LoginComponent {
       });
   }
 
-  toggleAdminMode() {
-    this.isAdminMode = !this.isAdminMode;
-    this.error = null;
-  }
+  
 }

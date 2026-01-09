@@ -5,8 +5,7 @@ import { adminGuard } from './core/guards/admin.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
+    loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: '',
@@ -24,7 +23,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./layout/dashboard-layout/dashboard-layout.component').then(
-        (m) => m.DashboardLayoutComponent,
+        (m) => m.DashboardLayoutComponent
       ),
     children: [
       {
@@ -39,7 +38,7 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         loadComponent: () =>
           import('./dashboard/admin/clients-list/clients-list.component').then(
-            (m) => m.AdminClientsListComponent,
+            (m) => m.AdminClientsListComponent
           ),
       },
       {
@@ -47,7 +46,7 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         loadComponent: () =>
           import('./dashboard/admin/accounts-list/accounts-list.component').then(
-            (m) => m.AdminAccountsListComponent,
+            (m) => m.AdminAccountsListComponent
           ),
       },
       {
@@ -55,7 +54,7 @@ export const routes: Routes = [
         canActivate: [adminGuard],
         loadComponent: () =>
           import('./dashboard/admin/deposit/deposit.component').then(
-            (m) => m.AdminDepositComponent,
+            (m) => m.AdminDepositComponent
           ),
       },
     ],
