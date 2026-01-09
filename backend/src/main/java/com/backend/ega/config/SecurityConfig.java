@@ -1,6 +1,6 @@
 package com.backend.ega.config;
 
-import com.backend.ega.filters.JwtRequestFilter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +30,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+
 
     /**
      * Bean pour encoder les mots de passe
@@ -101,8 +100,7 @@ public class SecurityConfig {
                         .xssProtection(xss -> xss.disable())
                 );
 
-        // Ajouter le filtre JWT avant l'authentification
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

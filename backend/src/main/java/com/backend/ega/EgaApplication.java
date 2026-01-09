@@ -1,5 +1,6 @@
 package com.backend.ega;
 
+import com.backend.ega.entities.Admin;
 import com.backend.ega.services.AdminsService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,13 +17,9 @@ public class EgaApplication {
     @Bean
     public CommandLineRunner initAdmin(AdminsService adminsService) {
         return args -> {
-            if (!adminsService.emailExists("admin@ega.com")) {
+            if (!adminsService.usernameExists("admin")) {
                 adminsService.createAdmin(
-                        "admin",
-                        "admin@ega.com",
-                        "admin123",
-                        "System",
-                        "Administrator"
+                        new Admin(1L,"admin","password")
                 );
                 System.out.println("Default admin user created: admin@ega.com / admin123");
             }

@@ -98,7 +98,7 @@ public class TransactionsService {
         // Save source account to ensure balance update is persisted
         sourceAccount = accountsRepository.save(sourceAccount);
         transaction.setSourceAccount(sourceAccount);
-        
+
         Transaction savedTransaction = transactionsRepository.save(transaction);
         return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
     }
@@ -119,5 +119,42 @@ public class TransactionsService {
                                         transaction.getDestinationAccount().getId().equals(accountId))
                 )
                 .collect(Collectors.toList());
+    }
+
+    /*public List<Transaction> getTransactionsByAccountAndDate(Long accountId, LocalDateTime startDate, LocalDateTime endDate) {
+        return transactionsRepository.findByAccountAndDateBetween(accountId, startDate, endDate);
+    }*/
+
+    public String generateStatement(Long accountId, LocalDateTime startDate, LocalDateTime endDate) {/*
+        List<Transaction> transactions = getTransactionsByAccountAndDate(accountId, startDate, endDate);
+        Optional<Account> accountOpt = accountsRepository.findById(accountId);
+
+        if (accountOpt.isEmpty()) {
+            return "Account not found.";
+        }
+
+        Account account = accountOpt.get();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Relevé de compte\n");
+        sb.append("Client: ").append(account.getOwner().getFirst_name()).append(" ").append(account.getOwner().getLast_name()).append("\n");
+        sb.append("Compte: ").append(account.getAccountNumber()).append("\n");
+        sb.append("Période: ").append(startDate).append(" au ").append(endDate).append("\n");
+        sb.append("--------------------------------------------------\n");
+        sb.append(String.format("%-20s %-15s %-10s %s\n", "Date", "Type", "Montant", "Description"));
+        sb.append("--------------------------------------------------\n");
+
+        for (Transaction t : transactions) {
+            sb.append(String.format("%-20s %-15s %-10.2f %s\n",
+                    t.getTransactionDate().toString(),
+                    t.getTransactionType(),
+                    t.getAmount(),
+                    t.getDescription() == null ? "" : t.getDescription()));
+        }
+        sb.append("--------------------------------------------------\n");
+        sb.append("Solde actuel: ").append(account.getBalance()).append("\n");
+
+        return sb.toString();
+    */
+        return "";
     }
 }

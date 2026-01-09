@@ -203,15 +203,14 @@ export class AdminDepositComponent implements OnInit {
     this.submitting = true;
     const { accountId, amount, description } = this.depositForm.value;
 
-    const transaction = {
+    const payload = {
       amount,
-      transactionType: 'DEPOSIT',
       description,
       sourceAccount: { id: parseInt(accountId) },
     };
 
     this.bankService
-      .createTransaction(transaction)
+      .deposit(payload)
       .pipe(finalize(() => (this.submitting = false)))
       .subscribe({
         next: () => {

@@ -2,27 +2,41 @@ package com.backend.ega.entities;
 
 import com.backend.ega.entities.enums.TransactionType;
 import jakarta.persistence.*;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "transactions")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Le montant est obligatoire")
+    @Min(value = 1, message = "Le montant doit être supérieur à 0")
     @Column(name = "amount", nullable = false)
     private Double amount;
 
     @Column(name = "transaction_date", nullable = false)
     private LocalDateTime transactionDate;
 
+    @NotNull(message = "Le type de transaction est obligatoire")
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", nullable = false)
     private TransactionType transactionType;
 
+    @NotNull(message = "Le compte source est obligatoire")
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "source_account_id", nullable = false)
     private Account sourceAccount;
@@ -40,118 +54,8 @@ public class Transaction {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    // --- Constructors ---
 
-    public Transaction() {
-        this.transactionDate = LocalDateTime.now();
-    }
 
-    public Transaction(Double amount, TransactionType transactionType, Account sourceAccount) {
-        this.amount = amount;
-        this.transactionType = transactionType;
-        this.sourceAccount = sourceAccount;
-        this.transactionDate = LocalDateTime.now();
-    }
 
-    // --- Lifecycle callbacks pour timestamps automatiques ---
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // --- Getters & Setters ---
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public LocalDateTime getTransactionDate() {
-        return transactionDate;
-    }
-
-    public void setTransactionDate(LocalDateTime transactionDate) {
-        this.transactionDate = transactionDate;
-    }
-
-    public TransactionType getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    public Account getSourceAccount() {
-        return sourceAccount;
-    }
-
-    public void setSourceAccount(Account sourceAccount) {
-        this.sourceAccount = sourceAccount;
-    }
-
-    public Account getDestinationAccount() {
-        return destinationAccount;
-    }
-
-    public void setDestinationAccount(Account destinationAccount) {
-        this.destinationAccount = destinationAccount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    // --- equals & hashCode ---
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

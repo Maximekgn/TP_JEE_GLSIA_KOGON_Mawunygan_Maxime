@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BankService, Account, Transaction } from '../../core/services/bank.service';
 import { AuthService } from '../../core/services/auth.service';
-import { HttpClient } from '@angular/common/http';
+
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -11,7 +11,7 @@ import { finalize } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './client-home.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class ClientHomeComponent implements OnInit {
   accounts: Account[] = [];
@@ -22,16 +22,16 @@ export class ClientHomeComponent implements OnInit {
   constructor(
     private bankService: BankService,
     public authService: AuthService,
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef
+
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     const userId = this.authService.getUserId();
     const userType = this.authService.getUserType();
-    
+
     console.log('Dashboard Init - User ID:', userId, 'User Type:', userType);
-    
+
     if (userType === 'ADMIN') {
       this.clientName = 'Administrateur';
       this.loading = false;
@@ -39,48 +39,41 @@ export class ClientHomeComponent implements OnInit {
       return;
     }
 
-    if (userId) {
-      this.fetchClientProfile(userId);
-      this.fetchAccounts(userId);
-    } else {
+    // Clients are no longer allowed to login.
+    // Keep this component safe if it’s accidentally rendered.
+    if (userType !== 'ADMIN') {
+      this.clientName = 'Accès admin uniquement';
       this.loading = false;
+      this.cdr.detectChanges();
+      return;
     }
-  }
 
-  fetchClientProfile(userId: number): void {
-    this.bankService.getClientProfile(userId).subscribe({
-      next: (client) => {
-        console.log('Client profile response:', client);
-        if (client) {
-          this.clientName = `${client.firstName} ${client.lastName}`;
-          this.cdr.detectChanges();
-        }
-      },
-      error: (err: any) => {
-        console.error('Error fetching client profile', err);
-      }
-    });
+    this.loading = false;
+    this.cdr.detectChanges();
   }
 
   fetchAccounts(userId: number): void {
     this.loading = true;
-    this.bankService.getAccountsByClient(userId).pipe(
-      finalize(() => {
-        this.loading = false;
-        this.cdr.detectChanges();
-      })
-    ).subscribe({
-      next: (accounts: Account[]) => {
-        console.log('Accounts response:', accounts);
-        this.accounts = accounts || [];
-        if (this.accounts.length > 0) {
-          this.fetchLastTransaction(this.accounts[0].id);
-        }
-      },
-      error: (err: any) => {
-        console.error('Error fetching accounts', err);
-      }
-    });
+    this.bankService
+      .getAccountsByClient(userId)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.cdr.detectChanges();
+        }),
+      )
+      .subscribe({
+        next: (accounts: Account[]) => {
+          console.log('Accounts response:', accounts);
+          this.accounts = accounts || [];
+          if (this.accounts.length > 0) {
+            this.fetchLastTransaction(this.accounts[0].id);
+          }
+        },
+        error: (err: any) => {
+          console.error('Error fetching accounts', err);
+        },
+      });
   }
 
   fetchLastTransaction(accountId: number): void {
@@ -99,7 +92,7 @@ export class ClientHomeComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Error fetching transactions', err);
-      }
+      },
     });
   }
 

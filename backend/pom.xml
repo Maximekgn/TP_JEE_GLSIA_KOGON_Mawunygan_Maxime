@@ -102,6 +102,11 @@
             <artifactId>iban4j</artifactId>
             <version>3.2.11-RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>annotationProcessor</scope>
+        </dependency>
     </dependencies>
 
     <build>

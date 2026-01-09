@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BankService, Account } from '../../../core/services/bank.service';
-import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
@@ -28,7 +27,10 @@ import { NotificationService } from '../../../core/services/notification.service
           >
             <option [ngValue]="null" disabled>Sélectionnez un compte</option>
             <option *ngFor="let acc of myAccounts" [ngValue]="acc.id">
-              {{ acc.accountType }} - {{ acc.accountNumber }} ({{ acc.balance | number:'1.2-2' }} FCFA)
+              {{ acc.accountType }} - {{ acc.accountNumber }} ({{
+                acc.balance | number: '1.2-2'
+              }}
+              FCFA)
             </option>
           </select>
         </div>
@@ -82,8 +84,19 @@ import { NotificationService } from '../../../core/services/notification.service
             <span *ngIf="!loading">Confirmer le virement</span>
             <span *ngIf="loading" class="flex items-center justify-center gap-2">
               <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Traitement en cours...
             </span>
@@ -94,63 +107,81 @@ import { NotificationService } from '../../../core/services/notification.service
       <!-- Security Note -->
       <div class="flex gap-4 p-4 rounded-xl bg-blue-50 text-blue-700 border border-blue-100">
         <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+          />
         </svg>
         <p class="text-xs">
-          <strong>Sécurité :</strong> Vos virements sont protégés par un cryptage de bout en bout. 
+          <strong>Sécurité :</strong> Vos virements sont protégés par un cryptage de bout en bout.
           Vérifiez toujours l'IBAN du destinataire avant de confirmer.
         </p>
       </div>
     </div>
-  `
+  `,
 })
 export class TransferComponent implements OnInit {
   private bankService = inject(BankService);
-  private authService = inject(AuthService);
   private notificationService = inject(NotificationService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
+  /**
+   * Admin-only screen.
+   * It can work in two modes:
+   * - If `clientId` is provided in query params, load accounts for that client.
+   * - Otherwise, load all accounts (admin) to allow transfers from any account.
+   */
   myAccounts: Account[] = [];
   loading = false;
+
   transferData = {
     sourceAccountId: null as number | null,
     destinationIBAN: '',
     amount: null as number | null,
-    description: ''
+    description: '',
+    clientId: null as number | null,
   };
 
   ngOnInit(): void {
-    const userId = this.authService.getUserId();
-    if (userId) {
-      this.fetchMyAccounts(userId);
-    }
-
-    // Pre-select account from query params if available
-    this.route.queryParams.subscribe(params => {
+    // Pre-select client/account from query params if available
+    this.route.queryParams.subscribe((params) => {
+      if (params['clientId']) {
+        this.transferData.clientId = +params['clientId'];
+      }
       if (params['from']) {
         this.transferData.sourceAccountId = +params['from'];
-        this.cdr.detectChanges();
       }
+
+      this.loadSourceAccounts();
     });
   }
 
-  fetchMyAccounts(userId: number): void {
-    this.bankService.getAccountsByClient(userId).subscribe({
+  private loadSourceAccounts(): void {
+    const clientId = this.transferData.clientId;
+
+    const request$ = clientId
+      ? this.bankService.getAccountsByClient(clientId)
+      : this.bankService.getAllAccounts();
+
+    request$.subscribe({
       next: (accounts: Account[]) => {
         this.myAccounts = accounts;
         this.cdr.detectChanges();
       },
       error: (err: any) => {
         console.error('Error fetching accounts', err);
-      }
+        this.notificationService.error('Impossible de charger la liste des comptes.');
+      },
     });
   }
 
   submitTransfer(): void {
     console.log('Action: submitTransfer click');
-    
+
     // Manual Validation
     if (!this.transferData.sourceAccountId) {
       this.notificationService.warning('Veuillez sélectionner un compte source.');
@@ -166,7 +197,7 @@ export class TransferComponent implements OnInit {
     }
 
     // Check balance locally
-    const sourceAcc = this.myAccounts.find(a => a.id === this.transferData.sourceAccountId);
+    const sourceAcc = this.myAccounts.find((a) => a.id === this.transferData.sourceAccountId);
     if (sourceAcc && sourceAcc.balance < this.transferData.amount) {
       this.notificationService.error('Solde insuffisant.');
       return;
@@ -174,33 +205,35 @@ export class TransferComponent implements OnInit {
 
     this.loading = true;
     this.cdr.detectChanges();
-    
+
     const payload = {
       amount: this.transferData.amount,
       description: this.transferData.description,
-      transactionType: 'TRANSFER',
       sourceAccount: { id: this.transferData.sourceAccountId },
       destinationAccount: { accountNumber: this.transferData.destinationIBAN },
-      transactionDate: new Date().toISOString()
+      transactionDate: new Date().toISOString(),
     };
 
-    console.log('API Call: createTransaction', payload);
+    console.log('API Call: transfer (admin)', payload);
 
-    this.bankService.createTransaction(payload).subscribe({
+    this.bankService.transfer(payload).subscribe({
       next: (res: any) => {
         console.log('API Success:', res);
         this.notificationService.success('Virement effectué !');
-        this.router.navigate(['/dashboard/transactions']);
+        this.router.navigate(['/dashboard/admin/accounts']);
       },
       error: (err: any) => {
         console.error('API Error:', err);
-        const msg = err.status === 403 ? 'Solde insuffisant.' : 
-                    err.status === 404 ? 'Compte destinataire introuvable.' : 
-                    'Erreur lors du virement.';
+        const msg =
+          err.status === 403
+            ? 'Solde insuffisant.'
+            : err.status === 404
+              ? 'Compte destinataire introuvable.'
+              : 'Erreur lors du virement.';
         this.notificationService.error(msg);
         this.loading = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 }

@@ -39,7 +39,7 @@ public class AccountsService {
     }
 
     public ResponseEntity<Account> createAccount(Account input) {
-        if (input.getOwner() == null || input.getOwner().getId() == null) {
+        if (input.getOwner() == null ) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -55,7 +55,7 @@ public class AccountsService {
         account.setOwner(owner);
         account.setAccountType(input.getAccountType());
         account.setBalance(0.0);
-        account.setCreationDate(input.getCreationDate() != null ? input.getCreationDate() : LocalDate.now());
+
         
         // Generate IBAN if missing
         if (input.getAccountNumber() == null || input.getAccountNumber().isBlank()) {
@@ -74,7 +74,6 @@ public class AccountsService {
                     // On peut aussi valider l'IBAN lors de la mise à jour
                     account.setAccountNumber(accountDetails.getAccountNumber());
                     account.setAccountType(accountDetails.getAccountType());
-                    account.setCreationDate(accountDetails.getCreationDate());
                     account.setBalance(accountDetails.getBalance());
 
                     Account updatedAccount = accountsRepository.save(account);
@@ -93,7 +92,7 @@ public class AccountsService {
 
     public List<Account> getAccountsByClient(Long clientId) {
         return accountsRepository.findAll().stream()
-                .filter(account -> account.getOwner().getId().equals(clientId))
+                .filter(account -> account.getOwner().getId() == clientId)
                 .collect(Collectors.toList());
     }
 
@@ -111,7 +110,7 @@ public class AccountsService {
         account.setAccountNumber(accountNumber);
         account.setAccountType(accountType);
         account.setOwner(client);
-        account.setCreationDate(LocalDate.now());
+
         account.setBalance(0.0);
 
         return accountsRepository.save(account);

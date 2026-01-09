@@ -1,5 +1,6 @@
 package com.backend.ega.utils;
 
+import com.backend.ega.entities.Admin;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -41,44 +42,20 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secretKeyString.getBytes());
     }
 
-    /**
-     * Génère un token JWT pour un utilisateur (Client ou Admin)
-     * @param email l'email de l'utilisateur
-     * @param userType type d'utilisateur ("CLIENT" ou "ADMIN")
-     * @param userId ID de l'utilisateur
-     * @return le token JWT
-     */
-    public String generateToken(String email, String userType, Long userId) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userType", userType);
-        claims.put("userId", userId);
-        return createToken(claims, email, accessTokenExpiration);
-    }
 
-    /**
-     * Génère un refresh token pour renouveler l'accès
-     */
-    public String generateRefreshToken(String email) {
+    public String generateToken(Admin admin) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("tokenType", "REFRESH");
-        return createToken(claims, email, refreshTokenExpiration);
-    }
-
-    /**
-     * Crée un token JWT avec les claims et la durée de vie spécifiées
-     */
-    private String createToken(Map<String, Object> claims, String subject, long expirationTime) {
-        Date now = new Date(System.currentTimeMillis());
-        Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
+        claims.put("id", admin.getId());
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(now)
-                .setExpiration(expirationDate)
+                .setSubject(admin.getUsername()) // ou username
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     /**
      * Extrait l'email du token JWT

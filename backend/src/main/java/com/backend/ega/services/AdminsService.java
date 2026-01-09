@@ -18,58 +18,40 @@ public class AdminsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * Récupère un admin par email
-     */
-    public Optional<Admin> findByEmail(String email) {
-        return adminsRepository.findByEmail(email);
-    }
+
 
     /**
      * Récupère un admin par username
      */
     public Optional<Admin> findByUsername(String username) {
-        return adminsRepository.findByUsername(username);
+        return adminsRepository.findByUsername((username));
     }
 
     /**
      * Crée un nouvel admin avec mot de passe hashé
      */
-    public Admin createAdmin(String username, String email, String password, String firstName, String lastName) {
-        // Vérifier que l'email/username n'existe pas
-        if (adminsRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("L'email " + email + " existe déjà");
-        }
-        if (adminsRepository.existsByUsername(username)) {
-            throw new IllegalArgumentException("Le username " + username + " existe déjà");
-        }
+    public Admin createAdmin(Admin admin) {
+
+        if (adminsRepository.existsByUsername(admin.getUsername()))
+        throw new IllegalArgumentException("Le username " + admin.getUsername() + " existe déjà");
 
         // Créer le nouvel admin avec mot de passe hashé
-        Admin admin = new Admin();
-        admin.setUsername(username);
-        admin.setEmail(email);
-        admin.setPassword(passwordEncoder.encode(password)); // Hasher le mot de passe
-        admin.setFirstName(firstName);
-        admin.setLastName(lastName);
-        admin.setRole("ADMIN");
-        admin.setActive(true);
+        Admin new_admin = new Admin();
+        admin.setUsername(admin.getUsername());
+
+        admin.setPassword(passwordEncoder.encode(admin.getPassword())); // Hasher le mot de passe
+
         // Les timestamps sont gérés automatiquement par @PrePersist
 
         return adminsRepository.save(admin);
     }
 
-    /**
-     * Vérifie si un email existe
-     */
-    public boolean emailExists(String email) {
-        return adminsRepository.existsByEmail(email);
-    }
 
     /**
      * Vérifie si un username existe
      */
     public boolean usernameExists(String username) {
-        return adminsRepository.existsByUsername(username);
+        return adminsRepository.existsByUsername((username));
     }
 
     /**
