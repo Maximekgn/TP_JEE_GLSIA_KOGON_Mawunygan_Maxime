@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BankService, Client } from '../../../core/services/bank.service';
+import { BankService, Client } from '../../core/services/bank.service';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -156,6 +156,6 @@ export class AdminClientsListComponent implements OnInit {
 
   getTotalBalance(client: Client): number {
     if (!client.accounts) return 0;
-    return client.accounts.reduce((sum, account) => sum + (account.balance || 0), 0);
+    return client.accounts.reduce((sum: number, account: any) => sum + (account.balance || 0), 0);
   }
 }

@@ -6,7 +6,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
-  
+
   {
     path: 'dashboard',
     canActivate: [authGuard],
@@ -39,8 +39,55 @@ export const routes: Routes = [
       {
         path: 'admin/deposit',
         loadComponent: () =>
-          import('./dashboard/deposit/deposit.component').then(
-            (m) => m.AdminDepositComponent
+          import('./dashboard/deposit/deposit.component').then((m) => m.AdminDepositComponent),
+      },
+      {
+        path: 'admin/withdraw',
+        loadComponent: () =>
+          import('./dashboard/withdrawal/withdrawal.component').then((m) => m.WithdrawalComponent),
+      },
+      {
+        path: 'admin/transfer',
+        loadComponent: () =>
+          import('./dashboard/transfer/transfer.component').then((m) => m.TransferComponent),
+      },
+      {
+        path: 'admin/transactions',
+        loadComponent: () =>
+          import('./dashboard/transactions/transactions-history.component').then(
+            (m) => m.TransactionsHistoryComponent
+          ),
+      },
+    ],
+  },
+
+  // Client Dashboard Routes
+  {
+    path: 'dashboard/client',
+    loadComponent: () =>
+      import('./client-dashboard/layout/client-layout.component').then(
+        (m) => m.ClientLayoutComponent
+      ),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./client-dashboard/my-accounts/my-accounts.component').then(
+            (m) => m.MyAccountsComponent
+          ),
+      },
+      {
+        path: 'operations',
+        loadComponent: () =>
+          import('./client-dashboard/operations/client-operations.component').then(
+            (m) => m.ClientOperationsComponent
+          ),
+      },
+      {
+        path: 'history',
+        loadComponent: () =>
+          import('./client-dashboard/history/client-history.component').then(
+            (m) => m.ClientHistoryComponent
           ),
       },
     ],

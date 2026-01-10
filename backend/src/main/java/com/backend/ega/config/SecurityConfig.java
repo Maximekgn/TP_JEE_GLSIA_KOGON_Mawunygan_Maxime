@@ -86,8 +86,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/**"
                         ).permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/clients").hasRole("ADMIN")
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/accounts").hasRole("ADMIN")
+                       
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

@@ -81,7 +81,7 @@ export class BankService {
       password: string;
       firstName: string;
       lastName: string;
-    },
+    }
   ): Observable<Client> {
     return this.http.post<Client>(`${this.API_BASE}/clients`, clientData);
   }
@@ -118,7 +118,7 @@ export class BankService {
 
   updateAccount(
     accountId: number,
-    accountData: Partial<Account> & { owner?: OwnerRef | Client },
+    accountData: Partial<Account> & { owner?: OwnerRef | Client }
   ): Observable<Account> {
     return this.http.put<Account>(`${this.API_BASE}/accounts/${accountId}`, accountData);
   }
@@ -200,13 +200,13 @@ export class BankService {
   getTransactionsByAccountDateRange(
     accountId: number,
     startDateIso: string,
-    endDateIso: string,
+    endDateIso: string
   ): Observable<Transaction[]> {
     const params = new HttpParams().set('startDate', startDateIso).set('endDate', endDateIso);
 
     return this.http.get<Transaction[]>(
       `${this.API_BASE}/transactions/account/${accountId}/date-range`,
-      { params },
+      { params }
     );
   }
 
@@ -217,7 +217,7 @@ export class BankService {
   getAccountStatement(
     accountId: number,
     startDateIso: string,
-    endDateIso: string,
+    endDateIso: string
   ): Observable<string> {
     const params = new HttpParams().set('startDate', startDateIso).set('endDate', endDateIso);
 

@@ -37,6 +37,21 @@ export class SidebarComponent {
       href: '/dashboard/admin/deposit',
       icon: 'M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
     },
+    {
+      label: 'Effectuer un Retrait',
+      href: '/dashboard/admin/withdraw',
+      icon: 'M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
+    },
+    {
+      label: 'Faire un Virement',
+      href: '/dashboard/admin/transfer',
+      icon: 'M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5',
+    },
+    {
+      label: 'Historique & Relevé',
+      href: '/dashboard/admin/transactions',
+      icon: 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+    },
   ];
 
   get filteredLinks() {

@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BankService, Account } from '../../../core/services/bank.service';
-import { NotificationService } from '../../../core/services/notification.service';
+import { BankService, Account } from '../../core/services/bank.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { finalize, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
@@ -214,7 +214,7 @@ export class AdminDepositComponent implements OnInit {
       .pipe(finalize(() => (this.submitting = false)))
       .subscribe({
         next: () => {
-          this.notificationService.show('Dépôt effectué avec succès', 'success');
+          this.notificationService.showSuccess('Dépôt effectué avec succès');
           this.depositForm.reset({
             accountId: '',
             amount: null,
@@ -222,9 +222,9 @@ export class AdminDepositComponent implements OnInit {
           });
           this.loadAccounts(); // Refresh balances
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error performing deposit', err);
-          this.notificationService.show('Erreur lors du dépôt', 'error');
+          this.notificationService.showError('Erreur lors du dépôt');
         },
       });
   }

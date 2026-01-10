@@ -9,7 +9,7 @@ export interface Notification {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
   // Using Angular Signals for state management (Best Practice in Angular 17+)
@@ -29,7 +29,7 @@ export class NotificationService {
     const newNotification: Notification = { id, message, type };
 
     // Update signal state
-    this.notificationsSignal.update(notifications => [...notifications, newNotification]);
+    this.notificationsSignal.update((notifications) => [...notifications, newNotification]);
 
     // Auto-dismiss
     if (duration > 0) {
@@ -37,15 +37,15 @@ export class NotificationService {
     }
   }
 
-  success(message: string, duration?: number): void {
+  showSuccess(message: string, duration?: number): void {
     this.show(message, 'success', duration);
   }
 
-  error(message: string, duration?: number): void {
+  showError(message: string, duration?: number): void {
     this.show(message, 'error', duration);
   }
 
-  info(message: string, duration?: number): void {
+  showInfo(message: string, duration?: number): void {
     this.show(message, 'info', duration);
   }
 
@@ -57,9 +57,7 @@ export class NotificationService {
    * Removes a notification by ID
    */
   dismiss(id: number): void {
-    this.notificationsSignal.update(notifications =>
-      notifications.filter(n => n.id !== id)
-    );
+    this.notificationsSignal.update((notifications) => notifications.filter((n) => n.id !== id));
   }
 
   /**
