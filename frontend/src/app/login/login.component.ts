@@ -19,7 +19,6 @@ export class LoginComponent {
   error: string | null = null;
   success: string | null = null;
 
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -53,15 +52,12 @@ export class LoginComponent {
       .subscribe({
         next: () => {
           this.success = 'Connexion réussie ! Redirection...';
-          setTimeout(() => {
-            this.router.navigate(['/dashboard']);
-          }, 1000);
+          console.log('Login success - navigating to dashboard');
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           this.error = err.message || 'Identifiants incorrects';
         },
       });
   }
-
-  
 }

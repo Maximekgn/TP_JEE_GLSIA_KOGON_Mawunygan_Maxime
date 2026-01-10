@@ -99,15 +99,15 @@ import { catchError } from 'rxjs/operators';
                 </td>
                 <td class="px-6 py-4 text-right">
                   <div class="font-bold text-slate-900">
-                    {{ account.balance | number: '1.2-2' }} FCFA
+                    {{ account.balance | number : '1.2-2' }} FCFA
                   </div>
                 </td>
                 <td class="px-6 py-4 text-sm text-slate-600">
-                  {{ account.creationDate || account.createdAt | date: 'dd/MM/yyyy' }}
+                  {{ account.creationDate || account.createdAt | date : 'dd/MM/yyyy' }}
                 </td>
                 <td class="px-6 py-4 text-right">
                   <button
-                    class="text-red-600 hover:text-red-800 font-bold text-xs uppercase tracking-wider hover:underline"
+                    class="text-blue-600 hover:text-blue-800 font-bold text-xs uppercase tracking-wider hover:underline"
                   >
                     Détails
                   </button>
@@ -152,7 +152,7 @@ export class AdminAccountsListComponent implements OnInit {
       catchError((err) => {
         console.error('Error loading accounts', err);
         return of([]);
-      }),
+      })
     );
   }
 }

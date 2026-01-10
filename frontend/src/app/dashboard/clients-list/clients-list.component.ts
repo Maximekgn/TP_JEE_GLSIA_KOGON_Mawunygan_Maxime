@@ -51,7 +51,7 @@ import { catchError } from 'rxjs/operators';
                 <td class="px-6 py-4">
                   <div class="flex items-center space-x-3">
                     <div
-                      class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold border border-red-200 uppercase"
+                      class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200 uppercase"
                     >
                       {{ (client.firstName || '?')[0] }}{{ (client.lastName || '?')[0] }}
                     </div>
@@ -76,7 +76,7 @@ import { catchError } from 'rxjs/operators';
                       class="text-xs text-slate-500"
                       *ngIf="client.accounts && client.accounts.length > 0"
                     >
-                      Total: {{ getTotalBalance(client) | number: '1.2-2' }} FCFA
+                      Total: {{ getTotalBalance(client) | number : '1.2-2' }} FCFA
                     </span>
                   </div>
                 </td>
@@ -92,7 +92,7 @@ import { catchError } from 'rxjs/operators';
                 </td>
                 <td class="px-6 py-4 text-right">
                   <button
-                    class="text-slate-400 hover:text-red-600 transition-colors p-2 rounded-lg hover:bg-red-50"
+                    class="text-slate-400 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +150,7 @@ export class AdminClientsListComponent implements OnInit {
       catchError((err) => {
         console.error('Error loading clients', err);
         return of([]);
-      }),
+      })
     );
   }
 

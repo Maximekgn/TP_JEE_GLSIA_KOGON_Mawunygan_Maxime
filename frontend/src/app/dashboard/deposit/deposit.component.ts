@@ -28,12 +28,12 @@ import { Observable, of } from 'rxjs';
               <div class="relative">
                 <select
                   formControlName="accountId"
-                  class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition-all appearance-none"
+                  class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all appearance-none"
                 >
                   <option value="">Sélectionnez un compte</option>
                   <option *ngFor="let acc of accounts" [value]="acc.id">
                     {{ acc.accountNumber }} - {{ acc.owner?.firstName }}
-                    {{ acc.owner?.lastName }} ({{ acc.balance | number: '1.2-2' }} FCFA)
+                    {{ acc.owner?.lastName }} ({{ acc.balance | number : '1.2-2' }} FCFA)
                   </option>
                 </select>
                 <div
@@ -60,7 +60,7 @@ import { Observable, of } from 'rxjs';
                   depositForm.get('accountId')?.touched &&
                   depositForm.get('accountId')?.hasError('required')
                 "
-                class="text-xs font-medium text-red-500 mt-1 pl-1"
+                class="text-xs font-medium text-blue-500 mt-1 pl-1"
               >
                 Le compte est requis.
               </p>
@@ -76,10 +76,10 @@ import { Observable, of } from 'rxjs';
                   type="number"
                   formControlName="amount"
                   placeholder="0.00"
-                  class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition-all"
+                  class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
                 />
                 <div
-                  class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-500 transition-colors"
+                  class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors"
                 >
                   <span class="font-bold">₵</span>
                 </div>
@@ -89,13 +89,13 @@ import { Observable, of } from 'rxjs';
                   depositForm.get('amount')?.touched &&
                   depositForm.get('amount')?.hasError('required')
                 "
-                class="text-xs font-medium text-red-500 mt-1 pl-1"
+                class="text-xs font-medium text-blue-500 mt-1 pl-1"
               >
                 Le montant est requis.
               </p>
               <p
                 *ngIf="depositForm.get('amount')?.hasError('min')"
-                class="text-xs font-medium text-red-500 mt-1 pl-1"
+                class="text-xs font-medium text-blue-500 mt-1 pl-1"
               >
                 Le montant doit être supérieur à 0.
               </p>
@@ -110,7 +110,7 @@ import { Observable, of } from 'rxjs';
                 type="text"
                 formControlName="description"
                 placeholder="Ex: Dépôt d'espèces au guichet"
-                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition-all"
+                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
               />
             </div>
 
@@ -138,15 +138,15 @@ import { Observable, of } from 'rxjs';
       </div>
 
       <!-- Quick Info Card -->
-      <div class="bg-red-50 border border-red-100 rounded-2xl p-6 flex items-start space-x-4">
-        <div class="bg-red-100 p-2 rounded-lg shrink-0">
+      <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6 flex items-start space-x-4">
+        <div class="bg-blue-100 p-2 rounded-lg shrink-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6 text-red-600"
+            class="w-6 h-6 text-blue-600"
           >
             <path
               stroke-linecap="round"
@@ -156,8 +156,8 @@ import { Observable, of } from 'rxjs';
           </svg>
         </div>
         <div class="space-y-1">
-          <h4 class="text-sm font-bold text-red-900 uppercase tracking-tight">Attention</h4>
-          <p class="text-sm text-red-700/80 leading-relaxed">
+          <h4 class="text-sm font-bold text-blue-900 uppercase tracking-tight">Attention</h4>
+          <p class="text-sm text-blue-700/80 leading-relaxed">
             Cette opération est irréversible. Le solde du client sera crédité immédiatement après
             confirmation.
           </p>
@@ -193,7 +193,7 @@ export class AdminDepositComponent implements OnInit {
       catchError((err) => {
         console.error('Error loading accounts', err);
         return of([]);
-      }),
+      })
     );
   }
 

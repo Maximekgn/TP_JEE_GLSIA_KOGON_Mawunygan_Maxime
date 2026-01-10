@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -15,6 +15,6 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
       </div>
     </div>
   `,
-  styles: []
+  styles: [],
 })
 export class DashboardLayoutComponent {}
