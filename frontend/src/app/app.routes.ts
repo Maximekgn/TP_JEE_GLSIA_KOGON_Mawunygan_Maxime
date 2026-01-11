@@ -1,9 +1,15 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
+import { authGuard } from '../security/core/guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
+    loadComponent: () =>
+      import('./landing-page/landing-page.component').then((m) => m.LandingPageComponent),
+  },
+
+  {
+    path: 'login',
     loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
 
@@ -11,8 +17,8 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./dashboard-layout/dashboard-layout.component').then(
-        (m) => m.DashboardLayoutComponent
+      import('../layouts/dashboard-layout/dashboard-layout.component').then(
+        (m) => m.DashboardLayoutComponent,
       ),
     children: [
       {
@@ -26,14 +32,14 @@ export const routes: Routes = [
         path: 'admin/clients',
         loadComponent: () =>
           import('./dashboard/clients-list/clients-list.component').then(
-            (m) => m.AdminClientsListComponent
+            (m) => m.AdminClientsListComponent,
           ),
       },
       {
         path: 'admin/accounts',
         loadComponent: () =>
           import('./dashboard/accounts-list/accounts-list.component').then(
-            (m) => m.AdminAccountsListComponent
+            (m) => m.AdminAccountsListComponent,
           ),
       },
       {
@@ -55,7 +61,7 @@ export const routes: Routes = [
         path: 'admin/transactions',
         loadComponent: () =>
           import('./dashboard/transactions/transactions-history.component').then(
-            (m) => m.TransactionsHistoryComponent
+            (m) => m.TransactionsHistoryComponent,
           ),
       },
     ],
@@ -66,28 +72,28 @@ export const routes: Routes = [
     path: 'dashboard/client',
     loadComponent: () =>
       import('./client-dashboard/layout/client-layout.component').then(
-        (m) => m.ClientLayoutComponent
+        (m) => m.ClientLayoutComponent,
       ),
     children: [
       {
         path: '',
         loadComponent: () =>
           import('./client-dashboard/my-accounts/my-accounts.component').then(
-            (m) => m.MyAccountsComponent
+            (m) => m.MyAccountsComponent,
           ),
       },
       {
         path: 'operations',
         loadComponent: () =>
           import('./client-dashboard/operations/client-operations.component').then(
-            (m) => m.ClientOperationsComponent
+            (m) => m.ClientOperationsComponent,
           ),
       },
       {
         path: 'history',
         loadComponent: () =>
           import('./client-dashboard/history/client-history.component').then(
-            (m) => m.ClientHistoryComponent
+            (m) => m.ClientHistoryComponent,
           ),
       },
     ],

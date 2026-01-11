@@ -5,11 +5,16 @@ meta {
 }
 
 get {
-  url: 
+  url: http://localhost:8080/api/accounts
   body: none
-  auth: inherit
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwic3ViIjoiYWRtaW4iLCJpYXQiOjE3NjgxMjE5NDMsImV4cCI6MTc2ODIwODM0M30.iZT21BJpmzSG-soChOi_7ckC2aAk_T5wdAOWx16nlcQ
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

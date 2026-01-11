@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BankService, Account, Client } from '../../core/services/bank.service';
+import { BankService, Account, Client } from '../../../security/core/services/bank.service';
 import { finalize, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 

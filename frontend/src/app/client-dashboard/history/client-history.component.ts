@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { BankService, Account, Transaction } from '../../core/services/bank.service';
+import { BankService, Account, Transaction } from '../../../security/core/services/bank.service';
 import { Observable, of } from 'rxjs';
 
 @Component({

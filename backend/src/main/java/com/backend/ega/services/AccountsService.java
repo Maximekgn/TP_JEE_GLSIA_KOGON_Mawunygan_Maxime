@@ -4,18 +4,17 @@ import com.backend.ega.entities.Account;
 import com.backend.ega.entities.Client;
 import com.backend.ega.entities.enums.AccountType;
 import com.backend.ega.repositories.AccountsRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import org.iban4j.CountryCode;
-import org.iban4j.Iban;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.iban4j.CountryCode;
+import org.iban4j.Iban;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AccountsService {
@@ -23,7 +22,10 @@ public class AccountsService {
     private final AccountsRepository accountsRepository;
     private final com.backend.ega.repositories.ClientsRepository clientsRepository;
 
-    public AccountsService(AccountsRepository accountsRepository, com.backend.ega.repositories.ClientsRepository clientsRepository) {
+    public AccountsService(
+        AccountsRepository accountsRepository,
+        com.backend.ega.repositories.ClientsRepository clientsRepository
+    ) {
         this.accountsRepository = accountsRepository;
         this.clientsRepository = clientsRepository;
     }
@@ -33,18 +35,21 @@ public class AccountsService {
     }
 
     public ResponseEntity<Account> getAccountById(Long id) {
-        return accountsRepository.findById(id)
-                .map(account -> new ResponseEntity<>(account, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return accountsRepository
+            .findById(id)
+            .map(account -> new ResponseEntity<>(account, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     public ResponseEntity<Account> createAccount(Account input) {
-        if (input.getOwner() == null ) {
+        if (input.getOwner() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         // Fetch Managed Client
-        Optional<Client> clientOpt = clientsRepository.findById(input.getOwner().getId());
+        Optional<Client> clientOpt = clientsRepository.findById(
+            input.getOwner().getId()
+        );
         if (clientOpt.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -56,30 +61,40 @@ public class AccountsService {
         account.setAccountType(input.getAccountType());
         account.setBalance(0.0);
 
-        
+        // Ensure timestamps required by validation constraints
+        account.setCreatedAt(LocalDateTime.now());
+        account.setUpdatedAt(LocalDateTime.now());
+
         // Generate IBAN if missing
-        if (input.getAccountNumber() == null || input.getAccountNumber().isBlank()) {
+        if (
+            input.getAccountNumber() == null ||
+            input.getAccountNumber().isBlank()
+        ) {
             account.setAccountNumber(generateAccountNumber());
         } else {
             account.setAccountNumber(input.getAccountNumber());
         }
-        
+
         Account savedAccount = accountsRepository.save(account);
         return new ResponseEntity<>(savedAccount, HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Account> updateAccount(Long id, Account accountDetails) {
-        return accountsRepository.findById(id)
-                .map(account -> {
-                    // On peut aussi valider l'IBAN lors de la mise à jour
-                    account.setAccountNumber(accountDetails.getAccountNumber());
-                    account.setAccountType(accountDetails.getAccountType());
-                    account.setBalance(accountDetails.getBalance());
+    public ResponseEntity<Account> updateAccount(
+        Long id,
+        Account accountDetails
+    ) {
+        return accountsRepository
+            .findById(id)
+            .map(account -> {
+                // On peut aussi valider l'IBAN lors de la mise à jour
+                account.setAccountNumber(accountDetails.getAccountNumber());
+                account.setAccountType(accountDetails.getAccountType());
+                account.setBalance(accountDetails.getBalance());
 
-                    Account updatedAccount = accountsRepository.save(account);
-                    return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
-                })
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                Account updatedAccount = accountsRepository.save(account);
+                return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+            })
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     public ResponseEntity<Void> deleteAccount(Long id) {
@@ -91,9 +106,11 @@ public class AccountsService {
     }
 
     public List<Account> getAccountsByClient(Long clientId) {
-        return accountsRepository.findAll().stream()
-                .filter(account -> account.getOwner().getId() == clientId)
-                .collect(Collectors.toList());
+        return accountsRepository
+            .findAll()
+            .stream()
+            .filter(account -> account.getOwner().getId() == clientId)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -102,7 +119,10 @@ public class AccountsService {
      * @param accountType le type de compte (SAVINGS ou CHECKING)
      * @return le compte créé
      */
-    public Account createAccountForClient(Client client, AccountType accountType) {
+    public Account createAccountForClient(
+        Client client,
+        AccountType accountType
+    ) {
         // Générer un numéro de compte unique au format IBAN
         String accountNumber = generateAccountNumber();
 

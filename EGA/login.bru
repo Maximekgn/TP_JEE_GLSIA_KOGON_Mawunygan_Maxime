@@ -4,12 +4,20 @@ meta {
   seq: 1
 }
 
-get {
-  url: localhost:8080/api/auth/login
-  body: none
+post {
+  url: http://localhost:8080/api/auth/login
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "username": "admin",
+    "password": "admin123"
+  }
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

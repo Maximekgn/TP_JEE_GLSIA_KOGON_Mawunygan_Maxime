@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BankService, Account, Transaction } from '../../core/services/bank.service';
-import { NotificationService } from '../../core/services/notification.service';
+import { BankService, Account, Transaction } from '../../../security/core/services/bank.service';
+import { NotificationService } from '../../../security/core/services/notification.service';
 import { catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
