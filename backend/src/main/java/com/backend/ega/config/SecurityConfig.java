@@ -1,10 +1,14 @@
 package com.backend.ega.config;
 
+import com.backend.ega.services.AdminUserDetailsService;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,6 +35,10 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Autowired
+    @Qualifier("adminUserDetailsService")
+    private AdminUserDetailsService adminUserDetailsService;
+
     /**
      * Bean pour encoder les mots de passe
      */
@@ -40,13 +48,15 @@ public class SecurityConfig {
     }
 
     /**
-     * Bean pour le gestionnaire d'authentification
+     * Provider d'authentification pour les admins
      */
     @Bean
-    public AuthenticationManager authenticationManager(
-        AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider =
+            new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(adminUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 
     /**
@@ -91,9 +101,18 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth ->
                 auth
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/transactions/deposit").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                    .requestMatchers("/api/auth/**")
+                    .permitAll()
+                    .requestMatchers("/api/client/auth/**")
+                    .permitAll()
+                    .requestMatchers("/api/clients")
+                    .permitAll()
+                    .requestMatchers("/api/client/**")
+                    .authenticated()
+                    .requestMatchers("/api/transactions/deposit")
+                    .hasRole("ADMIN")
+                    .anyRequest()
+                    .authenticated()
             )
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

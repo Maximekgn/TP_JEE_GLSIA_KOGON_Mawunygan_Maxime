@@ -4,7 +4,11 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { jwtInterceptor } from '../security/core/interceptors/jwt.interceptor';
+import { clientAuthInterceptor } from '../security/core/interceptors/client-auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideHttpClient(withInterceptors([jwtInterceptor]))],
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([jwtInterceptor, clientAuthInterceptor])),
+  ],
 };

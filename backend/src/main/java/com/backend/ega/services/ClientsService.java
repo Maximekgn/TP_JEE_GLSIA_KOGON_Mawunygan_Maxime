@@ -2,14 +2,14 @@ package com.backend.ega.services;
 
 import com.backend.ega.entities.Client;
 import com.backend.ega.repositories.ClientsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 /**
  * Service pour gérer les opérations CRUD sur les clients.
@@ -18,10 +18,15 @@ import java.util.Optional;
 public class ClientsService {
 
     private final ClientsRepository clientsRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ClientsService(ClientsRepository clientsRepository) {
+    public ClientsService(
+        ClientsRepository clientsRepository,
+        PasswordEncoder passwordEncoder
+    ) {
         this.clientsRepository = clientsRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -41,8 +46,9 @@ public class ClientsService {
      */
     public ResponseEntity<Client> getClientById(Long id) {
         Optional<Client> opt = clientsRepository.findById(id);
-        return opt.map(client -> new ResponseEntity<>(client, HttpStatus.OK))
-                  .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return opt
+            .map(client -> new ResponseEntity<>(client, HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -57,8 +63,16 @@ public class ClientsService {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        if (client.getEmail() != null && clientsRepository.existsByEmail(client.getEmail())) {
+        if (
+            client.getEmail() != null &&
+            clientsRepository.existsByEmail(client.getEmail())
+        ) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        // Encoder le mot de passe si fourni
+        if (client.getPassword() != null && !client.getPassword().isEmpty()) {
+            client.setPassword(passwordEncoder.encode(client.getPassword()));
         }
 
         // initialisation des timestamps si nécessaire
@@ -94,13 +108,37 @@ public class ClientsService {
         }
 
         // Mettre à jour les autres champs s'ils sont fournis
-        if (clientDetails.getFirst_name() != null) client.setFirst_name(clientDetails.getFirst_name());
-        if (clientDetails.getLast_name() != null) client.setLast_name(clientDetails.getLast_name());
-        if (clientDetails.getBirthDate() != null) client.setBirthDate(clientDetails.getBirthDate());
-        if (clientDetails.getGender() != null) client.setGender(clientDetails.getGender());
-        if (clientDetails.getAddress() != null) client.setAddress(clientDetails.getAddress());
-        if (clientDetails.getPhoneNumber() != null) client.setPhoneNumber(clientDetails.getPhoneNumber());
-        if (clientDetails.getNationality() != null) client.setNationality(clientDetails.getNationality());
+        if (clientDetails.getFirst_name() != null) client.setFirst_name(
+            clientDetails.getFirst_name()
+        );
+        if (clientDetails.getLast_name() != null) client.setLast_name(
+            clientDetails.getLast_name()
+        );
+        if (clientDetails.getBirthDate() != null) client.setBirthDate(
+            clientDetails.getBirthDate()
+        );
+        if (clientDetails.getGender() != null) client.setGender(
+            clientDetails.getGender()
+        );
+        if (clientDetails.getAddress() != null) client.setAddress(
+            clientDetails.getAddress()
+        );
+        if (clientDetails.getPhoneNumber() != null) client.setPhoneNumber(
+            clientDetails.getPhoneNumber()
+        );
+        if (clientDetails.getNationality() != null) client.setNationality(
+            clientDetails.getNationality()
+        );
+
+        // Encoder le mot de passe si fourni
+        if (
+            clientDetails.getPassword() != null &&
+            !clientDetails.getPassword().isEmpty()
+        ) {
+            client.setPassword(
+                passwordEncoder.encode(clientDetails.getPassword())
+            );
+        }
 
         client.setUpdatedAt(LocalDateTime.now());
 

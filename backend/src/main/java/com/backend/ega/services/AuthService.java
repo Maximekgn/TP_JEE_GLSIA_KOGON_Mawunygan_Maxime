@@ -8,9 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +15,6 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private static final String BEARER_PREFIX = "Bearer ";
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @Autowired
     private AdminsRepository adminsRepository;
@@ -35,7 +29,7 @@ public class AuthService {
     private Long accessTokenExpiration;
 
     /**
-     * Login ADMIN: authentifie via Spring Security puis génère un JWT.
+     * Login ADMIN: authentifie en vérifiant le mot de passe puis génère un JWT.
      */
     public Map<String, Object> loginAdmin(String username, String password) {
         if (username == null || password == null) {
@@ -45,30 +39,29 @@ public class AuthService {
         String trimmedUsername = safeTrim(username);
 
         if (
-                trimmedUsername == null ||
-                        trimmedUsername.isBlank() ||
-                        password.isBlank()
+            trimmedUsername == null ||
+            trimmedUsername.isBlank() ||
+            password.isBlank()
         ) {
             throw new IllegalArgumentException(
-                    "Username et mot de passe requis"
-            );
-        }
-
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(trimmedUsername, password)
-            );
-        } catch (BadCredentialsException e) {
-            throw new IllegalArgumentException(
-                    "Username ou mot de passe incorrect"
+                "Username et mot de passe requis"
             );
         }
 
         Admin admin = adminsRepository
-                .findByUsername(trimmedUsername)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Administrateur non trouvé")
-                );
+            .findByUsername(trimmedUsername)
+            .orElseThrow(() ->
+                new IllegalArgumentException(
+                    "Username ou mot de passe incorrect"
+                )
+            );
+
+        // Vérifier le mot de passe avec BCrypt
+        if (!passwordEncoder.matches(password, admin.getPassword())) {
+            throw new IllegalArgumentException(
+                "Username ou mot de passe incorrect"
+            );
+        }
 
         String accessToken = jwtUtil.generateToken(admin);
 
@@ -94,12 +87,12 @@ public class AuthService {
         String trimmedUsername = safeTrim(username);
 
         if (
-                trimmedUsername == null ||
-                        trimmedUsername.isBlank() ||
-                        password.isBlank()
+            trimmedUsername == null ||
+            trimmedUsername.isBlank() ||
+            password.isBlank()
         ) {
             throw new IllegalArgumentException(
-                    "Username et mot de passe requis"
+                "Username et mot de passe requis"
             );
         }
 
@@ -146,10 +139,10 @@ public class AuthService {
         }
 
         Admin admin = adminsRepository
-                .findByUsername(username)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Administrateur non trouvé")
-                );
+            .findByUsername(username)
+            .orElseThrow(() ->
+                new IllegalArgumentException("Administrateur non trouvé")
+            );
 
         boolean valid = jwtUtil.validateToken(token, admin.getUsername());
         if (!valid) {
@@ -158,8 +151,8 @@ public class AuthService {
 
         Date expiration = jwtUtil.extractExpiration(token);
         Long expiresInSeconds = Math.max(
-                0,
-                (expiration.getTime() - System.currentTimeMillis()) / 1000
+            0,
+            (expiration.getTime() - System.currentTimeMillis()) / 1000
         );
 
         Map<String, Object> result = new HashMap<>();
@@ -189,10 +182,10 @@ public class AuthService {
         }
 
         Admin admin = adminsRepository
-                .findByUsername(username)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Administrateur non trouvé")
-                );
+            .findByUsername(username)
+            .orElseThrow(() ->
+                new IllegalArgumentException("Administrateur non trouvé")
+            );
 
         Map<String, Object> result = new HashMap<>();
         result.put("id", admin.getId());

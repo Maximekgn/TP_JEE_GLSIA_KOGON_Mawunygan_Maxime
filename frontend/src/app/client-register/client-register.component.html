@@ -1,0 +1,360 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl w-full space-y-8">
+    <!-- Header -->
+    <div class="text-center">
+      <div class="mx-auto h-16 w-16 bg-indigo-600 rounded-full flex items-center justify-center mb-4">
+        <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+        </svg>
+      </div>
+      <h2 class="text-3xl font-extrabold text-gray-900">
+        Créer un compte client
+      </h2>
+      <p class="mt-2 text-sm text-gray-600">
+        Rejoignez notre banque en quelques étapes simples
+      </p>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center flex-1" *ngFor="let step of [1, 2, 3]; let i = index">
+          <div class="flex items-center">
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300"
+              [class.bg-indigo-600]="currentStep >= step"
+              [class.text-white]="currentStep >= step"
+              [class.bg-gray-200]="currentStep < step"
+              [class.text-gray-500]="currentStep < step"
+            >
+              {{ step }}
+            </div>
+            <div class="ml-3 text-sm font-medium" [class.text-indigo-600]="currentStep >= step" [class.text-gray-500]="currentStep < step">
+              <span *ngIf="step === 1">Informations personnelles</span>
+              <span *ngIf="step === 2">Contact</span>
+              <span *ngIf="step === 3">Sécurité</span>
+            </div>
+          </div>
+          <div
+            *ngIf="i < 2"
+            class="flex-1 h-1 mx-4 transition-all duration-300"
+            [class.bg-indigo-600]="currentStep > step"
+            [class.bg-gray-200]="currentStep <= step"
+          ></div>
+        </div>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <!-- Success Message -->
+        <div *ngIf="success" class="rounded-md bg-green-50 p-4 border border-green-200 mb-6">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-green-800">{{ success }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="rounded-md bg-red-50 p-4 border border-red-200 mb-6">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-red-800">{{ error }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 1: Personal Information -->
+        <div *ngIf="currentStep === 1" class="space-y-6 animate-fadeIn">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- First Name -->
+            <div>
+              <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">
+                Prénom <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="first_name"
+                type="text"
+                formControlName="first_name"
+                placeholder="Jean"
+                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                [class.border-gray-300]="!first_name?.invalid || !first_name?.touched"
+                [class.border-red-500]="first_name?.invalid && first_name?.touched"
+              />
+              <div *ngIf="first_name?.invalid && first_name?.touched" class="mt-2 text-sm text-red-600">
+                <p *ngIf="first_name?.errors?.['required']">Le prénom est requis</p>
+                <p *ngIf="first_name?.errors?.['minlength']">Le prénom doit contenir au moins 2 caractères</p>
+              </div>
+            </div>
+
+            <!-- Last Name -->
+            <div>
+              <label for="last_name" class="block text-sm font-medium text-gray-700 mb-2">
+                Nom <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="last_name"
+                type="text"
+                formControlName="last_name"
+                placeholder="Dupont"
+                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                [class.border-gray-300]="!last_name?.invalid || !last_name?.touched"
+                [class.border-red-500]="last_name?.invalid && last_name?.touched"
+              />
+              <div *ngIf="last_name?.invalid && last_name?.touched" class="mt-2 text-sm text-red-600">
+                <p *ngIf="last_name?.errors?.['required']">Le nom est requis</p>
+                <p *ngIf="last_name?.errors?.['minlength']">Le nom doit contenir au moins 2 caractères</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Birth Date -->
+          <div>
+            <label for="birth_date" class="block text-sm font-medium text-gray-700 mb-2">
+              Date de naissance <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="birth_date"
+              type="date"
+              formControlName="birth_date"
+              [max]="minBirthDate"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              [class.border-gray-300]="!birth_date?.invalid || !birth_date?.touched"
+              [class.border-red-500]="birth_date?.invalid && birth_date?.touched"
+            />
+            <p class="mt-1 text-xs text-gray-500">Vous devez avoir au moins 18 ans</p>
+            <div *ngIf="birth_date?.invalid && birth_date?.touched" class="mt-2 text-sm text-red-600">
+              <p *ngIf="birth_date?.errors?.['required']">La date de naissance est requise</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Gender -->
+            <div>
+              <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">
+                Genre <span class="text-red-500">*</span>
+              </label>
+              <select
+                id="gender"
+                formControlName="gender"
+                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                [class.border-gray-300]="!gender?.invalid || !gender?.touched"
+                [class.border-red-500]="gender?.invalid && gender?.touched"
+              >
+                <option value="">Sélectionnez</option>
+                <option value="M">Masculin</option>
+                <option value="F">Féminin</option>
+              </select>
+              <div *ngIf="gender?.invalid && gender?.touched" class="mt-2 text-sm text-red-600">
+                <p *ngIf="gender?.errors?.['required']">Le genre est requis</p>
+              </div>
+            </div>
+
+            <!-- Nationality -->
+            <div>
+              <label for="nationality" class="block text-sm font-medium text-gray-700 mb-2">
+                Nationalité <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="nationality"
+                type="text"
+                formControlName="nationality"
+                placeholder="Française"
+                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                [class.border-gray-300]="!nationality?.invalid || !nationality?.touched"
+                [class.border-red-500]="nationality?.invalid && nationality?.touched"
+              />
+              <div *ngIf="nationality?.invalid && nationality?.touched" class="mt-2 text-sm text-red-600">
+                <p *ngIf="nationality?.errors?.['required']">La nationalité est requise</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Contact Information -->
+        <div *ngIf="currentStep === 2" class="space-y-6 animate-fadeIn">
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+              Adresse email <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="jean.dupont@example.com"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              [class.border-gray-300]="!email?.invalid || !email?.touched"
+              [class.border-red-500]="email?.invalid && email?.touched"
+            />
+            <div *ngIf="email?.invalid && email?.touched" class="mt-2 text-sm text-red-600">
+              <p *ngIf="email?.errors?.['required']">L'email est requis</p>
+              <p *ngIf="email?.errors?.['email']">Veuillez entrer un email valide</p>
+            </div>
+          </div>
+
+          <!-- Phone Number -->
+          <div>
+            <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-2">
+              Numéro de téléphone <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="phone_number"
+              type="tel"
+              formControlName="phone_number"
+              placeholder="+33612345678"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              [class.border-gray-300]="!phone_number?.invalid || !phone_number?.touched"
+              [class.border-red-500]="phone_number?.invalid && phone_number?.touched"
+            />
+            <p class="mt-1 text-xs text-gray-500">Format: +33612345678 ou 0612345678</p>
+            <div *ngIf="phone_number?.invalid && phone_number?.touched" class="mt-2 text-sm text-red-600">
+              <p *ngIf="phone_number?.errors?.['required']">Le numéro de téléphone est requis</p>
+              <p *ngIf="phone_number?.errors?.['pattern']">Format de numéro invalide</p>
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+              Adresse complète <span class="text-red-500">*</span>
+            </label>
+            <textarea
+              id="address"
+              formControlName="address"
+              rows="3"
+              placeholder="123 Rue de la Paix, 75000 Paris"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              [class.border-gray-300]="!address?.invalid || !address?.touched"
+              [class.border-red-500]="address?.invalid && address?.touched"
+            ></textarea>
+            <div *ngIf="address?.invalid && address?.touched" class="mt-2 text-sm text-red-600">
+              <p *ngIf="address?.errors?.['required']">L'adresse est requise</p>
+              <p *ngIf="address?.errors?.['minlength']">L'adresse doit contenir au moins 10 caractères</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Security -->
+        <div *ngIf="currentStep === 3" class="space-y-6 animate-fadeIn">
+          <!-- Password -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+              Mot de passe <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              placeholder="••••••••"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              [class.border-gray-300]="!password?.invalid || !password?.touched"
+              [class.border-red-500]="password?.invalid && password?.touched"
+            />
+            <p class="mt-1 text-xs text-gray-500">Minimum 6 caractères</p>
+            <div *ngIf="password?.invalid && password?.touched" class="mt-2 text-sm text-red-600">
+              <p *ngIf="password?.errors?.['required']">Le mot de passe est requis</p>
+              <p *ngIf="password?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</p>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+              Confirmer le mot de passe <span class="text-red-500">*</span>
+            </label>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="••••••••"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              [class.border-gray-300]="!confirmPassword?.invalid || !confirmPassword?.touched"
+              [class.border-red-500]="confirmPassword?.invalid && confirmPassword?.touched"
+            />
+            <div *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="mt-2 text-sm text-red-600">
+              <p *ngIf="confirmPassword?.errors?.['required']">Veuillez confirmer votre mot de passe</p>
+              <p *ngIf="confirmPassword?.errors?.['passwordMismatch']">Les mots de passe ne correspondent pas</p>
+            </div>
+          </div>
+
+          <!-- Terms and Conditions -->
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <h4 class="text-sm font-medium text-gray-900 mb-2">Conditions d'utilisation</h4>
+            <p class="text-xs text-gray-600">
+              En créant un compte, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.
+              Vos données personnelles seront traitées de manière sécurisée conformément au RGPD.
+            </p>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+          <button
+            type="button"
+            *ngIf="currentStep > 1"
+            (click)="previousStep()"
+            class="px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
+          >
+            Précédent
+          </button>
+          <div *ngIf="currentStep === 1"></div>
+
+          <button
+            type="button"
+            *ngIf="currentStep < totalSteps"
+            (click)="nextStep()"
+            class="px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
+          >
+            Suivant
+          </button>
+
+          <button
+            type="submit"
+            *ngIf="currentStep === totalSteps"
+            [disabled]="submitting || registerForm.invalid"
+            class="px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            <span *ngIf="!submitting">Créer mon compte</span>
+            <span *ngIf="submitting" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Création en cours...
+            </span>
+          </button>
+        </div>
+
+        <!-- Login Link -->
+        <div class="text-center mt-6">
+          <p class="text-sm text-gray-600">
+            Vous avez déjà un compte ?
+            <a
+              routerLink="/client/login"
+              class="font-medium text-indigo-600 hover:text-indigo-500 transition"
+            >
+              Connectez-vous
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center">
+      <p class="text-xs text-gray-500">
+        © 2024 Système Bancaire. Tous droits réservés.
+      </p>
+    </div>
+  </div>
+</div>

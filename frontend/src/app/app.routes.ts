@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '../security/core/guards/auth.guard';
+import { clientAuthGuard } from '../security/core/guards/client-auth.guard';
 
 export const routes: Routes = [
   {
@@ -8,11 +9,25 @@ export const routes: Routes = [
       import('./landing-page/landing-page.component').then((m) => m.LandingPageComponent),
   },
 
+  // Admin Login
   {
     path: 'login',
     loadComponent: () => import('./login/login.component').then((m) => m.LoginComponent),
   },
 
+  // Client Authentication Routes
+  {
+    path: 'client/login',
+    loadComponent: () =>
+      import('./client-login/client-login.component').then((m) => m.ClientLoginComponent),
+  },
+  {
+    path: 'client/register',
+    loadComponent: () =>
+      import('./client-register/client-register.component').then((m) => m.ClientRegisterComponent),
+  },
+
+  // Admin Dashboard Routes
   {
     path: 'dashboard',
     canActivate: [authGuard],
@@ -97,7 +112,8 @@ export const routes: Routes = [
 
   // Client Dashboard Routes
   {
-    path: 'dashboard/client',
+    path: 'client/dashboard',
+    canActivate: [clientAuthGuard],
     loadComponent: () =>
       import('./client-dashboard/layout/client-layout.component').then(
         (m) => m.ClientLayoutComponent,
@@ -125,5 +141,11 @@ export const routes: Routes = [
           ),
       },
     ],
+  },
+
+  // Fallback route
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];

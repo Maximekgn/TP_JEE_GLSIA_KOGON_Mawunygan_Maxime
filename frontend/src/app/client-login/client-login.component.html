@@ -1,0 +1,143 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <!-- Header -->
+    <div class="text-center">
+      <div class="mx-auto h-16 w-16 bg-indigo-600 rounded-full flex items-center justify-center mb-4">
+        <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+      </div>
+      <h2 class="text-3xl font-extrabold text-gray-900">
+        Espace Client
+      </h2>
+      <p class="mt-2 text-sm text-gray-600">
+        Connectez-vous à votre compte bancaire
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="bg-white rounded-lg shadow-xl p-8">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-6">
+
+        <!-- Success Message -->
+        <div *ngIf="success" class="rounded-md bg-green-50 p-4 border border-green-200">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-green-800">{{ success }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="rounded-md bg-red-50 p-4 border border-red-200">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-red-800">{{ error }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+            Adresse email
+          </label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="exemple@email.com"
+            class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            [class.border-gray-300]="!email?.invalid || !email?.touched"
+            [class.border-red-500]="email?.invalid && email?.touched"
+          />
+          <div *ngIf="email?.invalid && email?.touched" class="mt-2 text-sm text-red-600">
+            <p *ngIf="email?.errors?.['required']">L'email est requis</p>
+            <p *ngIf="email?.errors?.['email']">Veuillez entrer un email valide</p>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+            Mot de passe
+          </label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="••••••••"
+            class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            [class.border-gray-300]="!password?.invalid || !password?.touched"
+            [class.border-red-500]="password?.invalid && password?.touched"
+          />
+          <div *ngIf="password?.invalid && password?.touched" class="mt-2 text-sm text-red-600">
+            <p *ngIf="password?.errors?.['required']">Le mot de passe est requis</p>
+            <p *ngIf="password?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</p>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <button
+            type="submit"
+            [disabled]="submitting"
+            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150"
+          >
+            <span *ngIf="!submitting">Se connecter</span>
+            <span *ngIf="submitting" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Connexion en cours...
+            </span>
+          </button>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center">
+          <p class="text-sm text-gray-600">
+            Vous n'avez pas de compte ?
+            <a
+              routerLink="/client/register"
+              class="font-medium text-indigo-600 hover:text-indigo-500 transition"
+            >
+              Inscrivez-vous
+            </a>
+          </p>
+        </div>
+
+        <!-- Admin Link -->
+        <div class="text-center pt-4 border-t border-gray-200">
+          <p class="text-sm text-gray-500">
+            Vous êtes administrateur ?
+            <a
+              routerLink="/login"
+              class="font-medium text-gray-700 hover:text-gray-900 transition"
+            >
+              Connexion admin
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center">
+      <p class="text-xs text-gray-500">
+        © 2024 Système Bancaire. Tous droits réservés.
+      </p>
+    </div>
+  </div>
+</div>
