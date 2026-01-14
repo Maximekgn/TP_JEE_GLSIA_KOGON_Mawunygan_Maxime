@@ -1,27 +1,113 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { BankService, Client } from '../../../security/core/services/bank.service';
-import { Observable, of } from 'rxjs';
+import { NotificationService } from '../../../security/core/services/notification.service';
+import { of, timeout, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-clients-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="space-y-6" *ngIf="clients$ | async as clients">
-      <div class="flex justify-between items-center">
+    <div *ngIf="loading()" class="flex flex-col items-center justify-center py-32 space-y-4">
+      <div
+        class="w-12 h-12 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"
+      ></div>
+      <p class="text-slate-500 font-medium animate-pulse">Chargement de la liste des clients...</p>
+    </div>
+
+    <div
+      *ngIf="error()"
+      class="bg-red-50 border border-red-200 text-red-700 p-6 rounded-2xl max-w-2xl mx-auto my-12 text-center"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-12 h-12 mx-auto mb-4"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+        />
+      </svg>
+      <h3 class="text-lg font-bold mb-2">Erreur de chargement</h3>
+      <p class="mb-6">{{ error() }}</p>
+      <button
+        (click)="loadClients()"
+        class="px-6 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors"
+      >
+        Réessayer
+      </button>
+    </div>
+
+    <div class="space-y-6" *ngIf="!loading() && !error()">
+      <div class="flex flex-col space-y-4">
         <h2 class="text-2xl font-bold text-slate-800">Gestion des Clients</h2>
-        <span
-          class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"
-        >
-          {{ clients.length }} Clients total
-        </span>
+        <div class="flex justify-end">
+          <button
+            type="button"
+            (click)="goToCreateClient()"
+            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-5 h-5 mr-2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Ajouter un client
+          </button>
+        </div>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <!-- Filtres de recherche -->
+      <div class="bg-white p-6 border border-slate-200 shadow-sm rounded-xl">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="md:col-span-2 relative">
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="applyFilters()"
+              placeholder="Rechercher par nom, prénom ou email..."
+              class="w-full pl-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <select
+              [(ngModel)]="genderFilter"
+              (ngModelChange)="applyFilters()"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            >
+              <option value="">Tous les genres</option>
+              <option value="M">Masculin</option>
+              <option value="F">Féminin</option>
+            </select>
+          </div>
+          <div>
+            <input
+              type="date"
+              [(ngModel)]="dateFilter"
+              (ngModelChange)="applyFilters()"
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-sm border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse" *ngIf="clients.length > 0">
+          <table class="w-full text-left border-collapse" *ngIf="filteredClients.length > 0">
             <thead>
               <tr class="bg-slate-50 border-b border-slate-200">
                 <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
@@ -30,12 +116,7 @@ import { catchError } from 'rxjs/operators';
                 <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Contact
                 </th>
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Comptes
-                </th>
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Localisation
-                </th>
+
                 <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Nationalité
                 </th>
@@ -47,17 +128,15 @@ import { catchError } from 'rxjs/operators';
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-200">
-              <tr *ngFor="let client of clients" class="hover:bg-slate-50 transition-colors group">
+              <tr
+                *ngFor="let client of filteredClients"
+                class="hover:bg-slate-50 transition-colors group"
+              >
                 <td class="px-6 py-4">
                   <div class="flex items-center space-x-3">
-                    <div
-                      class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200 uppercase"
-                    >
-                      {{ (client.firstName || '?')[0] }}{{ (client.lastName || '?')[0] }}
-                    </div>
                     <div>
                       <div class="font-bold text-slate-800">
-                        {{ client.firstName }} {{ client.lastName }}
+                        {{ client.first_name }} {{ client.last_name }}
                       </div>
                       <div class="text-xs text-slate-500 italic">ID: #{{ client.id }}</div>
                     </div>
@@ -67,58 +146,32 @@ import { catchError } from 'rxjs/operators';
                   <div class="text-sm text-slate-700 font-medium">{{ client.email }}</div>
                   <div class="text-xs text-slate-500">{{ client.phoneNumber }}</div>
                 </td>
-                <td class="px-6 py-4">
-                  <div class="flex flex-col">
-                    <span class="text-sm font-bold text-slate-800">
-                      {{ client.accounts?.length || 0 }} Compte(s)
-                    </span>
-                    <span
-                      class="text-xs text-slate-500"
-                      *ngIf="client.accounts && client.accounts.length > 0"
-                    >
-                      Total: {{ getTotalBalance(client) | number : '1.2-2' }} FCFA
-                    </span>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="text-sm text-slate-700">{{ client.address || 'N/A' }}</div>
-                </td>
+
                 <td class="px-6 py-4">
                   <div
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 border border-slate-200"
+                    class="inline-flex items-center px-2.5 py-0.5  text-xs font-medium bg-slate-100 text-slate-800 border border-slate-200"
                   >
                     {{ client.nationality || 'N/A' }}
                   </div>
                 </td>
                 <td class="px-6 py-4 text-right">
-                  <button
-                    class="text-slate-400 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-5 h-5"
+                  <div class="flex justify-end space-x-1">
+                    <a
+                      [routerLink]="['/dashboard/admin/clients', client.id]"
+                      class="text-slate-400 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50"
+                      title="Voir détails"
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                      />
-                    </svg>
-                  </button>
+                      Voir détails
+                    </a>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <div *ngIf="clients.length === 0" class="p-16 text-center">
-          <div
-            class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4"
-          >
+        <div *ngIf="filteredClients.length === 0" class="p-16 text-center">
+          <div class="w-16 h-16 bg-slate-50  flex items-center justify-center mx-auto mb-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -143,15 +196,121 @@ import { catchError } from 'rxjs/operators';
 })
 export class AdminClientsListComponent implements OnInit {
   private bankService = inject(BankService);
-  clients$: Observable<Client[]> = of([]);
+  private ns = inject(NotificationService);
+  private router = inject(Router);
+
+  allClients: Client[] = [];
+  filteredClients: Client[] = [];
+  loading = signal<boolean>(true);
+  error = signal<string | null>(null);
+
+  searchTerm = '';
+  genderFilter = '';
+  dateFilter = '';
 
   ngOnInit(): void {
-    this.clients$ = this.bankService.getAllClients().pipe(
-      catchError((err) => {
-        console.error('Error loading clients', err);
-        return of([]);
-      })
-    );
+    this.loadClients();
+  }
+
+  loadClients() {
+    console.log('[ClientsList] loadClients() -> start');
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.bankService
+      .getAllClients()
+      .pipe(
+        tap(() => console.log('[ClientsList] HTTP request started')),
+        timeout(5000),
+        tap((data) =>
+          console.log('[ClientsList] HTTP response received', {
+            type: typeof data,
+            isArray: Array.isArray(data),
+            length: Array.isArray(data) ? data.length : undefined,
+            sample: Array.isArray(data) ? data.slice(0, 1) : data,
+          }),
+        ),
+        catchError((err) => {
+          console.error('[ClientsList] Error loading clients (pipe)', err);
+          if (err?.name === 'TimeoutError') {
+            this.error.set('Le serveur met trop de temps à répondre (Timeout).');
+          } else {
+            this.error.set(
+              'Impossible de charger les clients. Le serveur est peut-être hors ligne ou injoignable.',
+            );
+          }
+          this.loading.set(false);
+          console.log('[ClientsList] loading=false (catchError)');
+          return of([]);
+        }),
+      )
+      .subscribe({
+        next: (data) => {
+          console.log('[ClientsList] subscribe.next()', {
+            isArray: Array.isArray(data),
+            length: Array.isArray(data) ? data.length : undefined,
+          });
+
+          this.allClients = Array.isArray(data) ? data : [];
+          this.applyFilters();
+
+          this.loading.set(false);
+          console.log('[ClientsList] loading=false (next)', {
+            allClients: this.allClients.length,
+            filteredClients: this.filteredClients.length,
+          });
+        },
+        error: (err) => {
+          console.error('[ClientsList] subscribe.error()', err);
+          this.error.set(this.error() || 'Erreur inattendue lors du chargement des clients.');
+          this.loading.set(false);
+          console.log('[ClientsList] loading=false (error)');
+        },
+        complete: () => {
+          console.log('[ClientsList] subscribe.complete()');
+          this.loading.set(false);
+          console.log('[ClientsList] loading=false (complete)');
+        },
+      });
+  }
+
+  applyFilters() {
+    const term = (this.searchTerm || '').toLowerCase();
+
+    this.filteredClients = (this.allClients || []).filter((c) => {
+      const firstName = (c?.first_name || '').toLowerCase();
+      const lastName = (c?.last_name || '').toLowerCase();
+      const email = (c?.email || '').toLowerCase();
+
+      const matchesSearch =
+        firstName.includes(term) || lastName.includes(term) || email.includes(term);
+
+      const matchesGender = !this.genderFilter || c?.gender === this.genderFilter;
+
+      const createdAt = c?.createdAt || '';
+      const matchesDate = !this.dateFilter || createdAt.includes(this.dateFilter);
+
+      return matchesSearch && matchesGender && matchesDate;
+    });
+  }
+
+  goToCreateClient() {
+    this.router.navigate(['/dashboard/admin/clients/create']);
+  }
+
+  deleteClient(id: number) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
+      this.bankService.deleteClient(id).subscribe({
+        next: () => {
+          this.ns.showSuccess('Client supprimé avec succès');
+          this.loadClients();
+        },
+        error: (err) => {
+          this.ns.showError('Erreur lors de la suppression');
+          console.error(err);
+        },
+      });
+    }
   }
 
   getTotalBalance(client: Client): number {

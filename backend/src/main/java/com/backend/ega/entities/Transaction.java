@@ -3,7 +3,7 @@ package com.backend.ega.entities;
 import com.backend.ega.entities.enums.TransactionType;
 import jakarta.persistence.*;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,14 +24,14 @@ public class Transaction {
     private Long id;
 
     @NotNull(message = "Le montant est obligatoire")
-    @Min(value = 1, message = "Le montant doit être supérieur à 0")
+    @Positive(message = "Le montant doit être supérieur à 0")
     @Column(name = "amount", nullable = false)
     private Double amount;
 
     @Column(name = "transaction_date", nullable = false)
     private LocalDateTime transactionDate;
 
-    @NotNull(message = "Le type de transaction est obligatoire")
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", nullable = false)
     private TransactionType transactionType;
@@ -43,7 +43,7 @@ public class Transaction {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "destination_account_id")
-    private Account destinationAccount; // Used only for transfers
+    private Account destinationAccount;
 
     @Column(name = "description")
     private String description;

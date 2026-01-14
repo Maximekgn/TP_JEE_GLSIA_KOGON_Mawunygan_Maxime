@@ -35,8 +35,8 @@ import { Observable, of } from 'rxjs';
                 >
                   <option value="">Sélectionnez un compte source</option>
                   <option *ngFor="let acc of accounts" [value]="acc.id">
-                    {{ acc.accountNumber }} - {{ acc.owner?.firstName }}
-                    {{ acc.owner?.lastName }} ({{ acc.balance | number : '1.2-2' }} FCFA)
+                    {{ acc.accountNumber }} - {{ acc.owner?.first_name }}
+                    {{ acc.owner?.last_name }} ({{ acc.balance | number: '1.2-2' }} FCFA)
                   </option>
                 </select>
                 <div
@@ -70,7 +70,7 @@ import { Observable, of } from 'rxjs';
             </div>
 
             <!-- Destination Account (Dropdown or Input? Dropdown for admin is easier but user might want Input) -->
-            <!-- Let's provide Dropdown as 'Select from list' and an optional text input if list is huge? 
+            <!-- Let's provide Dropdown as 'Select from list' and an optional text input if list is huge?
                  Simple admin panel: Dropdown is safer to avoid typos. -->
             <div class="space-y-2">
               <label class="block text-sm font-semibold text-slate-700"
@@ -84,7 +84,8 @@ import { Observable, of } from 'rxjs';
                   <option value="">Sélectionnez un compte destination</option>
                   <ng-container *ngFor="let acc of accounts">
                     <option [value]="acc.id" *ngIf="acc.id != transferForm.value.sourceAccountId">
-                      {{ acc.accountNumber }} - {{ acc.owner?.firstName }} {{ acc.owner?.lastName }}
+                      {{ acc.accountNumber }} - {{ acc.owner?.first_name }}
+                      {{ acc.owner?.last_name }}
                     </option>
                   </ng-container>
                 </select>
@@ -183,7 +184,7 @@ export class TransferComponent implements OnInit {
       destinationAccountId: ['', Validators.required],
       amount: ['', [Validators.required, Validators.min(1)]],
     },
-    { validators: this.insufficientFundsValidator.bind(this) }
+    { validators: this.insufficientFundsValidator.bind(this) },
   );
 
   ngOnInit(): void {
@@ -191,7 +192,7 @@ export class TransferComponent implements OnInit {
       catchError((err) => {
         this.notificationService.showError('Impossible de charger les comptes');
         return of([]);
-      })
+      }),
     );
   }
 

@@ -91,11 +91,11 @@ public class TransactionsService {
             transaction.getTransactionType() == TransactionType.WITHDRAWAL ||
             transaction.getTransactionType() == TransactionType.TRANSFER
         ) {
-            sourceAccount.setBalance(sourceAccount.getBalance() - amount);
+            sourceAccount.setBalance((sourceAccount.getBalance() != null ? sourceAccount.getBalance() : 0.0) - amount);
         } else if (
             transaction.getTransactionType() == TransactionType.DEPOSIT
         ) {
-            sourceAccount.setBalance(sourceAccount.getBalance() + amount);
+            sourceAccount.setBalance((sourceAccount.getBalance() != null ? sourceAccount.getBalance() : 0.0) + amount);
         }
 
         if (transaction.getTransactionType() == TransactionType.TRANSFER) {

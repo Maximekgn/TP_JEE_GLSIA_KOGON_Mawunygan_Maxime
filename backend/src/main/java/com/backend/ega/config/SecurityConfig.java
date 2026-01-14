@@ -91,10 +91,9 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth ->
                 auth
-                    .requestMatchers("/api/auth/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/transactions/deposit").hasRole("ADMIN")
+                    .anyRequest().authenticated()
             )
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

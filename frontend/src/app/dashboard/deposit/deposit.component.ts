@@ -32,8 +32,8 @@ import { Observable, of } from 'rxjs';
                 >
                   <option value="">Sélectionnez un compte</option>
                   <option *ngFor="let acc of accounts" [value]="acc.id">
-                    {{ acc.accountNumber }} - {{ acc.owner?.firstName }}
-                    {{ acc.owner?.lastName }} ({{ acc.balance | number : '1.2-2' }} FCFA)
+                    {{ acc.accountNumber }} - {{ acc.owner?.first_name }}
+                    {{ acc.owner?.last_name }} ({{ acc.balance | number: '1.2-2' }} FCFA)
                   </option>
                 </select>
                 <div
@@ -163,6 +163,33 @@ import { Observable, of } from 'rxjs';
           </p>
         </div>
       </div>
+
+      <!-- Logs Panel: Request / Response -->
+      <div class="mt-6 bg-slate-50 border border-slate-100 rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="text-sm font-semibold">Logs Requête / Réponse</h4>
+          <div class="flex items-center space-x-2">
+            <button
+              type="button"
+              (click)="logs = []"
+              class="text-xs text-slate-500 hover:text-slate-700"
+            >
+              Clear
+            </button>
+            <span class="text-xs text-slate-400">({{ logs.length }})</span>
+          </div>
+        </div>
+
+        <div *ngIf="logs.length === 0" class="text-xs text-slate-400">Aucun log</div>
+
+        <ul
+          *ngIf="logs.length > 0"
+          class="text-xs font-mono max-h-40 overflow-auto space-y-2"
+          aria-live="polite"
+        >
+          <li *ngFor="let l of logs">{{ l }}</li>
+        </ul>
+      </div>
     </div>
   `,
   styles: [],
@@ -175,6 +202,21 @@ export class AdminDepositComponent implements OnInit {
   depositForm: FormGroup;
   accounts$: Observable<Account[]> = of([]);
   submitting = false;
+
+  // In-memory logs shown in UI (most recent first)
+  logs: string[] = [];
+
+  private appendLog(message: string) {
+    try {
+      const ts = new Date().toISOString();
+      this.logs.unshift(`${ts} - ${message}`);
+      if (this.logs.length > 200) {
+        this.logs.length = 200;
+      }
+    } catch (e) {
+      // ignore logging failures in UI
+    }
+  }
 
   constructor() {
     this.depositForm = this.fb.group({
@@ -193,7 +235,7 @@ export class AdminDepositComponent implements OnInit {
       catchError((err) => {
         console.error('Error loading accounts', err);
         return of([]);
-      })
+      }),
     );
   }
 
@@ -209,11 +251,20 @@ export class AdminDepositComponent implements OnInit {
       sourceAccount: { id: parseInt(accountId) },
     };
 
+    // Log request payload in UI
+    try {
+      this.appendLog(
+        `REQUEST -> POST /api/transactions/deposit payload=${JSON.stringify(payload)}`,
+      );
+    } catch (e) {
+      this.appendLog(`REQUEST -> POST /api/transactions/deposit payload=[unserializable]`);
+    }
+
     this.bankService
       .deposit(payload)
       .pipe(finalize(() => (this.submitting = false)))
       .subscribe({
-        next: () => {
+        next: (res: any) => {
           this.notificationService.showSuccess('Dépôt effectué avec succès');
           this.depositForm.reset({
             accountId: '',
@@ -221,10 +272,25 @@ export class AdminDepositComponent implements OnInit {
             description: 'Dépôt administratif',
           });
           this.loadAccounts(); // Refresh balances
+
+          try {
+            const status = res?.status;
+            this.appendLog(`RESPONSE ${status} -> Succès`);
+          } catch (e) {
+            this.appendLog('RESPONSE -> Succès');
+          }
         },
         error: (err: any) => {
+          try {
+            const errMsg =
+              err?.message || (err && err.status ? `status=${err.status}` : JSON.stringify(err));
+            this.appendLog(`ERROR -> ${errMsg}`);
+          } catch (e) {
+            this.appendLog('ERROR -> [error]');
+          }
+
           console.error('Error performing deposit', err);
-          this.notificationService.showError('Erreur lors du dépôt');
+          this.notificationService.showError('Échec du dépôt');
         },
       });
   }

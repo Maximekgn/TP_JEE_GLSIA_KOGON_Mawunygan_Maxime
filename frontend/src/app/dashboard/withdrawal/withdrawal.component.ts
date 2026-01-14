@@ -33,8 +33,8 @@ import { Observable, of } from 'rxjs';
                 >
                   <option value="">Sélectionnez un compte</option>
                   <option *ngFor="let acc of accounts" [value]="acc.id">
-                    {{ acc.accountNumber }} - {{ acc.owner?.firstName }}
-                    {{ acc.owner?.lastName }} ({{ acc.balance | number : '1.2-2' }} FCFA)
+                    {{ acc.accountNumber }} - {{ acc.owner?.first_name }}
+                    {{ acc.owner?.last_name }} ({{ acc.balance | number: '1.2-2' }} FCFA)
                   </option>
                 </select>
                 <div
@@ -137,7 +137,7 @@ export class WithdrawalComponent implements OnInit {
       accountId: ['', Validators.required],
       amount: ['', [Validators.required, Validators.min(1)]],
     },
-    { validators: this.insufficientFundsValidator.bind(this) }
+    { validators: this.insufficientFundsValidator.bind(this) },
   );
 
   ngOnInit(): void {
@@ -145,7 +145,7 @@ export class WithdrawalComponent implements OnInit {
       catchError((err) => {
         this.notificationService.showError('Impossible de charger les comptes');
         return of([]);
-      })
+      }),
     );
   }
 

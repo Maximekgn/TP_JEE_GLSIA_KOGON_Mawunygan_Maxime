@@ -36,10 +36,38 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'admin/clients/create',
+        loadComponent: () =>
+          import('./dashboard/clients-create/client-create.component').then(
+            (m) => m.ClientCreateComponent,
+          ),
+      },
+      {
+        path: 'admin/clients/:id',
+        loadComponent: () =>
+          import('./dashboard/clients-list/client-details.component').then(
+            (m) => m.ClientDetailsComponent,
+          ),
+      },
+      {
         path: 'admin/accounts',
         loadComponent: () =>
           import('./dashboard/accounts-list/accounts-list.component').then(
             (m) => m.AdminAccountsListComponent,
+          ),
+      },
+      {
+        path: 'admin/accounts/create',
+        loadComponent: () =>
+          import('./dashboard/accounts-create/account-create.component').then(
+            (m) => m.AccountCreateComponent,
+          ),
+      },
+      {
+        path: 'admin/accounts/:id',
+        loadComponent: () =>
+          import('./dashboard/accounts-list/account-details.component').then(
+            (m) => m.AccountDetailsComponent,
           ),
       },
       {

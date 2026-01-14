@@ -6,6 +6,8 @@ import com.backend.ega.entities.enums.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -36,6 +38,8 @@ public class Account {
     private Double balance = 0.0;
 
     @NotNull(message = "Le propriétaire est obligatoire")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "client_id", nullable = false)
     private Client owner;

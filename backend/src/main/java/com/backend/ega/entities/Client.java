@@ -11,6 +11,8 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "clients")
@@ -68,5 +70,7 @@ public class Client {
         cascade = CascadeType.ALL,
         fetch = FetchType.LAZY
     )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Account> accounts = new ArrayList<>();
 }

@@ -38,7 +38,7 @@ import { Observable, of } from 'rxjs';
               >
                 <option value="">Choisir un compte</option>
                 <option *ngFor="let acc of accounts$ | async" [value]="acc.id">
-                  {{ acc.accountNumber }} - {{ acc.owner?.firstName }}
+                  {{ acc.accountNumber }} - {{ acc.owner?.first_name }}
                 </option>
               </select>
             </div>
@@ -92,16 +92,36 @@ import { Observable, of } from 'rxjs';
             <div>
               <h1 class="text-2xl font-bold text-slate-900">Relevé de Compte</h1>
               <p class="text-slate-500 mt-1">
-                Date d'édition: {{ currentDate | date : 'dd/MM/yyyy' }}
+                Date d'édition: {{ currentDate | date: 'dd/MM/yyyy' }}
               </p>
             </div>
             <div class="text-right">
               <p class="font-bold text-lg">
-                {{ selectedAccount.owner?.firstName }} {{ selectedAccount.owner?.lastName }}
+                {{ selectedAccount.owner?.first_name }} {{ selectedAccount.owner?.last_name }}
               </p>
               <p class="text-slate-600">Compte: {{ selectedAccount.accountNumber }}</p>
-              <p class="text-slate-600">Type: {{ selectedAccount.accountType }}</p>
+              <p class="text-sm text-slate-500">Compte {{ selectedAccount.accountType }}</p>
             </div>
+            <button
+              (click)="downloadStatement()"
+              class="ml-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors flex items-center space-x-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-4 h-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.72 13.89l-4.72-4.72m0 0l4.72-4.72M2 9.17h18a2.25 2.25 0 012.25 2.25v6.75a2.25 2.25 0 01-2.25 2.25H2.25A2.25 2.25 0 010 18.17V11.42a2.25 2.25 0 012.25-2.25z"
+                />
+              </svg>
+              <span>Relevé (TXT)</span>
+            </button>
           </div>
 
           <div class="mt-6 flex gap-8">
@@ -110,7 +130,7 @@ import { Observable, of } from 'rxjs';
                 >Solde Actuel</span
               >
               <p class="text-2xl font-bold text-blue-600">
-                {{ selectedAccount.balance | number : '1.0-0' }} FCFA
+                {{ selectedAccount.balance | number: '1.0-0' }} FCFA
               </p>
             </div>
             <div *ngIf="filterForm.value.startDate">
@@ -118,8 +138,8 @@ import { Observable, of } from 'rxjs';
                 >Période</span
               >
               <p class="text-gray-700">
-                Du {{ filterForm.value.startDate | date : 'dd/MM/yyyy' }} au
-                {{ filterForm.value.endDate || currentDate | date : 'dd/MM/yyyy' }}
+                Du {{ filterForm.value.startDate | date: 'dd/MM/yyyy' }} au
+                {{ filterForm.value.endDate || currentDate | date: 'dd/MM/yyyy' }}
               </p>
             </div>
           </div>
@@ -141,7 +161,7 @@ import { Observable, of } from 'rxjs';
             <tbody class="divide-y divide-slate-100">
               <tr *ngFor="let tx of transactions" class="hover:bg-slate-50/50">
                 <td class="px-8 py-4 text-slate-600">
-                  {{ tx.transactionDate | date : 'dd/MM/yyyy HH:mm' }}
+                  {{ tx.transactionDate | date: 'dd/MM/yyyy HH:mm' }}
                 </td>
                 <td class="px-8 py-4">
                   <span
@@ -154,7 +174,7 @@ import { Observable, of } from 'rxjs';
                       'bg-red-100 text-red-800':
                         tx.transactionType === 'WITHDRAWAL' ||
                         (tx.transactionType === 'TRANSFER' &&
-                          tx.sourceAccount?.id === selectedAccount.id)
+                          tx.sourceAccount?.id === selectedAccount.id),
                     }"
                   >
                     {{ tx.transactionType }}
@@ -181,7 +201,7 @@ import { Observable, of } from 'rxjs';
                     'text-red-600':
                       tx.transactionType === 'WITHDRAWAL' ||
                       (tx.transactionType === 'TRANSFER' &&
-                        tx.sourceAccount?.id === selectedAccount.id)
+                        tx.sourceAccount?.id === selectedAccount.id),
                   }"
                 >
                   <span
@@ -200,7 +220,7 @@ import { Observable, of } from 'rxjs';
                     "
                     >-</span
                   >
-                  {{ tx.amount | number : '1.0-0' }} FCFA
+                  {{ tx.amount | number: '1.0-0' }} FCFA
                 </td>
               </tr>
               <tr *ngIf="transactions.length === 0">
@@ -268,14 +288,15 @@ export class TransactionsHistoryComponent implements OnInit {
 
     // Find selected account object for display
     this.accounts$.subscribe((accounts) => {
-      this.selectedAccount = accounts.find((a) => a.id == accountId) || null;
+      this.selectedAccount = accounts.find((a) => (a.id as any) == accountId) || null;
     });
 
     if (startDate && endDate) {
-      // Assume ISO format needed for service, but input gives YYYY-MM-DD
-      // Mock service usually handles strings flexibly, but let's be safe.
-      // For now, passing raw input strings as service expects param.
-      this.bankService.getTransactionsByAccountDateRange(accountId, startDate, endDate).subscribe({
+      // Backend expects ISO LocalDateTime: YYYY-MM-DDTHH:MM:SS
+      const startIso = `${startDate}T00:00:00`;
+      const endIso = `${endDate}T23:59:59`;
+
+      this.bankService.getTransactionsByAccountDateRange(accountId, startIso, endIso).subscribe({
         next: (data) => (this.transactions = data),
         error: (err) => this.notificationService.showError('Erreur chargement historique'),
       });
@@ -286,6 +307,32 @@ export class TransactionsHistoryComponent implements OnInit {
         error: (err) => this.notificationService.showError('Erreur chargement historique'),
       });
     }
+  }
+
+  downloadStatement() {
+    if (this.filterForm.invalid) return;
+    const { accountId, startDate, endDate } = this.filterForm.value;
+
+    if (!startDate || !endDate) {
+      this.notificationService.showError('Veuillez sélectionner une période pour le relevé.');
+      return;
+    }
+
+    const startIso = `${startDate}T00:00:00`;
+    const endIso = `${endDate}T23:59:59`;
+
+    this.bankService.getAccountStatement(accountId, startIso, endIso).subscribe({
+      next: (text) => {
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `releve_compte_${this.selectedAccount?.accountNumber || accountId}.txt`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => this.notificationService.showError('Erreur lors de la génération du relevé'),
+    });
   }
 
   printStatement() {

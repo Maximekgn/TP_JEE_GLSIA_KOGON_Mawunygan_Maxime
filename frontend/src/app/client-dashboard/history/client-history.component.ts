@@ -92,7 +92,7 @@ import { Observable, of } from 'rxjs';
             <div class="text-right">
               <h2 class="font-bold text-lg">Jean Dupont</h2>
               <p class="text-sm text-slate-500">Client #001</p>
-              <p class="text-sm text-slate-500">Edité le {{ today | date : 'dd/MM/yyyy' }}</p>
+              <p class="text-sm text-slate-500">Edité le {{ today | date: 'dd/MM/yyyy' }}</p>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@ import { Observable, of } from 'rxjs';
           <tbody class="divide-y divide-slate-100">
             <tr *ngFor="let tx of transactions" class="hover:bg-slate-50 transition-colors">
               <td class="p-6 text-slate-600 font-medium">
-                {{ tx.transactionDate | date : 'dd/MM/yyyy' }}
+                {{ tx.transactionDate | date: 'dd/MM/yyyy' }}
               </td>
               <td class="p-6 text-slate-900">
                 <div class="font-semibold">{{ tx.description }}</div>
@@ -125,7 +125,7 @@ import { Observable, of } from 'rxjs';
                   [ngClass]="{
                     'bg-green-100 text-green-700': tx.transactionType === 'DEPOSIT',
                     'bg-red-100 text-red-700': tx.transactionType === 'WITHDRAWAL',
-                    'bg-blue-100 text-blue-700': tx.transactionType === 'TRANSFER'
+                    'bg-blue-100 text-blue-700': tx.transactionType === 'TRANSFER',
                   }"
                 >
                   {{ tx.transactionType }}
@@ -140,7 +140,7 @@ import { Observable, of } from 'rxjs';
                     : 'text-slate-900'
                 "
               >
-                {{ isCredit(tx) ? '+' : '-' }} {{ tx.amount | number : '1.0-0' }}
+                {{ isCredit(tx) ? '+' : '-' }} {{ tx.amount | number: '1.0-0' }}
               </td>
             </tr>
             <tr *ngIf="transactions.length === 0">
@@ -206,8 +206,10 @@ export class ClientHistoryComponent implements OnInit {
     // If specific account selected, use specific endpoint
     if (accountId) {
       if (startDate && endDate) {
+        const startIso = `${startDate}T00:00:00`;
+        const endIso = `${endDate}T23:59:59`;
         this.bankService
-          .getTransactionsByAccountDateRange(parseInt(accountId), startDate, endDate)
+          .getTransactionsByAccountDateRange(parseInt(accountId), startIso, endIso)
           .subscribe((data) => (this.transactions = data));
       } else {
         this.bankService
@@ -218,14 +220,14 @@ export class ClientHistoryComponent implements OnInit {
       // Should ideally have "getAllClientTransactions" but we can iterate user accounts
       // or just fetch all global transactions and filter by client's account IDs on frontend for this demo.
       // Let's fetch ALL transactions and filter client side for Safety (in real app, backend query)
-      this.bankService.getAllTransactions().subscribe((all) => {
+      this.bankService.getAllTransactions().subscribe((all: Transaction[]) => {
         // We need to know client's account IDs first
         this.accounts$.subscribe((myAccounts) => {
           const myIds = myAccounts.map((a) => a.id);
           this.transactions = all.filter(
-            (t) =>
-              (t.sourceAccount && myIds.includes(t.sourceAccount.id)) ||
-              (t.destinationAccount && myIds.includes(t.destinationAccount.id))
+            (t: Transaction) =>
+              (t.sourceAccount && myIds.includes(t.sourceAccount.id as number)) ||
+              (t.destinationAccount && myIds.includes(t.destinationAccount.id as number)),
           );
 
           // Apply date filter manually if global fetch
@@ -233,7 +235,7 @@ export class ClientHistoryComponent implements OnInit {
             this.transactions = this.transactions.filter((t) => t.transactionDate >= startDate!);
           if (endDate)
             this.transactions = this.transactions.filter(
-              (t) => t.transactionDate <= endDate! + 'T23:59:59'
+              (t) => t.transactionDate <= endDate! + 'T23:59:59',
             );
         });
       });

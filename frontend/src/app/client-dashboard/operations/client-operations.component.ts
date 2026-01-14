@@ -56,7 +56,7 @@ import { Observable, of } from 'rxjs';
               >
                 <option value="">Sélectionnez un compte</option>
                 <option *ngFor="let acc of accounts" [value]="acc.id">
-                  {{ acc.accountNumber }} ({{ acc.balance | number : '1.0-0' }} FCFA)
+                  {{ acc.accountNumber }} ({{ acc.balance | number: '1.0-0' }} FCFA)
                 </option>
               </select>
               <p
@@ -72,9 +72,9 @@ import { Observable, of } from 'rxjs';
               <label class="block text-sm font-semibold text-slate-700"
                 >Compte Bénéficiaire (ID ou Sélection)</label
               >
-              <!-- For demo simplicity, user selects from dropdown of *all* accounts or types an ID. 
+              <!-- For demo simplicity, user selects from dropdown of *all* accounts or types an ID.
                      Ideally, should select from 'Same Client Accounts' OR 'External IBAN'.
-                     For this requirement: "Virement inter-comptes" often implies own accounts. 
+                     For this requirement: "Virement inter-comptes" often implies own accounts.
                      Let's allow selecting one of THEIR OWN accounts easily. -->
               <select
                 formControlName="destinationAccountId"
@@ -237,7 +237,7 @@ export class ClientOperationsComponent implements OnInit {
       destinationAccountId: ['', Validators.required],
       amount: ['', [Validators.required, Validators.min(1)]],
     },
-    { validators: this.checkFunds('sourceAccountId') }
+    { validators: this.checkFunds('sourceAccountId') },
   );
 
   depositForm = this.fb.group({
@@ -250,7 +250,7 @@ export class ClientOperationsComponent implements OnInit {
       accountId: ['', Validators.required],
       amount: ['', [Validators.required, Validators.min(1)]],
     },
-    { validators: this.checkFunds('accountId') }
+    { validators: this.checkFunds('accountId') },
   );
 
   ngOnInit() {
@@ -317,10 +317,11 @@ export class ClientOperationsComponent implements OnInit {
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: () => {
-          this.ns.showSuccess('Dépôt crédité !');
+          this.ns.showSuccess('Dépôt effectué avec succès');
           this.depositForm.reset();
           this.refreshAccounts();
         },
+        error: (e) => this.ns.showError('Échec du dépôt'),
       });
   }
 
