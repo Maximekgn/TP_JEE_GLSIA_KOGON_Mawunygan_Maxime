@@ -50,13 +50,7 @@ export const routes: Routes = [
             (m) => m.AdminClientsListComponent,
           ),
       },
-      {
-        path: 'admin/clients/create',
-        loadComponent: () =>
-          import('./dashboard/clients-create/client-create.component').then(
-            (m) => m.ClientCreateComponent,
-          ),
-      },
+
       {
         path: 'admin/clients/:id',
         loadComponent: () =>
@@ -140,8 +134,16 @@ export const routes: Routes = [
             (m) => m.ClientHistoryComponent,
           ),
       },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./client-dashboard/profile/profile.component').then(
+            (m) => m.ProfileComponent,
+          ),
+      },
     ],
   },
+
 
   // Fallback route
   {

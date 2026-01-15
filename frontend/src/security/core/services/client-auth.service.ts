@@ -116,6 +116,33 @@ export class ClientAuthService {
   }
 
   /**
+   * Update current client profile
+   */
+  updateProfile(clientData: Partial<ClientInfo>): Observable<ClientInfo> {
+    return this.http.put<ClientInfo>(`${this.API_BASE}/profile`, clientData).pipe(
+      tap((updatedClient) => {
+        if (updatedClient.first_name) {
+          localStorage.setItem(this.USER_FIRST_NAME_KEY, updatedClient.first_name);
+        }
+        if (updatedClient.last_name) {
+          localStorage.setItem(this.USER_LAST_NAME_KEY, updatedClient.last_name);
+        }
+      }),
+      catchError((error) => this.handleError(error)),
+    );
+  }
+
+  /**
+   * Change current client password
+   */
+  changePassword(passwordData: any): Observable<any> {
+    return this.http
+      .post(`${this.API_BASE}/change-password`, passwordData)
+      .pipe(catchError((error) => this.handleError(error)));
+  }
+
+
+  /**
    * Save authentication data to localStorage
    */
   private saveAuthData(res: ClientAuthResponse): void {

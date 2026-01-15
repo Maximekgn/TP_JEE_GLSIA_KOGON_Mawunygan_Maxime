@@ -1,8 +1,8 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-2xl w-full space-y-8">
     <!-- Header -->
     <div class="text-center">
-      <div class="mx-auto h-16 w-16 bg-indigo-600 rounded-full flex items-center justify-center mb-4">
+      <div class="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
         <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
         </svg>
@@ -22,14 +22,14 @@
           <div class="flex items-center">
             <div
               class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300"
-              [class.bg-indigo-600]="currentStep >= step"
+              [class.bg-blue-600]="currentStep >= step"
               [class.text-white]="currentStep >= step"
               [class.bg-gray-200]="currentStep < step"
               [class.text-gray-500]="currentStep < step"
             >
               {{ step }}
             </div>
-            <div class="ml-3 text-sm font-medium" [class.text-indigo-600]="currentStep >= step" [class.text-gray-500]="currentStep < step">
+            <div class="ml-3 text-sm font-medium" [class.text-blue-600]="currentStep >= step" [class.text-gray-500]="currentStep < step">
               <span *ngIf="step === 1">Informations personnelles</span>
               <span *ngIf="step === 2">Contact</span>
               <span *ngIf="step === 3">Sécurité</span>
@@ -38,7 +38,7 @@
           <div
             *ngIf="i < 2"
             class="flex-1 h-1 mx-4 transition-all duration-300"
-            [class.bg-indigo-600]="currentStep > step"
+            [class.bg-blue-600]="currentStep > step"
             [class.bg-gray-200]="currentStep <= step"
           ></div>
         </div>
@@ -86,7 +86,7 @@
                 type="text"
                 formControlName="first_name"
                 placeholder="Jean"
-                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 [class.border-gray-300]="!first_name?.invalid || !first_name?.touched"
                 [class.border-red-500]="first_name?.invalid && first_name?.touched"
               />
@@ -106,7 +106,7 @@
                 type="text"
                 formControlName="last_name"
                 placeholder="Dupont"
-                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 [class.border-gray-300]="!last_name?.invalid || !last_name?.touched"
                 [class.border-red-500]="last_name?.invalid && last_name?.touched"
               />
@@ -127,7 +127,7 @@
               type="date"
               formControlName="birth_date"
               [max]="minBirthDate"
-              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               [class.border-gray-300]="!birth_date?.invalid || !birth_date?.touched"
               [class.border-red-500]="birth_date?.invalid && birth_date?.touched"
             />
@@ -146,7 +146,7 @@
               <select
                 id="gender"
                 formControlName="gender"
-                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 [class.border-gray-300]="!gender?.invalid || !gender?.touched"
                 [class.border-red-500]="gender?.invalid && gender?.touched"
               >
@@ -169,7 +169,7 @@
                 type="text"
                 formControlName="nationality"
                 placeholder="Française"
-                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 [class.border-gray-300]="!nationality?.invalid || !nationality?.touched"
                 [class.border-red-500]="nationality?.invalid && nationality?.touched"
               />
@@ -192,7 +192,7 @@
               type="email"
               formControlName="email"
               placeholder="jean.dupont@example.com"
-              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               [class.border-gray-300]="!email?.invalid || !email?.touched"
               [class.border-red-500]="email?.invalid && email?.touched"
             />
@@ -212,7 +212,7 @@
               type="tel"
               formControlName="phone_number"
               placeholder="+33612345678"
-              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               [class.border-gray-300]="!phone_number?.invalid || !phone_number?.touched"
               [class.border-red-500]="phone_number?.invalid && phone_number?.touched"
             />
@@ -233,7 +233,7 @@
               formControlName="address"
               rows="3"
               placeholder="123 Rue de la Paix, 75000 Paris"
-              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               [class.border-gray-300]="!address?.invalid || !address?.touched"
               [class.border-red-500]="address?.invalid && address?.touched"
             ></textarea>
@@ -256,7 +256,7 @@
               type="password"
               formControlName="password"
               placeholder="••••••••"
-              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               [class.border-gray-300]="!password?.invalid || !password?.touched"
               [class.border-red-500]="password?.invalid && password?.touched"
             />
@@ -277,7 +277,7 @@
               type="password"
               formControlName="confirmPassword"
               placeholder="••••••••"
-              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              class="appearance-none block w-full px-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               [class.border-gray-300]="!confirmPassword?.invalid || !confirmPassword?.touched"
               [class.border-red-500]="confirmPassword?.invalid && confirmPassword?.touched"
             />
@@ -303,7 +303,7 @@
             type="button"
             *ngIf="currentStep > 1"
             (click)="previousStep()"
-            class="px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
+            class="px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition"
           >
             Précédent
           </button>
@@ -313,7 +313,7 @@
             type="button"
             *ngIf="currentStep < totalSteps"
             (click)="nextStep()"
-            class="px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition"
+            class="px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition"
           >
             Suivant
           </button>
@@ -322,7 +322,7 @@
             type="submit"
             *ngIf="currentStep === totalSteps"
             [disabled]="submitting || registerForm.invalid"
-            class="px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            class="px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
           >
             <span *ngIf="!submitting">Créer mon compte</span>
             <span *ngIf="submitting" class="flex items-center">
@@ -341,7 +341,7 @@
             Vous avez déjà un compte ?
             <a
               routerLink="/client/login"
-              class="font-medium text-indigo-600 hover:text-indigo-500 transition"
+              class="font-medium text-blue-600 hover:text-blue-500 transition"
             >
               Connectez-vous
             </a>

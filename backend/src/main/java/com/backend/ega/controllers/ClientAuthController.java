@@ -91,4 +91,33 @@ public class ClientAuthController {
             );
         }
     }
+
+    /**
+     * Endpoint pour mettre à jour le profil du client connecté
+     * @param authHeader Header Authorization
+     * @param clientDetails Nouvelles informations
+     * @return Informations mises à jour
+     */
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(
+        @RequestHeader("Authorization") String authHeader,
+        @RequestBody Map<String, Object> clientDetails
+    ) {
+        try {
+            Map<String, Object> updatedClient = clientAuthService.updateCurrentClient(
+                authHeader,
+                clientDetails
+            );
+            return ResponseEntity.ok(updatedClient);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of("error", "Requête invalide", "message", e.getMessage())
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                Map.of("error", "Erreur serveur", "message", "Une erreur est survenue")
+            );
+        }
+    }
 }
+

@@ -14,7 +14,7 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
       <!-- Logo -->
       <div class="h-20 flex items-center px-8 border-b border-slate-800">
         <div class="flex items-center gap-2">
-          <div class="bg-indigo-500 text-white p-1.5 rounded-lg">
+          <div class="bg-blue-500 text-white p-1.5 rounded-lg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -31,7 +31,7 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
             </svg>
           </div>
           <span class="text-xl font-bold tracking-tight"
-            >E-Bank<span class="text-indigo-400"> Client</span></span
+            >E-Bank<span class="text-blue-400"> Client</span></span
           >
         </div>
       </div>
@@ -41,7 +41,7 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
         <a
           *ngFor="let link of navLinks"
           [routerLink]="link.href"
-          routerLinkActive="bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+          routerLinkActive="bg-blue-600 text-white shadow-lg shadow-blue-600/20"
           [routerLinkActiveOptions]="{ exact: link.href === '/client/dashboard' }"
           class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200"
         >
@@ -59,19 +59,39 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
         </a>
       </nav>
 
-      <!-- User Profile / Logout -->
+      <!-- User Profile Link / Logout -->
       <div class="p-4 border-t border-slate-800">
-        <div class="flex items-center gap-3 mb-4 px-2">
+        <a
+          routerLink="/client/dashboard/profile"
+          class="flex items-center gap-3 mb-4 px-3 py-2 rounded-xl hover:bg-slate-800/50 transition-all duration-200 group cursor-pointer"
+          title="Voir mon profil"
+        >
           <img
             [src]="getAvatarUrl()"
             [alt]="clientFullName"
-            class="w-10 h-10 rounded-full border-2 border-slate-700"
+            class="w-10 h-10 rounded-full border-2 border-slate-700 group-hover:border-blue-500 transition-colors"
           />
           <div class="flex-1 min-w-0">
-            <div class="text-sm font-bold text-white truncate">{{ clientFullName }}</div>
+            <div
+              class="text-sm font-bold text-white truncate group-hover:text-blue-400 transition-colors"
+            >
+              {{ clientFullName }}
+            </div>
             <div class="text-xs text-slate-500 truncate">{{ clientEmail }}</div>
           </div>
-        </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            class="w-4 h-4 text-slate-600 group-hover:text-blue-400 transition-colors"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </a>
         <button
           (click)="logout()"
           class="flex items-center gap-2 justify-center w-full py-2.5 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg transition-colors text-sm font-medium cursor-pointer"
@@ -139,7 +159,13 @@ export class ClientSidebarComponent implements OnInit {
       href: '/client/dashboard/history',
       icon: 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
     },
+    {
+      label: 'Mon Profil',
+      href: '/client/dashboard/profile',
+      icon: 'M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z',
+    },
   ];
+
 
   ngOnInit() {
     this.loadClientInfo();

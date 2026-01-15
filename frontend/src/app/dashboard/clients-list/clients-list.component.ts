@@ -1,16 +1,17 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { BankService, Client } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
+import { DataTableComponent, DataTableColumn } from '../../shared/components/ui/data-table/data-table.component';
 import { of, timeout, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-clients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, DataTableComponent],
   template: `
     <div *ngIf="loading()" class="flex flex-col items-center justify-center py-32 space-y-4">
       <div
@@ -50,146 +51,19 @@ import { catchError } from 'rxjs/operators';
     <div class="space-y-6" *ngIf="!loading() && !error()">
       <div class="flex flex-col space-y-4">
         <h2 class="text-2xl font-bold text-slate-800">Gestion des Clients</h2>
-        <div class="flex justify-end">
-          <button
-            type="button"
-            (click)="goToCreateClient()"
-            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="w-5 h-5 mr-2"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            Ajouter un client
-          </button>
-        </div>
       </div>
 
-      <!-- Filtres de recherche -->
-      <div class="bg-white p-6 border border-slate-200 shadow-sm rounded-xl">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div class="md:col-span-2 relative">
-            <input
-              type="text"
-              [(ngModel)]="searchTerm"
-              (ngModelChange)="applyFilters()"
-              placeholder="Rechercher par nom, prénom ou email..."
-              class="w-full pl-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <select
-              [(ngModel)]="genderFilter"
-              (ngModelChange)="applyFilters()"
-              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            >
-              <option value="">Tous les genres</option>
-              <option value="M">Masculin</option>
-              <option value="F">Féminin</option>
-            </select>
-          </div>
-          <div>
-            <input
-              type="date"
-              [(ngModel)]="dateFilter"
-              (ngModelChange)="applyFilters()"
-              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white shadow-sm border border-slate-200 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse" *ngIf="filteredClients.length > 0">
-            <thead>
-              <tr class="bg-slate-50 border-b border-slate-200">
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Client
-                </th>
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Contact
-                </th>
-
-                <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Nationalité
-                </th>
-                <th
-                  class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right"
-                >
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-200">
-              <tr
-                *ngFor="let client of filteredClients"
-                class="hover:bg-slate-50 transition-colors group"
-              >
-                <td class="px-6 py-4">
-                  <div class="flex items-center space-x-3">
-                    <div>
-                      <div class="font-bold text-slate-800">
-                        {{ client.first_name }} {{ client.last_name }}
-                      </div>
-                      <div class="text-xs text-slate-500 italic">ID: #{{ client.id }}</div>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="text-sm text-slate-700 font-medium">{{ client.email }}</div>
-                  <div class="text-xs text-slate-500">{{ client.phoneNumber }}</div>
-                </td>
-
-                <td class="px-6 py-4">
-                  <div
-                    class="inline-flex items-center px-2.5 py-0.5  text-xs font-medium bg-slate-100 text-slate-800 border border-slate-200"
-                  >
-                    {{ client.nationality || 'N/A' }}
-                  </div>
-                </td>
-                <td class="px-6 py-4 text-right">
-                  <div class="flex justify-end space-x-1">
-                    <a
-                      [routerLink]="['/dashboard/admin/clients', client.id]"
-                      class="text-slate-400 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50"
-                      title="Voir détails"
-                    >
-                      Voir détails
-                    </a>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div *ngIf="filteredClients.length === 0" class="p-16 text-center">
-          <div class="w-16 h-16 bg-slate-50  flex items-center justify-center mx-auto mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-8 h-8 text-slate-300"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-              />
-            </svg>
-          </div>
-          <p class="text-slate-500 font-medium">Aucun client trouvé.</p>
-        </div>
-      </div>
+      <app-data-table
+        [data]="allClients"
+        [columns]="columns"
+        [loading]="loading()"
+        [searchable]="true"
+        searchPlaceholder="Rechercher un client..."
+        [itemsPerPage]="10"
+        [striped]="false"
+        [hoverable]="true"
+        (onRowClick)="onTableAction($event)"
+      ></app-data-table>
     </div>
   `,
   styles: [],
@@ -200,13 +74,70 @@ export class AdminClientsListComponent implements OnInit {
   private router = inject(Router);
 
   allClients: Client[] = [];
-  filteredClients: Client[] = [];
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
 
-  searchTerm = '';
-  genderFilter = '';
-  dateFilter = '';
+  columns: DataTableColumn<Client>[] = [
+    {
+      key: 'last_name',
+      header: 'Client',
+      sortable: true,
+      filterable: true,
+      render: (val, row) => `
+        <div class="font-bold text-slate-800">${row.first_name} ${row.last_name}</div>
+        <div class="text-xs text-slate-500 italic">ID: #${row.id}</div>
+      `,
+    },
+    {
+      key: 'email',
+      header: 'Contact',
+      sortable: true,
+      filterable: true,
+      render: (val, row) => `
+        <div class="text-sm text-slate-700 font-medium">${row.email}</div>
+        <div class="text-xs text-slate-500">${row.phoneNumber}</div>
+      `,
+    },
+    {
+      key: 'nationality',
+      header: 'Nationalité',
+      sortable: true,
+      filterable: true,
+      render: (val) => `
+        <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-slate-100 text-slate-800 border border-slate-200 rounded">
+          ${val || 'N/A'}
+        </span>
+      `,
+    },
+    {
+      key: 'actions',
+      header: 'Actions',
+      render: (val, row) => `
+        <div class="flex items-center justify-end gap-3 pr-4">
+          <button class="view-btn text-blue-600 hover:text-blue-800 font-semibold text-sm transition-colors cursor-pointer">
+            Voir détails →
+          </button>
+          <button class="delete-btn p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer" title="Supprimer le client">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.34 12.142m-4.204 3.69.255-1.166m.512-2.333M7.5 7h9m-9 0a2 2 0 0 0-2 2v1h11V9a2 2 0 0 0-2-2m-9 0h9m-11 5h13m-13 4h13m-13 4h13" />
+            </svg>
+          </button>
+        </div>
+      `,
+    },
+  ];
+
+  onTableAction(event: { row: Client; index: number; event: MouseEvent }) {
+    const target = event.event.target as HTMLElement;
+    const btn = target.closest('button');
+    
+    if (btn?.classList.contains('delete-btn')) {
+      event.event.stopPropagation();
+      this.deleteClient(event.row.id!);
+    } else {
+      this.goToDetails(event);
+    }
+  }
 
   ngOnInit(): void {
     this.loadClients();
@@ -252,12 +183,10 @@ export class AdminClientsListComponent implements OnInit {
           });
 
           this.allClients = Array.isArray(data) ? data : [];
-          this.applyFilters();
 
           this.loading.set(false);
           console.log('[ClientsList] loading=false (next)', {
             allClients: this.allClients.length,
-            filteredClients: this.filteredClients.length,
           });
         },
         error: (err) => {
@@ -274,29 +203,10 @@ export class AdminClientsListComponent implements OnInit {
       });
   }
 
-  applyFilters() {
-    const term = (this.searchTerm || '').toLowerCase();
-
-    this.filteredClients = (this.allClients || []).filter((c) => {
-      const firstName = (c?.first_name || '').toLowerCase();
-      const lastName = (c?.last_name || '').toLowerCase();
-      const email = (c?.email || '').toLowerCase();
-
-      const matchesSearch =
-        firstName.includes(term) || lastName.includes(term) || email.includes(term);
-
-      const matchesGender = !this.genderFilter || c?.gender === this.genderFilter;
-
-      const createdAt = c?.createdAt || '';
-      const matchesDate = !this.dateFilter || createdAt.includes(this.dateFilter);
-
-      return matchesSearch && matchesGender && matchesDate;
-    });
+  goToDetails(event: { row: Client; index: number; event: MouseEvent }) {
+    this.router.navigate(['/dashboard/admin/clients', event.row.id]);
   }
 
-  goToCreateClient() {
-    this.router.navigate(['/dashboard/admin/clients/create']);
-  }
 
   deleteClient(id: number) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {

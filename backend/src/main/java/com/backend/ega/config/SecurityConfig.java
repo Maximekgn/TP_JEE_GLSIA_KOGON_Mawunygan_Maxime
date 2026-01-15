@@ -102,26 +102,24 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth ->
                 auth
                     // Public endpoints - no authentication required
-                    .requestMatchers("/api/auth/**")
-                    .permitAll()
-                    .requestMatchers("/api/client/auth/**")
-                    .permitAll()
-                    .requestMatchers("/api/clients/**")
-                    .permitAll()
-                    .requestMatchers("/error")
-                    .permitAll()
-                    // Authenticated endpoints for both Admins and Clients
-                    .requestMatchers("/api/accounts/**", "/api/transactions/**")
-                    .authenticated()
-                    // Admin-only endpoints
-                    .requestMatchers("/api/transactions/deposit")
-                    .hasRole("ADMIN")
-                    // Client operations (already authenticated)
-                    .requestMatchers("/api/client/**")
-                    .authenticated()
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/client/auth/**").permitAll()
+                    .requestMatchers("/api/clients/**").permitAll()
+                    .requestMatchers("/error").permitAll()
+                    
+                    // Admin-only operations (Deposit, Withdrawal, Transfer)
+                    // But they cannot see individual client history
+                    .requestMatchers("/api/transactions/deposit", "/api/transactions/withdraw", "/api/transactions/transfer").hasRole("ADMIN")
+                    
+                    // Client operations (history, statement, etc.)
+                    .requestMatchers("/api/client/**").hasRole("CLIENT")
+                    
+                    // Specific restrictions to block Admin from seeing private client history
+                    .requestMatchers("/api/transactions/account/**").hasRole("CLIENT")
+                    .requestMatchers("/api/transactions").hasRole("CLIENT") // Or restricted to super-admin if exists
+                    
                     // All other requests require authentication
-                    .anyRequest()
-                    .authenticated()
+                    .anyRequest().authenticated()
             )
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

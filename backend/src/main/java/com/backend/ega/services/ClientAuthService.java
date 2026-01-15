@@ -111,6 +111,39 @@ public class ClientAuthService {
     }
 
     /**
+     * Met à jour les informations du client connecté
+     */
+    public Map<String, Object> updateCurrentClient(String authHeader, Map<String, Object> clientDetails) {
+        String token = extractBearerToken(authHeader);
+        String email;
+        try {
+            email = jwtUtil.extractEmail(token);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Token invalide");
+        }
+
+        Client client = clientsRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new IllegalArgumentException("Client non trouvé"));
+
+        // Mise à jour des champs
+        if (clientDetails.containsKey("first_name")) client.setFirst_name((String) clientDetails.get("first_name"));
+        if (clientDetails.containsKey("last_name")) client.setLast_name((String) clientDetails.get("last_name"));
+        if (clientDetails.containsKey("phone_number")) client.setPhoneNumber((String) clientDetails.get("phone_number"));
+        if (clientDetails.containsKey("address")) client.setAddress((String) clientDetails.get("address"));
+        if (clientDetails.containsKey("gender")) client.setGender((String) clientDetails.get("gender"));
+        if (clientDetails.containsKey("nationality")) client.setNationality((String) clientDetails.get("nationality"));
+        
+        // On ne permet pas de changer l'email ou le mot de passe via cet endpoint simple pour l'instant
+        // pour éviter des complications de sécurité sans re-validation.
+
+        clientsRepository.save(client);
+
+        return getCurrentClient(authHeader);
+    }
+
+
+    /**
      * Extrait le client ID du token JWT
      */
     public Long extractClientIdFromToken(String authHeader) {

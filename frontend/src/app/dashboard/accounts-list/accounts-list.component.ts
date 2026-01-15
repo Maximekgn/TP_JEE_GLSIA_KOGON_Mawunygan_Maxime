@@ -163,12 +163,31 @@ import { catchError, of } from 'rxjs';
                         />
                       </svg>
                     </a>
-                    
+                    <button
+                      (click)="deleteAccount(account.id!); $event.stopPropagation()"
+                      class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
+                      title="Supprimer le compte"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m14.74 9-.34 12.142m-4.204 3.69.255-1.166m.512-2.333M7.5 7h9m-9 0a2 2 0 0 0-2 2v1h11V9a2 2 0 0 0-2-2m-9 0h9m-11 5h13m-13 4h13m-13 4h13"
+                        />
+                      </svg>
+                    </button>
                   </div>
                 </td>
-              </tr>
-            </tbody>
-          </table>
+                </tr>
+              </tbody>
+            </table>
 
           <ng-template #noData>
             <div class="p-16 text-center" *ngIf="!isLoading()">

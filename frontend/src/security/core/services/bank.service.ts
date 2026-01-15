@@ -207,4 +207,24 @@ export class BankService {
       { params },
     );
   }
+
+  // ----------------------------
+  // Client-Specific Operations (using /api/client)
+  // ----------------------------
+
+  getMyAccounts(): Observable<Account[]> {
+    return this.http.get<Account[]>(`${this.API_BASE}/client/accounts`);
+  }
+
+  getMyTransactionsByAccount(accountId: number): Observable<Transaction[]> {
+    return this.http.get<Transaction[]>(`${this.API_BASE}/client/accounts/${accountId}/transactions`);
+  }
+
+  getMyAccountStatement(accountId: number, startDate?: string, endDate?: string): Observable<any> {
+    let params = new HttpParams();
+    if (startDate) params = params.set('startDate', startDate);
+    if (endDate) params = params.set('endDate', endDate);
+
+    return this.http.get<any>(`${this.API_BASE}/client/accounts/${accountId}/statement`, { params });
+  }
 }

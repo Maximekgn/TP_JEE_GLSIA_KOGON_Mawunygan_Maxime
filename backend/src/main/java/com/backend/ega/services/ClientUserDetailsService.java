@@ -28,7 +28,7 @@ public class ClientUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(client.getEmail())
                 .password(client.getPassword())
-                .authorities(new ArrayList<>())
+                .roles("CLIENT")
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -13,39 +13,50 @@ import { Observable, of } from 'rxjs';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="space-y-8" *ngIf="accounts$ | async as accounts">
+    <div class="space-y-8" *ngIf="!loadingAccounts; else loadingTemplate">
       <div
         class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden"
       >
-        <!-- Tabs -->
-        <div class="flex border-b border-slate-100">
-          <button
-            *ngFor="let tab of tabs"
-            (click)="activeTab = tab.id"
-            class="flex-1 py-6 text-sm font-bold uppercase tracking-wider transition-colors border-b-2"
-            [ngClass]="
-              activeTab === tab.id
-                ? 'text-indigo-600 border-indigo-600 bg-indigo-50/50'
-                : 'text-slate-400 border-transparent hover:text-indigo-500'
-            "
-          >
-            {{ tab.label }}
-          </button>
+        <!-- Header -->
+        <div class="p-8 border-b border-slate-100 bg-slate-50/30">
+          <h3 class="text-2xl font-bold text-slate-900">Virement Bancaire</h3>
+          <p class="text-slate-500 mt-1">
+            Transférez des fonds en toute sécurité entre vos comptes ou vers un autre bénéficiaire.
+          </p>
         </div>
 
         <div class="p-8 max-w-2xl mx-auto">
           <!-- VIREMENT (TRANSFER) -->
-          <form
-            *ngIf="activeTab === 'transfer'"
-            [formGroup]="transferForm"
-            (ngSubmit)="onTransfer()"
-            class="space-y-6"
-          >
-            <div class="space-y-2">
-              <h3 class="text-xl font-bold text-slate-900">Nouveau Virement</h3>
-              <p class="text-slate-500 text-sm">
-                Transfert immédiat entre vos comptes ou vers un bénéficiaire.
-              </p>
+          <form [formGroup]="transferForm" (ngSubmit)="onTransfer()" class="space-y-6">
+            <!-- Type de Virement -->
+            <div class="space-y-3">
+              <label class="block text-sm font-semibold text-slate-700">Type de bénéficiaire</label>
+              <div class="grid grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  (click)="setDestinationType('own')"
+                  [class]="
+                    destinationType === 'own'
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'
+                  "
+                  class="py-3 px-4 rounded-xl border-2 font-bold text-sm transition-all"
+                >
+                  Mes Comptes
+                </button>
+                <button
+                  type="button"
+                  (click)="setDestinationType('external')"
+                  [class]="
+                    destinationType === 'external'
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'
+                  "
+                  class="py-3 px-4 rounded-xl border-2 font-bold text-sm transition-all"
+                >
+                  Autre Bénéficiaire
+                </button>
+              </div>
             </div>
 
             <!-- Source -->
@@ -53,8 +64,8 @@ import { Observable, of } from 'rxjs';
               <label class="block text-sm font-semibold text-slate-700">Compte à débiter</label>
               <select
                 formControlName="sourceAccountId"
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"
-                (change)="updateBalance($event, accounts)"
+                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-medium"
+                (change)="updateBalance($event)"
               >
                 <option value="">Sélectionnez un compte</option>
                 <option *ngFor="let acc of accounts" [value]="acc.id">
@@ -62,156 +73,97 @@ import { Observable, of } from 'rxjs';
                 </option>
               </select>
               <p
-                class="text-xs text-red-500"
+                class="text-xs text-red-500 mt-1"
                 *ngIf="hasError(transferForm, 'sourceAccountId', 'required')"
               >
-                Requis
+                Veuillez sélectionner le compte source
               </p>
             </div>
 
-            <!-- Destination -->
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700"
-                >Compte Bénéficiaire (ID ou Sélection)</label
-              >
-              <!-- For demo simplicity, user selects from dropdown of *all* accounts or types an ID.
-                     Ideally, should select from 'Same Client Accounts' OR 'External IBAN'.
-                     For this requirement: "Virement inter-comptes" often implies own accounts.
-                     Let's allow selecting one of THEIR OWN accounts easily. -->
+            <!-- Destination OWN -->
+            <div class="space-y-2" *ngIf="destinationType === 'own'">
+              <label class="block text-sm font-semibold text-slate-700">Compte bénéficiaire</label>
               <select
                 formControlName="destinationAccountId"
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"
+                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-medium"
               >
                 <option value="">Sélectionnez un de vos comptes</option>
                 <ng-container *ngFor="let acc of accounts">
-                  <!-- exclude source -->
                   <option [value]="acc.id" *ngIf="acc.id != transferForm.value.sourceAccountId">
                     {{ acc.accountNumber }} - {{ acc.accountType }}
                   </option>
                 </ng-container>
               </select>
-              <p class="text-xs text-slate-400">
-                Pour virer vers un tiers, veuillez contacter votre conseiller.
+              <p
+                class="text-xs text-red-500 mt-1"
+                *ngIf="hasError(transferForm, 'destinationAccountId', 'required')"
+              >
+                Veuillez sélectionner le compte de destination
+              </p>
+            </div>
+
+            <!-- Destination EXTERNAL -->
+            <div class="space-y-2" *ngIf="destinationType === 'external'">
+              <label class="block text-sm font-semibold text-slate-700">Numéro de compte bénéficiaire</label>
+              <input
+                type="text"
+                formControlName="destinationAccountNumber"
+                placeholder="Ex: ACC-123456"
+                class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-medium"
+              />
+              <p
+                class="text-xs text-red-500 mt-1"
+                *ngIf="hasError(transferForm, 'destinationAccountNumber', 'required')"
+              >
+                Le numéro de compte est requis
               </p>
             </div>
 
             <!-- Amount -->
             <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Montant</label>
-              <input
-                type="number"
-                formControlName="amount"
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"
-                placeholder="0.00"
-              />
-              <p class="text-xs text-red-500" *ngIf="transferForm.errors?.['insufficientFunds']">
-                Solde insuffisant
+              <label class="block text-sm font-semibold text-slate-700">Montant à transférer</label>
+              <div class="relative">
+                <input
+                  type="number"
+                  formControlName="amount"
+                  class="w-full pl-4 pr-16 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-bold text-lg"
+                  placeholder="0"
+                />
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">FCFA</span>
+              </div>
+              <p class="text-xs text-red-500 mt-1" *ngIf="transferForm.errors?.['insufficientFunds']">
+                Solde insuffisant (Solde actuel: {{ currentBalance | number: '1.0-0' }} FCFA)
+              </p>
+              <p class="text-xs text-red-500 mt-1" *ngIf="hasError(transferForm, 'amount', 'min')">
+                Le montant doit être supérieur à 0
               </p>
             </div>
 
             <button
               type="submit"
               [disabled]="transferForm.invalid || isSubmitting"
-              class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all disabled:opacity-50"
+              class="w-full py-4 mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-200 flex items-center justify-center gap-2"
             >
-              {{ isSubmitting ? 'Traitement...' : 'Confirmer le Virement' }}
-            </button>
-          </form>
-
-          <!-- DEPOSIT (SIMULATION) -->
-          <form
-            *ngIf="activeTab === 'deposit'"
-            [formGroup]="depositForm"
-            (ngSubmit)="onDeposit()"
-            class="space-y-6"
-          >
-            <div class="space-y-2">
-              <h3 class="text-xl font-bold text-slate-900">Simulation de Dépôt</h3>
-              <p class="text-fuchsia-500 text-sm font-bold">
-                ⚠️ Fonctionnalité de démonstration uniquement
-              </p>
-            </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Compte à créditer</label>
-              <select
-                formControlName="accountId"
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"
-              >
-                <option *ngFor="let acc of accounts" [value]="acc.id">
-                  {{ acc.accountNumber }}
-                </option>
-              </select>
-            </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Montant</label>
-              <input
-                type="number"
-                formControlName="amount"
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"
-              />
-            </div>
-
-            <button
-              type="submit"
-              [disabled]="depositForm.invalid || isSubmitting"
-              class="w-full py-4 bg-slate-800 text-white font-bold rounded-xl disabled:opacity-50"
-            >
-              Effectuer le Versement
-            </button>
-          </form>
-
-          <!-- WITHDRAWAL (SIMULATION) -->
-          <form
-            *ngIf="activeTab === 'withdraw'"
-            [formGroup]="withdrawForm"
-            (ngSubmit)="onWithdraw()"
-            class="space-y-6"
-          >
-            <div class="space-y-2">
-              <h3 class="text-xl font-bold text-slate-900">Simulation de Retrait</h3>
-              <p class="text-fuchsia-500 text-sm font-bold">
-                ⚠️ Fonctionnalité de démonstration uniquement
-              </p>
-            </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Compte à débiter</label>
-              <select
-                formControlName="accountId"
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"
-                (change)="updateBalance($event, accounts)"
-              >
-                <option *ngFor="let acc of accounts" [value]="acc.id">
-                  {{ acc.accountNumber }} ({{ acc.balance }} FCFA)
-                </option>
-              </select>
-            </div>
-
-            <div class="space-y-2">
-              <label class="block text-sm font-semibold text-slate-700">Montant</label>
-              <input
-                type="number"
-                formControlName="amount"
-                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"
-              />
-              <p class="text-xs text-red-500" *ngIf="withdrawForm.errors?.['insufficientFunds']">
-                Solde insuffisant
-              </p>
-            </div>
-
-            <button
-              type="submit"
-              [disabled]="withdrawForm.invalid || isSubmitting"
-              class="w-full py-4 bg-slate-800 text-white font-bold rounded-xl disabled:opacity-50"
-            >
-              Effectuer le Retrait
+              <svg *ngIf="isSubmitting" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              {{ isSubmitting ? 'Traitement en cours...' : 'Confirmer le Virement' }}
             </button>
           </form>
         </div>
       </div>
     </div>
+
+    <ng-template #loadingTemplate>
+      <div class="flex flex-col items-center justify-center py-24 space-y-4">
+        <div class="relative w-16 h-16">
+          <div class="absolute top-0 left-0 w-full h-full border-4 border-blue-100 rounded-full"></div>
+          <div class="absolute top-0 left-0 w-full h-full border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+        </div>
+        <p class="text-slate-500 font-medium animate-pulse">Chargement de vos comptes...</p>
+      </div>
+    </ng-template>
   `,
   styles: [],
 })
@@ -220,41 +172,26 @@ export class ClientOperationsComponent implements OnInit {
   private bankService = inject(BankService);
   private ns = inject(NotificationService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
 
-  accounts$: Observable<Account[]> = of([]);
-  activeTab = 'transfer';
+  accounts: Account[] = [];
+  loadingAccounts = false;
   isSubmitting = false;
   currentBalance = 0;
+  destinationType: 'own' | 'external' = 'own';
+
   private authService = inject(ClientAuthService);
   private readonly CLIENT_ID = this.authService.getUserId() || 1;
-
-  tabs = [
-    { id: 'transfer', label: 'Virement' },
-    { id: 'deposit', label: 'Versement' },
-    { id: 'withdraw', label: 'Retrait' },
-  ];
 
   // Forms
   transferForm = this.fb.group(
     {
       sourceAccountId: ['', Validators.required],
-      destinationAccountId: ['', Validators.required],
+      destinationAccountId: [''],
+      destinationAccountNumber: [''],
       amount: ['', [Validators.required, Validators.min(1)]],
     },
-    { validators: this.checkFunds('sourceAccountId') },
-  );
-
-  depositForm = this.fb.group({
-    accountId: ['', Validators.required],
-    amount: ['', [Validators.required, Validators.min(1)]],
-  });
-
-  withdrawForm = this.fb.group(
-    {
-      accountId: ['', Validators.required],
-      amount: ['', [Validators.required, Validators.min(1)]],
-    },
-    { validators: this.checkFunds('accountId') },
+    { validators: [this.checkFunds('sourceAccountId'), this.validateDestination()] },
   );
 
   ngOnInit() {
@@ -263,26 +200,78 @@ export class ClientOperationsComponent implements OnInit {
       const accountId = params['accountId'];
       if (accountId) {
         this.transferForm.patchValue({ sourceAccountId: accountId });
-        this.depositForm.patchValue({ accountId: accountId });
-        this.withdrawForm.patchValue({ accountId: accountId });
-
-        // Trigger balance update if accounts are already loaded
-        this.accounts$.subscribe((accounts) => {
-          const acc = accounts.find((a) => a.id == accountId);
+        
+        // If accounts are already loaded, update balance immediately
+        if (this.accounts.length > 0) {
+          const acc = this.accounts.find((a: Account) => a.id == accountId);
           if (acc) this.currentBalance = acc.balance;
-        });
+          this.cdr.detectChanges();
+        }
       }
     });
   }
 
   refreshAccounts() {
-    this.accounts$ = this.bankService.getAccountsByClient(this.CLIENT_ID);
+    this.loadingAccounts = true;
+    this.cdr.detectChanges();
+    this.bankService.getAccountsByClient(this.CLIENT_ID)
+      .pipe(
+        finalize(() => {
+          this.loadingAccounts = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          this.accounts = data;
+          
+          // If we had a sourceAccountId from query params, update balance
+          const sourceId = this.transferForm.get('sourceAccountId')?.value;
+          if (sourceId) {
+            const acc = this.accounts.find((a: Account) => a.id == sourceId);
+            if (acc) this.currentBalance = acc.balance;
+          }
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error loading accounts:', err);
+          this.ns.showError('Impossible de charger vos comptes');
+        }
+      });
   }
 
-  updateBalance(event: any, accounts: Account[]) {
+  setDestinationType(type: 'own' | 'external') {
+    this.destinationType = type;
+    if (type === 'own') {
+      this.transferForm.patchValue({ destinationAccountNumber: '' });
+      this.transferForm.get('destinationAccountId')?.setValidators(Validators.required);
+      this.transferForm.get('destinationAccountNumber')?.clearValidators();
+    } else {
+      this.transferForm.patchValue({ destinationAccountId: '' });
+      this.transferForm.get('destinationAccountNumber')?.setValidators(Validators.required);
+      this.transferForm.get('destinationAccountId')?.clearValidators();
+    }
+    this.transferForm.get('destinationAccountId')?.updateValueAndValidity();
+    this.transferForm.get('destinationAccountNumber')?.updateValueAndValidity();
+  }
+
+  updateBalance(event: any) {
     const id = event.target.value;
-    const acc = accounts.find((a) => a.id == id);
-    if (acc) this.currentBalance = acc.balance;
+    const acc = this.accounts.find((a) => a.id == id);
+    this.currentBalance = acc ? acc.balance : 0;
+    this.transferForm.updateValueAndValidity();
+    this.cdr.detectChanges();
+  }
+
+  validateDestination() {
+    return (group: FormGroup) => {
+      const destId = group.get('destinationAccountId')?.value;
+      const destNum = group.get('destinationAccountNumber')?.value;
+
+      if (this.destinationType === 'own' && !destId) return { destinationRequired: true };
+      if (this.destinationType === 'external' && !destNum) return { destinationRequired: true };
+      return null;
+    };
   }
 
   checkFunds(accountField: string) {
@@ -294,74 +283,46 @@ export class ClientOperationsComponent implements OnInit {
   }
 
   hasError(form: FormGroup, field: string, error: string) {
-    return form.get(field)?.touched && form.get(field)?.hasError(error);
+    const control = form.get(field);
+    return control?.touched && control?.hasError(error);
   }
 
-  // ACTIONS
   onTransfer() {
-    if (this.transferForm.invalid) return;
+    if (this.transferForm.invalid) {
+      this.transferForm.markAllAsTouched();
+      return;
+    }
+
     this.isSubmitting = true;
     const val = this.transferForm.value;
 
+    const payload: any = {
+      sourceAccount: { id: parseInt(val.sourceAccountId!) },
+      amount: parseFloat(val.amount!),
+      description: 'Virement Client Web',
+    };
+
+    if (this.destinationType === 'own') {
+      payload.destinationAccount = { id: parseInt(val.destinationAccountId!) };
+    } else {
+      payload.destinationAccount = { accountNumber: val.destinationAccountNumber };
+    }
+
     this.bankService
-      .transfer({
-        sourceAccount: { id: parseInt(val.sourceAccountId!) },
-        destinationAccount: { id: parseInt(val.destinationAccountId!) },
-        amount: parseFloat(val.amount!),
-        description: 'Virement Client Web',
-      })
+      .transfer(payload)
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: () => {
-          this.ns.showSuccess('Virement effectué !');
+          this.ns.showSuccess('Virement effectué avec succès !');
           this.transferForm.reset();
           this.refreshAccounts();
+          this.destinationType = 'own';
         },
-        error: (e) => this.ns.showError('Echec virement'),
-      });
-  }
-
-  onDeposit() {
-    if (this.depositForm.invalid) return;
-    this.isSubmitting = true;
-    const val = this.depositForm.value;
-
-    this.bankService
-      .deposit({
-        sourceAccount: { id: parseInt(val.accountId!) },
-        amount: parseFloat(val.amount!),
-        description: 'Dépôt Guichet/GAB',
-      })
-      .pipe(finalize(() => (this.isSubmitting = false)))
-      .subscribe({
-        next: () => {
-          this.ns.showSuccess('Dépôt effectué avec succès');
-          this.depositForm.reset();
-          this.refreshAccounts();
+        error: (e) => {
+          console.error(e);
+          const message = e.status === 404 ? 'Compte destinataire inexistant' : 'Echec du virement';
+          this.ns.showError(message);
         },
-        error: (e) => this.ns.showError('Échec du dépôt'),
-      });
-  }
-
-  onWithdraw() {
-    if (this.withdrawForm.invalid) return;
-    this.isSubmitting = true;
-    const val = this.withdrawForm.value;
-
-    this.bankService
-      .withdraw({
-        sourceAccount: { id: parseInt(val.accountId!) },
-        amount: parseFloat(val.amount!),
-        description: 'Retrait D.A.B',
-      })
-      .pipe(finalize(() => (this.isSubmitting = false)))
-      .subscribe({
-        next: () => {
-          this.ns.showSuccess('Retrait effectué, prenez vos billets.');
-          this.withdrawForm.reset();
-          this.refreshAccounts();
-        },
-        error: (e) => this.ns.showError('Fonds insuffisants'),
       });
   }
 }

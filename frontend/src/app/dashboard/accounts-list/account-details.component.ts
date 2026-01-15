@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BankService, Account, Transaction } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
@@ -102,6 +102,27 @@ import { catchError, finalize, of, timeout } from 'rxjs';
             </div>
           </div>
         </div>
+
+        <button
+          (click)="deleteAccount()"
+          class="flex items-center gap-2 px-6 py-3 bg-white border border-rose-200 text-rose-600 font-bold rounded-2xl hover:bg-rose-50 transition-all shadow-sm group"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            class="w-5 h-5 group-hover:scale-110 transition-transform"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m14.74 9-.34 12.142m-4.204 3.69.255-1.166m.512-2.333M7.5 7h9m-9 0a2 2 0 0 0-2 2v1h11V9a2 2 0 0 0-2-2m-9 0h9m-11 5h13m-13 4h13m-13 4h13"
+            />
+          </svg>
+          Supprimer le compte
+        </button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -284,67 +305,17 @@ import { catchError, finalize, of, timeout } from 'rxjs';
             </div>
           </div>
 
-          <!-- Transaction History -->
-          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100 font-bold text-slate-800">
-              Historique des transactions
+          <!-- Removed Transaction History for Admin Privacy -->
+          <div class="bg-amber-50 rounded-2xl border border-amber-200 p-8 text-center space-y-3">
+            <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+              </svg>
             </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse">
-                <thead>
-                  <tr class="bg-slate-50 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    <th class="px-6 py-3">Date</th>
-                    <th class="px-6 py-3">Type</th>
-                    <th class="px-6 py-3">Description</th>
-                    <th class="px-6 py-3 text-right">Montant</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 text-sm">
-                  <tr *ngFor="let tx of transactions" class="hover:bg-slate-50">
-                    <td class="px-6 py-3 text-slate-500">
-                      {{ tx.transactionDate | date: 'short' }}
-                    </td>
-                    <td class="px-6 py-3">
-                      <span
-                        [ngClass]="{
-                          'text-green-600': tx.transactionType === 'DEPOSIT',
-                          'text-red-600': tx.transactionType === 'WITHDRAWAL',
-                          'text-blue-600': tx.transactionType === 'TRANSFER',
-                        }"
-                        class="font-bold"
-                      >
-                        {{ tx.transactionType }}
-                      </span>
-                    </td>
-                    <td class="px-6 py-3 text-slate-600">{{ tx.description }}</td>
-                    <td
-                      class="px-6 py-3 text-right font-bold"
-                      [ngClass]="
-                        tx.transactionType === 'DEPOSIT' ||
-                        (tx.transactionType === 'TRANSFER' &&
-                          tx.destinationAccount?.id === account.id)
-                          ? 'text-green-600'
-                          : 'text-red-600'
-                      "
-                    >
-                      {{
-                        tx.transactionType === 'DEPOSIT' ||
-                        (tx.transactionType === 'TRANSFER' &&
-                          tx.destinationAccount?.id === account.id)
-                          ? '+'
-                          : '-'
-                      }}
-                      {{ tx.amount | number: '1.2-2' }}
-                    </td>
-                  </tr>
-                  <tr *ngIf="transactions.length === 0">
-                    <td colspan="4" class="px-6 py-8 text-center text-slate-400">
-                      Aucune transaction trouvée
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <h4 class="text-amber-900 font-bold">Confidentialité de l'Historique</h4>
+            <p class="text-amber-700 text-sm max-w-md mx-auto">
+              Par mesure de sécurité et de respect de la vie privée des clients, les administrateurs n'ont plus accès à l'historique détaillé des transactions.
+            </p>
           </div>
         </div>
 
@@ -437,6 +408,7 @@ import { catchError, finalize, of, timeout } from 'rxjs';
 })
 export class AccountDetailsComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private fb = inject(FormBuilder);
   private bankService = inject(BankService);
   private ns = inject(NotificationService);
@@ -507,20 +479,11 @@ export class AccountDetailsComponent implements OnInit {
       .subscribe((data) => {
         if (data) {
           this.account = data;
-          this.loadTransactions(id);
           this.loadOtherAccounts();
         } else if (!this.error()) {
           this.error.set('Le compte demandé est introuvable.');
         }
       });
-  }
-
-  loadTransactions(id: number) {
-    this.bankService.getTransactionsByAccount(id).subscribe((data) => {
-      this.transactions = data.sort(
-        (a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime(),
-      );
-    });
   }
 
   loadOtherAccounts() {
@@ -601,5 +564,21 @@ export class AccountDetailsComponent implements OnInit {
         error: (err) =>
           this.ns.showError('Erreur: ' + (err.error?.message || 'Transaction échouée')),
       });
+  }
+
+  deleteAccount() {
+    if (!this.account?.id) return;
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce compte ? Cette action est irréversible.')) {
+      this.bankService.deleteAccount(this.account.id).subscribe({
+        next: () => {
+          this.ns.showSuccess('Compte supprimé avec succès');
+          this.router.navigate(['/dashboard/admin/accounts']);
+        },
+        error: (err) => {
+          this.ns.showError('Erreur lors de la suppression');
+          console.error(err);
+        }
+      });
+    }
   }
 }
