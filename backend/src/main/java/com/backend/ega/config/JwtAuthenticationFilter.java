@@ -1,11 +1,12 @@
 package com.backend.ega.config;
 
-import com.backend.ega.services.AdminUserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import com.backend.ega.utils.JwtUtil;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +44,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private AdminUserDetailsService adminUserDetailsService;
+    @Qualifier("adminUserDetailsService")
+    private UserDetailsService adminUserDetailsService;
+
+    @Autowired
+    @Qualifier("clientUserDetailsService")
+    private UserDetailsService clientUserDetailsService;
 
     private static final String BEARER_PREFIX = "Bearer ";
 
@@ -61,16 +67,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 String username = jwtUtil.extractEmail(token);
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = adminUserDetailsService.loadUserByUsername(username);
-                    if (jwtUtil.validateToken(token, userDetails.getUsername())) {
+                    String userType = jwtUtil.extractUserType(token);
+                    UserDetails userDetails = null;
+
+                    if ("ADMIN".equals(userType)) {
+                        userDetails = adminUserDetailsService.loadUserByUsername(username);
+                    } else if ("CLIENT".equals(userType)) {
+                        userDetails = clientUserDetailsService.loadUserByUsername(username);
+                    }
+
+                    if (userDetails != null && jwtUtil.validateToken(token, userDetails.getUsername())) {
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                                 userDetails, null, userDetails.getAuthorities()
                         );
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                        logger.debug("Authenticated user '{}' via JWT", username);
+                        logger.debug("Authenticated user '{}' (Type: {}) via JWT", username, userType);
                     } else {
-                        logger.debug("JWT validation failed for user '{}'", username);
+                        logger.debug("JWT validation failed or user not found for '{}'", username);
                     }
                 }
             } catch (JwtException | IllegalArgumentException ex) {

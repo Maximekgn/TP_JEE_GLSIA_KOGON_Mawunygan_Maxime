@@ -3,8 +3,10 @@ package com.backend.ega.repositories;
 import com.backend.ega.entities.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface  AccountsRepository extends JpaRepository<Account, Long> {
+public interface AccountsRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByAccountNumber(String accountNumber);
+    List<Account> findByOwnerId(Long ownerId);
 }

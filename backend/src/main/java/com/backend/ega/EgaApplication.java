@@ -71,6 +71,7 @@ public class EgaApplication {
                     alice.setAddress("1 Rue Principale");
                     alice.setPhoneNumber("123456789");
                     alice.setNationality("TG");
+                    alice.setPassword("alice123");
                     alice.setCreatedAt(LocalDateTime.now());
                     alice.setUpdatedAt(LocalDateTime.now());
 
@@ -135,6 +136,7 @@ public class EgaApplication {
                     bob.setAddress("2 Avenue Secondaire");
                     bob.setPhoneNumber("987654321");
                     bob.setNationality("TG");
+                    bob.setPassword("bob123");
                     bob.setCreatedAt(LocalDateTime.now());
                     bob.setUpdatedAt(LocalDateTime.now());
 

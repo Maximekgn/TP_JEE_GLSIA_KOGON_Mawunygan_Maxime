@@ -26,6 +26,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("birth_date")
     @NotNull(message = "La date de naissance est obligatoire")
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -38,6 +39,7 @@ public class Client {
     @Column(name = "address")
     private String address;
 
+    @JsonProperty("phone_number")
     @NotNull(message = "Le numéro de telephone est obligatoire")
     @Column(name = "phone_number")
     private String phoneNumber;

@@ -56,7 +56,10 @@ export class ClientAuthService {
 
   public authStatus$ = this.authStatusSub.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
     this.initializeAuth();
   }
 
@@ -64,15 +67,19 @@ export class ClientAuthService {
    * Register a new client
    */
   register(clientData: ClientRegisterData): Observable<any> {
-    const toLog = { ...clientData } as any;
-    if (toLog.password) toLog.password = '***';
-    console.log('ClientAuthService.register - sending:', toLog);
+    const payload: ClientRegisterData = {
+      ...clientData,
+      email: (clientData.email || '').trim().toLowerCase(),
+    };
 
-    return this.http.post<any>('/api/clients', clientData).pipe(
-      tap((res) => {
-        console.log('ClientAuthService.register - client created:', res);
+    // Never log PII/sensitive payloads (password, personal data). Keep logs minimal.
+    console.log('ClientAuthService.register - sending registration request');
+
+    return this.http.post<any>('/api/clients', payload).pipe(
+      tap(() => {
+        console.log('ClientAuthService.register - client created');
       }),
-      catchError((error) => this.handleError(error))
+      catchError((error) => this.handleError(error)),
     );
   }
 
@@ -80,18 +87,22 @@ export class ClientAuthService {
    * Login client and store token
    */
   login(credentials: { email: string; password: string }): Observable<ClientAuthResponse> {
-    const toLog = { ...credentials } as any;
-    if (toLog.password) toLog.password = '***';
-    console.log('ClientAuthService.login - sending:', toLog);
+    const payload = {
+      ...credentials,
+      email: (credentials.email || '').trim().toLowerCase(),
+    };
 
-    return this.http.post<ClientAuthResponse>(`${this.API_BASE}/login`, credentials).pipe(
+    // Never log credentials (even masked). Keep logs minimal.
+    console.log('ClientAuthService.login - sending login request');
+
+    return this.http.post<ClientAuthResponse>(`${this.API_BASE}/login`, payload).pipe(
       tap((res) => {
-        console.log('ClientAuthService.login - received:', res);
+        console.log('ClientAuthService.login - received auth response');
         if (res && res.access_token) {
           this.saveAuthData(res);
         }
       }),
-      catchError((error) => this.handleError(error))
+      catchError((error) => this.handleError(error)),
     );
   }
 
@@ -99,9 +110,9 @@ export class ClientAuthService {
    * Get current client information
    */
   getCurrentClient(): Observable<ClientInfo> {
-    return this.http.get<ClientInfo>(`${this.API_BASE}/me`).pipe(
-      catchError((error) => this.handleError(error))
-    );
+    return this.http
+      .get<ClientInfo>(`${this.API_BASE}/me`)
+      .pipe(catchError((error) => this.handleError(error)));
   }
 
   /**

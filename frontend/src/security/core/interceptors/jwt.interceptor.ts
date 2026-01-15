@@ -9,7 +9,7 @@ import { AuthService } from '../services/auth.service';
  */
 export const jwtInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn
+  next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
   const authService = inject(AuthService);
   const token = authService.getToken();
@@ -18,7 +18,13 @@ export const jwtInterceptor: HttpInterceptorFn = (
   // We avoid sending the token to external third-party APIs for security
   const isApiUrl = req.url.startsWith('/api');
 
-  if (token && isApiUrl) {
+  // Do not attach ADMIN token to client public/auth endpoints
+  // - register: POST /api/clients
+  // - login/me: /api/client/auth/**
+  const isClientPublicOrAuth =
+    req.url.startsWith('/api/clients') || req.url.startsWith('/api/client/auth');
+
+  if (token && isApiUrl && !isClientPublicOrAuth) {
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,

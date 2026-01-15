@@ -106,11 +106,7 @@ public class AccountsService {
     }
 
     public List<Account> getAccountsByClient(Long clientId) {
-        return accountsRepository
-            .findAll()
-            .stream()
-            .filter(account -> account.getOwner().getId() == clientId)
-            .collect(Collectors.toList());
+        return accountsRepository.findByOwnerId(clientId);
     }
 
     /**

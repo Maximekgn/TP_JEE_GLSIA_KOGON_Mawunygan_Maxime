@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Client Auth - Diagnostic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .test-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .response-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .response-success {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .response-error {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .response-info {
+            background: #d1ecf1;
+            border: 2px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-200 { background: #d4edda; color: #155724; }
+        .status-201 { background: #d4edda; color: #155724; }
+        .status-400 { background: #fff3cd; color: #856404; }
+        .status-401 { background: #f8d7da; color: #721c24; }
+        .status-403 { background: #f8d7da; color: #721c24; }
+        .status-404 { background: #f8d7da; color: #721c24; }
+        .status-409 { background: #fff3cd; color: #856404; }
+        .status-500 { background: #f8d7da; color: #721c24; }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #e0e0e0;
+        }
+
+        .checklist li.success {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .checklist li.error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .checklist li.warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Test Client Authentication</h1>
+            <p class="subtitle">Diagnostic des endpoints backend pour le système d'authentification client</p>
+        </div>
+
+        <!-- Backend Status Check -->
+        <div class="test-section">
+            <h2>📡 Vérification du Backend</h2>
+            <button onclick="checkBackendStatus()">Vérifier le Backend</button>
+            <div id="backend-status"></div>
+        </div>
+
+        <!-- Test Registration -->
+        <div class="test-section">
+            <h2>📝 Test d'Inscription (POST /api/clients)</h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" id="reg-firstname" value="Marie">
+                </div>
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" id="reg-lastname" value="Dubois">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="reg-email" value="marie.test@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="tel" id="reg-phone" value="+33698765432">
+                </div>
+                <div class="form-group">
+                    <label>Date de naissance</label>
+                    <input type="date" id="reg-birthdate" value="1995-03-15">
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <input type="text" id="reg-gender" value="F">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Adresse</label>
+                <input type="text" id="reg-address" value="45 Avenue des Champs-Élysées, 75008 Paris">
+            </div>
+            <div class="form-group">
+                <label>Nationalité</label>
+                <input type="text" id="reg-nationality" value="Française">
+            </div>
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" id="reg-password" value="password123">
+            </div>
+            <button onclick="testRegistration()">Tester l'Inscription</button>
+            <button class="btn-secondary" onclick="generateRandomEmail()">Email Aléatoire</button>
+            <div id="reg-response"></div>
+        </div>
+
+        <!-- Test Login -->
+        <div class="test-section">
+            <h2>🔐 Test de Connexion (POST /api/client/auth/login)</h2>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="login-email" value="marie.test@example.com">
+            </div>
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" id="login-password" value="password123">
+            </div>
+            <button onclick="testLogin()">Tester la Connexion</button>
+            <div id="login-response"></div>
+        </div>
+
+        <!-- Test Get Current Client -->
+        <div class="test-section">
+            <h2>👤 Test</h2> Récupération Client (GET /api/client/auth/me)</h2>
+            <div class="form-group">
+                <label>Token JWT (sera rempli automatiquement après login)</label>
+                <textarea id="token" rows="3" placeholder="Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+            </div>
+            <button onclick="testGetCurrentClient()">Récupérer les Infos Client</button>
+            <div id="me-response"></div>
+        </div>
+
+        <!-- Diagnostic Results -->
+        <div class="test-section">
+            <h2>✅ Résum</h2>é du Diagnostic</h2>
+            <ul class="checklist" id="checklist">
+                <li>Cliquez sur "Vérifier le Backend" pour commencer</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+        let diagnosticResults = {
+            backendOnline: false,
+            registrationWorks: false,
+            loginWorks: false,
+            getCurrentClientWorks: false
+        };
+
+        // Generate random email
+        function generateRandomEmail() {
+            const random = Math.random().toString(36).substring(7);
+            const email = `test.${random}@example.com`;
+            document.getElementById('reg-email').value = email;
+            document.getElementById('login-email').value = email;
+        }
+
+        // Check backend status
+        async function checkBackendStatus() {
+            const statusDiv = document.getElementById('backend-status');
+            statusDiv.innerHTML = '<div class="loading"></div> Vérification en cours...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/clients`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const statusClass = `status-${response.status}`;
+                let result = `<div class="status-badge ${statusClass}">Status: ${response.status}</div>\n`;
+                result += `<div class="response-box response-success">`;
+                result += `✅ Backend accessible sur ${API_BASE}\n`;
+                result += `Status: ${response.status}\n`;
+                result += `URL testée: GET /api/clients\n`;
+                result += `</div>`;
+
+                statusDiv.innerHTML = result;
+                diagnosticResults.backendOnline = true;
+                updateChecklist();
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="response-box response-error">❌ Erreur: ${error.message}\n\n` +
+                    `Le backend ne semble pas accessible sur ${API_BASE}\n` +
+                    `Assurez-vous que le backend Spring Boot est démarré.</div>`;
+                diagnosticResults.backendOnline = false;
+                updateChecklist();
+            }
+        }
+
+        // Test registration
+        async function testRegistration() {
+            const responseDiv = document.getElementById('reg-response');
+            responseDiv.innerHTML = '<div class="loading"></div> Inscription en cours...';
+
+            const data = {
+                first_name: document.getElementById('reg-firstname').value,
+                last_name: document.getElementById('reg-lastname').value,
+                email: document.getElementById('reg-email').value,
+                password: document.getElementById('reg-password').value,
+                birth_date: document.getElementById('reg-birthdate').value,
+                gender: document.getElementById('reg-gender').value,
+                address: document.getElementById('reg-address').value,
+                phone_number: document.getElementById('reg-phone').value,
+                nationality: document.getElementById('reg-nationality').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/clients`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const statusClass = `status-${response.status}`;
+                let result = `<div class="status-badge ${statusClass}">Status: ${response.status}</div>\n`;
+
+                const responseText = await response.text();
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch {
+                    responseData = responseText;
+                }
+
+                result += `<div class="response-box ${response.ok ? 'response-success' : 'response-error'}">`;
+                result += `Request:\nPOST ${API_BASE}/api/clients\n`;
+                result += `Body: ${JSON.stringify(data, null, 2)}\n\n`;
+                result += `Response:\n${JSON.stringify(responseData, null, 2)}`;
+                result += `</div>`;
+
+                responseDiv.innerHTML = result;
+
+                if (response.status === 201 || response.status === 200) {
+                    diagnosticResults.registrationWorks = true;
+                    // Copy email to login form
+                    document.getElementById('login-email').value = data.email;
+                    document.getElementById('login-password').value = data.password;
+                } else {
+                    diagnosticResults.registrationWorks = false;
+                }
+                updateChecklist();
+            } catch (error) {
+                responseDiv.innerHTML = `<div class="response-box response-error">❌ Erreur: ${error.message}</div>`;
+                diagnosticResults.registrationWorks = false;
+                updateChecklist();
+            }
+        }
+
+        // Test login
+        async function testLogin() {
+            const responseDiv = document.getElementById('login-response');
+            responseDiv.innerHTML = '<div class="loading"></div> Connexion en cours...';
+
+            const data = {
+                email: document.getElementById('login-email').value,
+                password: document.getElementById('login-password').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/client/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const statusClass = `status-${response.status}`;
+                let result = `<div class="status-badge ${statusClass}">Status: ${response.status}</div>\n`;
+
+                const responseText = await response.text();
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch {
+                    responseData = responseText;
+                }
+
+                result += `<div class="response-box ${response.ok ? 'response-success' : 'response-error'}">`;
+                result += `Request:\nPOST ${API_BASE}/api/client/auth/login\n`;
+                result += `Body: ${JSON.stringify(data, null, 2)}\n\n`;
+                result += `Response:\n${JSON.stringify(responseData, null, 2)}`;
+                result += `</div>`;
+
+                responseDiv.innerHTML = result;
+
+                if (response.ok && responseData.access_token) {
+                    diagnosticResults.loginWorks = true;
+                    // Save token for next test
+                    document.getElementById('token').value = `Bearer ${responseData.access_token}`;
+
+                    result += `<div class="response-box response-info" style="margin-top: 15px;">`;
+                    result += `✅ Token sauvegardé automatiquement pour le test suivant`;
+                    result += `</div>`;
+                    responseDiv.innerHTML = result;
+                } else {
+                    diagnosticResults.loginWorks = false;
+                }
+                updateChecklist();
+            } catch (error) {
+                responseDiv.innerHTML = `<div class="response-box response-error">❌ Erreur: ${error.message}</div>`;
+                diagnosticResults.loginWorks = false;
+                updateChecklist();
+            }
+        }
+
+        // Test get current client
+        async function testGetCurrentClient() {
+            const responseDiv = document.getElementById('me-response');
+            const token = document.getElementById('token').value.trim();
+
+            if (!token) {
+                responseDiv.innerHTML = `<div class="response-box response-error">❌ Aucun token fourni. Connectez-vous d'abord.</div>`;
+                return;
+            }
+
+            responseDiv.innerHTML = '<div class="loading"></div> Récupération en cours...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/client/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const statusClass = `status-${response.status}`;
+                let result = `<div class="status-badge ${statusClass}">Status: ${response.status}</div>\n`;
+
+                const responseText = await response.text();
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch {
+                    responseData = responseText;
+                }
+
+                result += `<div class="response-box ${response.ok ? 'response-success' : 'response-error'}">`;
+                result += `Request:\nGET ${API_BASE}/api/client/auth/me\n`;
+                result += `Headers:\n  Authorization: ${token.substring(0, 50)}...\n\n`;
+                result += `Response:\n${JSON.stringify(responseData, null, 2)}`;
+                result += `</div>`;
+
+                responseDiv.innerHTML = result;
+
+                if (response.ok) {
+                    diagnosticResults.getCurrentClientWorks = true;
+                } else {
+                    diagnosticResults.getCurrentClientWorks = false;
+                }
+                updateChecklist();
+            } catch (error) {
+                responseDiv.innerHTML = `<div class="response-box response-error">❌ Erreur: ${error.message}</div>`;
+                diagnosticResults.getCurrentClientWorks = false;
+                updateChecklist();
+            }
+        }
+
+        // Update checklist
+        function updateChecklist() {
+            const checklist = document.getElementById('checklist');
+            let html = '';
+
+            html += `<li class="${diagnosticResults.backendOnline ? 'success' : 'error'}">`;
+            html += `${diagnosticResults.backendOnline ? '✅' : '❌'} Backend accessible sur localhost:8080`;
+            html += `</li>`;
+
+            html += `<li class="${diagnosticResults.registrationWorks ? 'success' : 'warning'}">`;
+            html += `${diagnosticResults.registrationWorks ? '✅' : '⚠️'} Inscription client (POST /api/clients)`;
+            html += `</li>`;
+
+            html += `<li class="${diagnosticResults.loginWorks ? 'success' : 'warning'}">`;
+            html += `${diagnosticResults.loginWorks ? '✅' : '⚠️'} Connexion client (POST /api/client/auth/login)`;
+            html += `</li>`;
+
+            html += `<li class="${diagnosticResults.getCurrentClientWorks ? 'success' : 'warning'}">`;
+            html += `${diagnosticResults.getCurrentClientWorks ? '✅' : '⚠️'} Récupération infos client (GET /api/client/auth/me)`;
+            html += `</li>`;
+
+            const allWorking = diagnosticResults.backendOnline &&
+                              diagnosticResults.registrationWorks &&
+                              diagnosticResults.loginWorks &&
+                              diagnosticResults.getCurrentClientWorks;
+
+            if (allWorking) {
+                html += `<li class="success">`;
+                html += `🎉 Tous les tests sont passés ! Le système d'authentification client fonctionne.`;
+                html += `</li>`;
+            }
+
+            checklist.innerHTML = html;
+        }
+
+        // Initialize
+        updateChecklist();
+    </script>
+</body>
+</html>

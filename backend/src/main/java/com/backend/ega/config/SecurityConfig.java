@@ -52,9 +52,9 @@ public class SecurityConfig {
      */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider =
-            new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(adminUserDetailsService);
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(
+            adminUserDetailsService
+        );
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -101,16 +101,25 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth ->
                 auth
+                    // Public endpoints - no authentication required
                     .requestMatchers("/api/auth/**")
                     .permitAll()
                     .requestMatchers("/api/client/auth/**")
                     .permitAll()
-                    .requestMatchers("/api/clients")
+                    .requestMatchers("/api/clients/**")
                     .permitAll()
-                    .requestMatchers("/api/client/**")
+                    .requestMatchers("/error")
+                    .permitAll()
+                    // Authenticated endpoints for both Admins and Clients
+                    .requestMatchers("/api/accounts/**", "/api/transactions/**")
                     .authenticated()
+                    // Admin-only endpoints
                     .requestMatchers("/api/transactions/deposit")
                     .hasRole("ADMIN")
+                    // Client operations (already authenticated)
+                    .requestMatchers("/api/client/**")
+                    .authenticated()
+                    // All other requests require authentication
                     .anyRequest()
                     .authenticated()
             )

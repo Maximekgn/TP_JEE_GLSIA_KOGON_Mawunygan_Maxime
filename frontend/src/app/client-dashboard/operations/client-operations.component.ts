@@ -1,7 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { BankService, Account } from '../../../security/core/services/bank.service';
+import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
 import { finalize, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -217,12 +219,14 @@ export class ClientOperationsComponent implements OnInit {
   private fb = inject(FormBuilder);
   private bankService = inject(BankService);
   private ns = inject(NotificationService);
+  private route = inject(ActivatedRoute);
 
   accounts$: Observable<Account[]> = of([]);
   activeTab = 'transfer';
   isSubmitting = false;
   currentBalance = 0;
-  private readonly CLIENT_ID = 1;
+  private authService = inject(ClientAuthService);
+  private readonly CLIENT_ID = this.authService.getUserId() || 1;
 
   tabs = [
     { id: 'transfer', label: 'Virement' },
@@ -255,6 +259,20 @@ export class ClientOperationsComponent implements OnInit {
 
   ngOnInit() {
     this.refreshAccounts();
+    this.route.queryParams.subscribe((params) => {
+      const accountId = params['accountId'];
+      if (accountId) {
+        this.transferForm.patchValue({ sourceAccountId: accountId });
+        this.depositForm.patchValue({ accountId: accountId });
+        this.withdrawForm.patchValue({ accountId: accountId });
+
+        // Trigger balance update if accounts are already loaded
+        this.accounts$.subscribe((accounts) => {
+          const acc = accounts.find((a) => a.id == accountId);
+          if (acc) this.currentBalance = acc.balance;
+        });
+      }
+    });
   }
 
   refreshAccounts() {

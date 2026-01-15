@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 import { finalize, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -11,7 +12,21 @@ interface Account {
   accountType: string;
   balance: number;
   createdAt: string;
-  clientId: number;
+  owner?: {
+    id: number;
+    first_name: string;
+    last_name: string;
+  };
+}
+
+interface Transaction {
+  id: number;
+  amount: number;
+  transactionType: string;
+  transactionDate: string;
+  description: string;
+  sourceAccount?: { accountNumber: string };
+  destinationAccount?: { accountNumber: string };
 }
 
 @Component({
@@ -161,13 +176,14 @@ interface Account {
 
       <!-- Accounts Grid -->
       <div
-        *ngIf="!loading && !error && accounts.length > 0"
+        *ngIf="!loading && !error && accounts.length > 0 && !selectedAccount"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         <!-- Account Card -->
         <div
           *ngFor="let acc of accounts"
           class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+          (click)="viewDetails(acc)"
         >
           <div class="flex justify-between items-start mb-8">
             <div
@@ -226,16 +242,93 @@ interface Account {
           <div class="mt-6 pt-6 border-t border-slate-100 flex gap-2">
             <button
               class="flex-1 px-3 py-2 text-xs font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
-              title="Voir détails"
+              (click)="$event.stopPropagation(); viewDetails(acc)"
             >
               Détails
             </button>
             <button
               class="flex-1 px-3 py-2 text-xs font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
-              title="Opérations"
+              (click)="$event.stopPropagation(); gotoOperations(acc)"
             >
               Opérations
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Details View -->
+      <div *ngIf="selectedAccount" class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+        <!-- Details Header -->
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <div class="flex items-center gap-4">
+            <button (click)="selectedAccount = null" class="p-2 hover:bg-white rounded-full transition shadow-sm border border-slate-200">
+              <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div>
+              <h2 class="text-xl font-bold text-slate-900">Détails du compte</h2>
+              <p class="text-sm text-slate-500 font-mono">{{ selectedAccount.accountNumber }}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Solde Actuel</p>
+            <p class="text-2xl font-bold text-indigo-600">{{ selectedAccount.balance | number:'1.2-2' }} FCFA</p>
+          </div>
+        </div>
+
+        <!-- Transactions History -->
+        <div class="p-6">
+          <h3 class="text-lg font-bold text-slate-800 mb-4">Dernières transactions</h3>
+          
+          <div *ngIf="loadingTransactions" class="py-12 text-center">
+            <div class="animate-spin h-8 w-8 text-indigo-600 mx-auto mb-2"></div>
+            <p class="text-slate-400 text-sm">Chargement de l'historique...</p>
+          </div>
+
+          <div *ngIf="!loadingTransactions && transactions.length === 0" class="py-12 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <p class="text-slate-500">Aucune transaction trouvée pour ce compte.</p>
+          </div>
+
+          <div *ngIf="!loadingTransactions && transactions.length > 0" class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="text-left text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                  <th class="pb-3 pr-4">Date</th>
+                  <th class="pb-3 pr-4">Type</th>
+                  <th class="pb-3 pr-4">Description</th>
+                  <th class="pb-3 text-right">Montant</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-50">
+                <tr *ngFor="let t of transactions" class="group hover:bg-slate-50/50 transition-colors">
+                  <td class="py-4 pr-4 text-sm text-slate-600">
+                    {{ t.transactionDate | date:'dd/MM/yyyy HH:mm' }}
+                  </td>
+                  <td class="py-4 pr-4">
+                    <span [class]="'px-2 py-1 rounded-md text-[10px] font-bold uppercase ' + (
+                      t.transactionType === 'DEPOSIT' ? 'bg-green-100 text-green-700' :
+                      t.transactionType === 'WITHDRAWAL' ? 'bg-red-100 text-red-700' :
+                      'bg-indigo-100 text-indigo-700'
+                    )">
+                      {{ t.transactionType }}
+                    </span>
+                  </td>
+                  <td class="py-4 pr-4 text-sm text-slate-600">
+                    {{ t.description }}
+                  </td>
+                  <td class="py-4 text-right">
+                    <span [class]="'font-bold ' + (
+                      t.transactionType === 'DEPOSIT' ? 'text-green-600' :
+                      t.transactionType === 'WITHDRAWAL' ? 'text-red-600' :
+                      'text-indigo-600'
+                    )">
+                      {{ (t.transactionType === 'DEPOSIT' ? '+' : '-') }} {{ t.amount | number:'1.2-2' }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -261,11 +354,17 @@ interface Account {
 export class MyAccountsComponent implements OnInit {
   private clientAuthService = inject(ClientAuthService);
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   clientName: string = '';
   accounts: Account[] = [];
   loading = false;
   error: string | null = null;
+
+  // Selected account for details
+  selectedAccount: Account | null = null;
+  transactions: Transaction[] = [];
+  loadingTransactions = false;
 
   // Computed properties
   get totalAccounts(): number {
@@ -289,25 +388,19 @@ export class MyAccountsComponent implements OnInit {
   }
 
   loadAccounts(): void {
-    const clientId = this.clientAuthService.getUserId();
-
-    if (!clientId) {
-      this.error = 'Impossible de récupérer votre identifiant client';
-      return;
-    }
-
     this.loading = true;
     this.error = null;
 
+    // Use /api/client/accounts which is more secure (gets ID from token)
     this.http
-      .get<Account[]>(`/api/accounts/client/${clientId}`)
+      .get<Account[]>('/api/client/accounts')
       .pipe(
         finalize(() => {
           this.loading = false;
         }),
         catchError((err) => {
           console.error('Error loading accounts:', err);
-          this.error = err.message || 'Impossible de charger vos comptes';
+          this.error = err.error?.message || err.message || 'Impossible de charger vos comptes';
           return of([]);
         }),
       )
@@ -317,5 +410,37 @@ export class MyAccountsComponent implements OnInit {
           console.log('Loaded accounts:', accounts);
         },
       });
+  }
+
+  viewDetails(account: Account): void {
+    this.selectedAccount = account;
+    this.loadTransactions(account.id);
+  }
+
+  loadTransactions(accountId: number): void {
+    this.loadingTransactions = true;
+    this.http
+      .get<Transaction[]>(`/api/client/accounts/${accountId}/transactions`)
+      .pipe(
+        finalize(() => {
+          this.loadingTransactions = false;
+        }),
+        catchError((err) => {
+          console.error('Error loading transactions:', err);
+          return of([]);
+        }),
+      )
+      .subscribe({
+        next: (transactions) => {
+          this.transactions = transactions;
+        },
+      });
+  }
+
+  gotoOperations(account: Account): void {
+    // Navigate to operations with selected account
+    this.router.navigate(['/client/dashboard/operations'], {
+      queryParams: { accountId: account.id },
+    });
   }
 }

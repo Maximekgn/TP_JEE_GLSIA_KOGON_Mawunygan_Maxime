@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { BankService, Account, Transaction } from '../../../security/core/services/bank.service';
+import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -178,8 +179,9 @@ import { Observable, of } from 'rxjs';
 })
 export class ClientHistoryComponent implements OnInit {
   private bankService = inject(BankService);
+  private authService = inject(ClientAuthService);
   private fb = inject(FormBuilder);
-  private readonly CLIENT_ID = 1;
+  private readonly CLIENT_ID = this.authService.getUserId() || 1;
 
   accounts$: Observable<Account[]> = of([]);
   transactions: Transaction[] = [];

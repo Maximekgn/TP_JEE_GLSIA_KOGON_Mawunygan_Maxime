@@ -63,16 +63,48 @@ public class ClientsService {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        // Normaliser l'email (trim + lower) et valider les champs requis
+        String normalizedEmail = (client.getEmail() == null)
+            ? null
+            : client.getEmail().trim().toLowerCase();
+
+        if (normalizedEmail == null || normalizedEmail.isBlank()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         if (
-            client.getEmail() != null &&
-            clientsRepository.existsByEmail(client.getEmail())
+            client.getFirst_name() == null ||
+            client.getFirst_name().trim().isBlank() ||
+            client.getLast_name() == null ||
+            client.getLast_name().trim().isBlank() ||
+            client.getBirthDate() == null ||
+            client.getGender() == null ||
+            client.getGender().trim().isBlank() ||
+            client.getNationality() == null ||
+            client.getNationality().trim().isBlank() ||
+            client.getPhoneNumber() == null ||
+            client.getPhoneNumber().trim().isBlank() ||
+            client.getAddress() == null ||
+            client.getAddress().trim().isBlank()
         ) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // Appliquer l'email normalisé sur l'entité avant l'unicité
+        client.setEmail(normalizedEmail);
+
+        if (clientsRepository.existsByEmail(normalizedEmail)) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        // Encoder le mot de passe si fourni
-        if (client.getPassword() != null && !client.getPassword().isEmpty()) {
-            client.setPassword(passwordEncoder.encode(client.getPassword()));
+        // Encoder le mot de passe si fourni (trim pour éviter espaces involontaires)
+        if (
+            client.getPassword() != null &&
+            !client.getPassword().trim().isEmpty()
+        ) {
+            client.setPassword(
+                passwordEncoder.encode(client.getPassword().trim())
+            );
         }
 
         // initialisation des timestamps si nécessaire
