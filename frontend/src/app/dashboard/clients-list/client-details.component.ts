@@ -1,15 +1,20 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroPencilSquare, heroTrash, heroArrowLeft } from '@ng-icons/heroicons/outline';
 import { BankService, Client, Account } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
-import { catchError, forkJoin, map, of, finalize } from 'rxjs';
+import { catchError, forkJoin, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-client-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, NgIcon],
+  viewProviders: [
+    provideIcons({ heroPencilSquare, heroTrash, heroArrowLeft })
+  ],
   template: `
     <div class="space-y-8" *ngIf="client(); else stateView">
       <!-- Header -->
@@ -20,20 +25,7 @@ import { catchError, forkJoin, map, of, finalize } from 'rxjs';
               routerLink="/dashboard/admin/clients"
               class="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-500"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                />
-              </svg>
+              <ng-icon name="heroArrowLeft" size="1.25rem"></ng-icon>
             </a>
             <h2 class="text-xl font-bold text-slate-900">Détails du Client</h2>
           </div>
@@ -45,12 +37,10 @@ import { catchError, forkJoin, map, of, finalize } from 'rxjs';
 
         <div class="flex items-center gap-3">
           <button
-            (click)="isEditing = true"
+            (click)="goToEdit()"
             class="px-4 py-2 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all flex items-center gap-2"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-blue-600">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-            </svg>
+            <ng-icon name="heroPencilSquare" size="1.25rem" class="text-blue-600"></ng-icon>
             Modifier
           </button>
           
@@ -58,9 +48,7 @@ import { catchError, forkJoin, map, of, finalize } from 'rxjs';
             (click)="deleteClient()"
             class="px-4 py-2 bg-white border border-slate-200 text-rose-600 font-bold rounded-xl hover:bg-rose-50 transition-all flex items-center gap-2"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.34 12.142m-4.204 3.69.255-1.166m.512-2.333M7.5 7h9m-9 0a2 2 0 0 0-2 2v1h11V9a2 2 0 0 0-2-2m-9 0h9m-11 5h13m-13 4h13m-13 4h13" />
-            </svg>
+            <ng-icon name="heroTrash" size="1.25rem"></ng-icon>
             Supprimer
           </button>
 
@@ -74,55 +62,6 @@ import { catchError, forkJoin, map, of, finalize } from 'rxjs';
           >
             {{ client()?.active !== false ? 'Compte Actif' : 'Compte Inactif' }}
           </span>
-        </div>
-      </div>
-
-      <!-- Edit Modal Overlay -->
-      <div *ngIf="isEditing" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" (click)="isEditing = false"></div>
-        <div class="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in duration-200">
-           <div class="p-6 border-b border-slate-100 flex items-center justify-between">
-              <h3 class="text-xl font-bold text-slate-900">Modifier les informations</h3>
-              <button (click)="isEditing = false" class="text-slate-400 hover:text-slate-600 transition-colors">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-           </div>
-           
-           <div class="p-8">
-              <form [formGroup]="editForm" (ngSubmit)="onUpdateClient()" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Prénom</label>
-                    <input type="text" formControlName="first_name" class="w-full px-4 py-3 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none font-medium transition-all" />
-                  </div>
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Nom</label>
-                    <input type="text" formControlName="last_name" class="w-full px-4 py-3 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none font-medium transition-all" />
-                  </div>
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Email</label>
-                    <input type="email" formControlName="email" class="w-full px-4 py-3 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none font-medium transition-all" />
-                  </div>
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Téléphone</label>
-                    <input type="tel" formControlName="phoneNumber" class="w-full px-4 py-3 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none font-medium transition-all" />
-                  </div>
-                </div>
-                
-                <div class="space-y-2">
-                  <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Adresse</label>
-                  <textarea formControlName="address" rows="3" class="w-full px-4 py-3 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl outline-none font-medium transition-all resize-none"></textarea>
-                </div>
-
-                <div class="flex gap-4 pt-4">
-                  <button type="button" (click)="isEditing = false" class="flex-1 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all">Annuler</button>
-                  <button type="submit" [disabled]="editForm.invalid || isUpdating" class="flex-1 py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-2">
-                    <span *ngIf="isUpdating" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                    Enregistrer les modifications
-                  </button>
-                </div>
-              </form>
-           </div>
         </div>
       </div>
 
@@ -351,24 +290,9 @@ export class ClientDetailsComponent implements OnInit {
   private router = inject(Router);
   private bankService = inject(BankService);
   private ns = inject(NotificationService);
-  private fb = inject(FormBuilder);
 
   client = signal<Client | null>(null);
   errorMessage = signal<string | null>(null);
-
-  isEditing = false;
-  isUpdating = false;
-  editForm!: FormGroup;
-
-  constructor() {
-    this.editForm = this.fb.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
-      address: ['', Validators.required],
-    });
-  }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -414,36 +338,16 @@ export class ClientDetailsComponent implements OnInit {
       .subscribe((data) => {
         if (data) {
           this.client.set(data);
-          this.editForm.patchValue({
-            first_name: data.first_name,
-            last_name: data.last_name,
-            email: data.email,
-            phoneNumber: data.phoneNumber,
-            address: data.address,
-          });
         }
       });
   }
 
-  onUpdateClient() {
-    if (this.editForm.invalid || !this.client()?.id) return;
-
-    this.isUpdating = true;
-    const clientId = this.client()!.id!;
-
-    this.bankService.updateClient(clientId, this.editForm.value)
-      .pipe(finalize(() => (this.isUpdating = false)))
-      .subscribe({
-        next: (updated) => {
-          this.ns.showSuccess('Informations client mises à jour');
-          this.isEditing = false;
-          this.loadData(clientId);
-        },
-        error: (err) => {
-          this.ns.showError('Erreur lors de la mise à jour');
-          console.error(err);
-        }
-      });
+  // Navigate to existing edit route
+  goToEdit() {
+      const clientId = this.client()?.id;
+      if (clientId) {
+          this.router.navigate(['/dashboard/admin/clients/edit', clientId]);
+      }
   }
 
   deleteClient() {

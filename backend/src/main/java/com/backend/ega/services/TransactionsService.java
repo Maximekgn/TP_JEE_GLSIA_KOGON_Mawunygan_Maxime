@@ -162,31 +162,19 @@ public class TransactionsService {
     }
 
     public List<Transaction> getTransactionsByAccount(Long accountId) {
-        return transactionsRepository
-            .findAll()
-            .stream()
-            .filter(
-                transaction ->
-                    transaction.getSourceAccount().getId().equals(accountId) ||
-                    (transaction.getDestinationAccount() != null &&
-                        transaction
-                            .getDestinationAccount()
-                            .getId()
-                            .equals(accountId))
-            )
-            .collect(Collectors.toList());
+        return transactionsRepository.findByAccount(accountId);
     }
 
-    /*public List<Transaction> getTransactionsByAccountAndDate(Long accountId, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<Transaction> getTransactionsByAccountAndDate(Long accountId, LocalDateTime startDate, LocalDateTime endDate) {
         return transactionsRepository.findByAccountAndDateBetween(accountId, startDate, endDate);
-    }*/
+    }
 
     public String generateStatement(
         Long accountId,
         LocalDateTime startDate,
         LocalDateTime endDate
     ) {
-        /*
+        
         List<Transaction> transactions = getTransactionsByAccountAndDate(accountId, startDate, endDate);
         Optional<Account> accountOpt = accountsRepository.findById(accountId);
 
@@ -215,7 +203,6 @@ public class TransactionsService {
         sb.append("Solde actuel: ").append(account.getBalance()).append("\n");
 
         return sb.toString();
-    */
-        return "";
+        
     }
 }

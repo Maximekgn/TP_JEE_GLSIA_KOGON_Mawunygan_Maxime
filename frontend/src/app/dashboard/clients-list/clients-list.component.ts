@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroExclamationCircle, heroUsers } from '@ng-icons/heroicons/outline';
+import { heroExclamationCircle, heroUsers, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { BankService, Client } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
 import { DataTableComponent, DataTableColumn } from '../../shared/components/ui/data-table/data-table.component';
@@ -15,7 +15,7 @@ import { catchError } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule, FormsModule, DataTableComponent, NgIcon],
   viewProviders: [
-    provideIcons({ heroExclamationCircle, heroUsers })
+    provideIcons({ heroExclamationCircle, heroUsers, heroPencilSquare, heroTrash })
   ],
   template: `
     <div *ngIf="loading()" class="flex flex-col items-center justify-center py-32 space-y-4">
@@ -122,12 +122,18 @@ export class AdminClientsListComponent implements OnInit {
       key: 'actions',
       header: 'Actions',
       render: (val, row) => `
-        <div class="flex items-center justify-end gap-3 pr-4">
-          <button class="view-btn text-blue-600 hover:text-blue-800 font-semibold text-sm transition-colors cursor-pointer">
-            Voir détails →
+        <div class="flex items-center justify-end gap-2 pr-4">
+           <button class="view-btn text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors cursor-pointer" title="Voir détails">
+            <span class="text-sm font-semibold">Voir détails</span>
           </button>
-          <button class="delete-btn p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer" title="Supprimer le client">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <button class="edit-btn p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer" title="Modifier">
+             <!-- Using a simple SVG for now as ng-icon inside render string is tricky without proper component integration -->
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+            </svg>
+          </button>
+          <button class="delete-btn p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer" title="Supprimer">
+             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.34 12.142m-4.204 3.69.255-1.166m.512-2.333M7.5 7h9m-9 0a2 2 0 0 0-2 2v1h11V9a2 2 0 0 0-2-2m-9 0h9m-11 5h13m-13 4h13m-13 4h13" />
             </svg>
           </button>
@@ -143,6 +149,11 @@ export class AdminClientsListComponent implements OnInit {
     if (btn?.classList.contains('delete-btn')) {
       event.event.stopPropagation();
       this.deleteClient(event.row.id!);
+    } else if (btn?.classList.contains('edit-btn')) {
+      event.event.stopPropagation();
+      this.goToEdit(event.row.id!);
+    } else if (btn?.classList.contains('view-btn')) {
+        this.goToDetails(event);
     } else {
       this.goToDetails(event);
     }
@@ -153,62 +164,29 @@ export class AdminClientsListComponent implements OnInit {
   }
 
   loadClients() {
-    console.log('[ClientsList] loadClients() -> start');
     this.loading.set(true);
     this.error.set(null);
 
     this.bankService
       .getAllClients()
       .pipe(
-        tap(() => console.log('[ClientsList] HTTP request started')),
         timeout(5000),
-        tap((data) =>
-          console.log('[ClientsList] HTTP response received', {
-            type: typeof data,
-            isArray: Array.isArray(data),
-            length: Array.isArray(data) ? data.length : undefined,
-            sample: Array.isArray(data) ? data.slice(0, 1) : data,
-          }),
-        ),
         catchError((err) => {
           console.error('[ClientsList] Error loading clients (pipe)', err);
-          if (err?.name === 'TimeoutError') {
-            this.error.set('Le serveur met trop de temps à répondre (Timeout).');
-          } else {
-            this.error.set(
-              'Impossible de charger les clients. Le serveur est peut-être hors ligne ou injoignable.',
-            );
-          }
+          this.error.set('Impossible de charger les clients.');
           this.loading.set(false);
-          console.log('[ClientsList] loading=false (catchError)');
           return of([]);
         }),
       )
       .subscribe({
         next: (data) => {
-          console.log('[ClientsList] subscribe.next()', {
-            isArray: Array.isArray(data),
-            length: Array.isArray(data) ? data.length : undefined,
-          });
-
           this.allClients = Array.isArray(data) ? data : [];
-
           this.loading.set(false);
-          console.log('[ClientsList] loading=false (next)', {
-            allClients: this.allClients.length,
-          });
         },
         error: (err) => {
-          console.error('[ClientsList] subscribe.error()', err);
-          this.error.set(this.error() || 'Erreur inattendue lors du chargement des clients.');
+          this.error.set('Erreur inattendue.');
           this.loading.set(false);
-          console.log('[ClientsList] loading=false (error)');
-        },
-        complete: () => {
-          console.log('[ClientsList] subscribe.complete()');
-          this.loading.set(false);
-          console.log('[ClientsList] loading=false (complete)');
-        },
+        }
       });
   }
 
@@ -216,13 +194,16 @@ export class AdminClientsListComponent implements OnInit {
     this.router.navigate(['/dashboard/admin/clients', event.row.id]);
   }
 
+  goToEdit(id: number) {
+      this.router.navigate(['/dashboard/admin/clients/edit', id]);
+  }
 
   goToCreate() {
     this.router.navigate(['/dashboard/admin/clients/create']);
   }
 
   deleteClient(id: number) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce client ? Cela supprimera également tous ses comptes et transactions.')) {
       this.bankService.deleteClient(id).subscribe({
         next: () => {
           this.ns.showSuccess('Client supprimé avec succès');
@@ -234,10 +215,5 @@ export class AdminClientsListComponent implements OnInit {
         },
       });
     }
-  }
-
-  getTotalBalance(client: Client): number {
-    if (!client.accounts) return 0;
-    return client.accounts.reduce((sum: number, account: any) => sum + (account.balance || 0), 0);
   }
 }

@@ -10,10 +10,12 @@ export interface Client {
   firstName?: string;
   lastName?: string;
   email: string;
-  birthDate: string;
+  birthDate?: string;
+  birth_date?: string; // Backend mapping
   gender: string;
   address: string;
-  phoneNumber: string;
+  phoneNumber?: string;
+  phone_number?: string; // Backend mapping
   nationality: string;
   active?: boolean;
   createdAt?: string;

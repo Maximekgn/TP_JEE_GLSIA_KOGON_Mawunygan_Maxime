@@ -121,11 +121,6 @@ export class AdminSidebarComponent {
     { label: 'Tableau de Bord', href: '/dashboard/acceuil', icon: 'heroHome', exact: true },
     { label: 'Clients', href: '/dashboard/admin/clients', icon: 'heroUsers', exact: false },
     { label: 'Comptes', href: '/dashboard/admin/accounts', icon: 'heroCreditCard', exact: false },
-    { label: 'Nouveau Compte', href: '/dashboard/admin/accounts/create', icon: 'heroPlusCircle', exact: true },
-    { label: 'Dépôt', href: '/dashboard/admin/deposit', icon: 'heroBanknotes', exact: true },
-    { label: 'Retrait', href: '/dashboard/admin/withdraw', icon: 'heroArrowDownTray', exact: true },
-    { label: 'Virement', href: '/dashboard/admin/transfer', icon: 'heroArrowsRightLeft', exact: true },
-    { label: 'Transactions', href: '/dashboard/admin/transactions', icon: 'heroClipboardDocumentList', exact: true },
   ];
 
   get userEmail(): string {

@@ -83,28 +83,35 @@ import { Observable, of } from 'rxjs';
 
       <!-- Results / Statement (Visible on Print) -->
       <div
-        *ngIf="selectedAccount"
+        *ngIf="selectedAccount || transactions.length > 0"
         class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden print:shadow-none print:border-none"
       >
-        <!-- Statement Header (Only visible when account selected, specially styled for print) -->
+        <!-- Statement Header -->
         <div class="p-8 border-b border-gray-100">
           <div class="flex justify-between items-start">
             <div>
-              <h1 class="text-2xl font-bold text-slate-900">Relevé de Compte</h1>
+              <h1 class="text-2xl font-bold text-slate-900">
+                {{ selectedAccount ? 'Relevé de Compte' : 'Journal des Transactions' }}
+              </h1>
               <p class="text-slate-500 mt-1">
                 Date d'édition: {{ currentDate | date: 'dd/MM/yyyy' }}
               </p>
             </div>
-            <div class="text-right">
+            <div class="text-right" *ngIf="selectedAccount">
               <p class="font-bold text-lg">
                 {{ selectedAccount.owner?.first_name }} {{ selectedAccount.owner?.last_name }}
               </p>
               <p class="text-slate-600">Compte: {{ selectedAccount.accountNumber }}</p>
               <p class="text-sm text-slate-500">Compte {{ selectedAccount.accountType }}</p>
             </div>
+            <div class="text-right" *ngIf="!selectedAccount">
+              <p class="font-bold text-lg text-blue-600">Vue Globale</p>
+              <p class="text-slate-500 text-sm">Toutes les transactions du système</p>
+            </div>
             <button
+              *ngIf="selectedAccount"
               (click)="downloadStatement()"
-              class="ml-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors flex items-center space-x-2"
+              class="ml-auto px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors flex items-center space-x-2 print:hidden"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -125,12 +132,20 @@ import { Observable, of } from 'rxjs';
           </div>
 
           <div class="mt-6 flex gap-8">
-            <div>
+            <div *ngIf="selectedAccount">
               <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
                 >Solde Actuel</span
               >
               <p class="text-2xl font-bold text-blue-600">
                 {{ selectedAccount.balance | number: '1.0-0' }} FCFA
+              </p>
+            </div>
+            <div *ngIf="!selectedAccount">
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider"
+                >Volume Total</span
+              >
+              <p class="text-2xl font-bold text-slate-900">
+                {{ transactions.length }} Opérations
               </p>
             </div>
             <div *ngIf="filterForm.value.startDate">
@@ -153,6 +168,7 @@ import { Observable, of } from 'rxjs';
                 class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold"
               >
                 <th class="px-8 py-4">Date</th>
+                <th class="px-8 py-4">Compte</th>
                 <th class="px-8 py-4">Type</th>
                 <th class="px-8 py-4">Description</th>
                 <th class="px-8 py-4 text-right">Montant</th>
@@ -163,6 +179,10 @@ import { Observable, of } from 'rxjs';
                 <td class="px-8 py-4 text-slate-600">
                   {{ tx.transactionDate | date: 'dd/MM/yyyy HH:mm' }}
                 </td>
+                <td class="px-8 py-4 text-slate-600 text-sm">
+                  <div class="font-bold">{{ tx.sourceAccount?.accountNumber }}</div>
+                  <div class="text-[10px]">{{ tx.sourceAccount?.owner?.first_name }} {{ tx.sourceAccount?.owner?.last_name }}</div>
+                </td>
                 <td class="px-8 py-4">
                   <span
                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
@@ -170,11 +190,11 @@ import { Observable, of } from 'rxjs';
                       'bg-green-100 text-green-800':
                         tx.transactionType === 'DEPOSIT' ||
                         (tx.transactionType === 'TRANSFER' &&
-                          tx.destinationAccount?.id === selectedAccount.id),
+                          tx.destinationAccount?.id === selectedAccount?.id),
                       'bg-red-100 text-red-800':
                         tx.transactionType === 'WITHDRAWAL' ||
                         (tx.transactionType === 'TRANSFER' &&
-                          tx.sourceAccount?.id === selectedAccount.id),
+                          tx.sourceAccount?.id === selectedAccount?.id),
                     }"
                   >
                     {{ tx.transactionType }}
@@ -183,10 +203,10 @@ import { Observable, of } from 'rxjs';
                 <td class="px-8 py-4 text-slate-900 font-medium">
                   {{ tx.description }}
                   <span *ngIf="tx.transactionType === 'TRANSFER'">
-                    <span *ngIf="tx.sourceAccount?.id === selectedAccount.id">
+                    <span *ngIf="tx.sourceAccount?.id === selectedAccount?.id">
                       Vers: {{ tx.destinationAccount?.accountNumber }}
                     </span>
-                    <span *ngIf="tx.destinationAccount?.id === selectedAccount.id">
+                    <span *ngIf="tx.destinationAccount?.id === selectedAccount?.id">
                       De: {{ tx.sourceAccount?.accountNumber }}
                     </span>
                   </span>
@@ -197,18 +217,16 @@ import { Observable, of } from 'rxjs';
                     'text-green-600':
                       tx.transactionType === 'DEPOSIT' ||
                       (tx.transactionType === 'TRANSFER' &&
-                        tx.destinationAccount?.id === selectedAccount.id),
+                        tx.destinationAccount?.id === selectedAccount?.id),
                     'text-red-600':
-                      tx.transactionType === 'WITHDRAWAL' ||
-                      (tx.transactionType === 'TRANSFER' &&
-                        tx.sourceAccount?.id === selectedAccount.id),
+                      tx.transactionType !== 'DEPOSIT' && !(tx.transactionType === 'TRANSFER' && tx.destinationAccount?.id === selectedAccount?.id),
                   }"
                 >
                   <span
                     *ngIf="
                       tx.transactionType === 'DEPOSIT' ||
                       (tx.transactionType === 'TRANSFER' &&
-                        tx.destinationAccount?.id === selectedAccount.id)
+                        tx.destinationAccount?.id === selectedAccount?.id)
                     "
                     >+</span
                   >
@@ -216,7 +234,8 @@ import { Observable, of } from 'rxjs';
                     *ngIf="
                       tx.transactionType === 'WITHDRAWAL' ||
                       (tx.transactionType === 'TRANSFER' &&
-                        tx.sourceAccount?.id === selectedAccount.id)
+                        tx.sourceAccount?.id === selectedAccount?.id) ||
+                      (tx.transactionType === 'TRANSFER' && !selectedAccount)
                     "
                     >-</span
                   >
@@ -224,13 +243,18 @@ import { Observable, of } from 'rxjs';
                 </td>
               </tr>
               <tr *ngIf="transactions.length === 0">
-                <td colspan="4" class="px-8 py-12 text-center text-slate-400">
+                <td colspan="5" class="px-8 py-12 text-center text-slate-400">
                   Aucune transaction trouvée pour cette période.
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+      </div>
+
+      <!-- No Selection State -->
+      <div *ngIf="!selectedAccount && transactions.length === 0" class="bg-white rounded-3xl p-12 text-center border-2 border-dashed border-slate-200">
+          <p class="text-slate-400">Veuillez sélectionner un compte ou lancer la recherche pour voir toutes les transactions.</p>
       </div>
     </div>
   `,
@@ -272,7 +296,7 @@ export class TransactionsHistoryComponent implements OnInit {
   currentDate = new Date();
 
   filterForm: FormGroup = this.fb.group({
-    accountId: ['', Validators.required],
+    accountId: [''], // Removed Validators.required to allow viewing all transactions
     startDate: [''],
     endDate: [''],
   });
@@ -282,29 +306,38 @@ export class TransactionsHistoryComponent implements OnInit {
   }
 
   search() {
-    if (this.filterForm.invalid) return;
-
     const { accountId, startDate, endDate } = this.filterForm.value;
 
-    // Find selected account object for display
-    this.accounts$.subscribe((accounts) => {
-      this.selectedAccount = accounts.find((a) => (a.id as any) == accountId) || null;
-    });
-
-    if (startDate && endDate) {
-      // Backend expects ISO LocalDateTime: YYYY-MM-DDTHH:MM:SS
-      const startIso = `${startDate}T00:00:00`;
-      const endIso = `${endDate}T23:59:59`;
-
-      this.bankService.getTransactionsByAccountDateRange(accountId, startIso, endIso).subscribe({
-        next: (data) => (this.transactions = data),
-        error: (err) => this.notificationService.showError('Erreur chargement historique'),
+    if (accountId) {
+      // Find selected account object for display
+      this.accounts$.subscribe((accounts) => {
+        this.selectedAccount = accounts.find((a) => (a.id as any) == accountId) || null;
       });
+
+      if (startDate && endDate) {
+        // Backend expects ISO LocalDateTime: YYYY-MM-DDTHH:MM:SS
+        const startIso = `${startDate}T00:00:00`;
+        const endIso = `${endDate}T23:59:59`;
+
+        this.bankService.getTransactionsByAccountDateRange(accountId, startIso, endIso).subscribe({
+          next: (data) => (this.transactions = data),
+          error: (err) => this.notificationService.showError('Erreur chargement historique'),
+        });
+      } else {
+        // Fallback to all transactions if no date
+        this.bankService.getTransactionsByAccount(accountId).subscribe({
+          next: (data) => (this.transactions = data),
+          error: (err) => this.notificationService.showError('Erreur chargement historique'),
+        });
+      }
     } else {
-      // Fallback to all transactions if no date
-      this.bankService.getTransactionsByAccount(accountId).subscribe({
-        next: (data) => (this.transactions = data),
-        error: (err) => this.notificationService.showError('Erreur chargement historique'),
+      // View all transactions in the system
+      this.selectedAccount = null;
+      this.bankService.getAllTransactions().subscribe({
+        next: (data) => {
+          this.transactions = data.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime());
+        },
+        error: (err) => this.notificationService.showError('Erreur chargement transactions globales'),
       });
     }
   }

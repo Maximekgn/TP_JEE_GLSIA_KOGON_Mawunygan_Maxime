@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.http.HttpMethod;
 
 /**
  * Configuration de la sécurité Spring
@@ -104,19 +102,16 @@ public class SecurityConfig {
                     // Public endpoints - no authentication required
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/api/client/auth/**").permitAll()
-                    .requestMatchers("/api/clients/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/clients").permitAll() // Registration is public
                     .requestMatchers("/error").permitAll()
                     
-                    // Admin-only operations (Deposit, Withdrawal, Transfer)
-                    // But they cannot see individual client history
-                    .requestMatchers("/api/transactions/deposit", "/api/transactions/withdraw", "/api/transactions/transfer").hasRole("ADMIN")
+                    // Admin-only operations
+                    .requestMatchers("/api/clients/**").hasRole("ADMIN")          // Manage clients
+                    .requestMatchers("/api/transactions/**").hasRole("ADMIN")     // View all transactions
+                    .requestMatchers("/api/accounts/**").hasRole("ADMIN")         // View all accounts
                     
-                    // Client operations (history, statement, etc.)
+                    // Client operations (portal)
                     .requestMatchers("/api/client/**").hasRole("CLIENT")
-                    
-                    // Specific restrictions to block Admin from seeing private client history
-                    .requestMatchers("/api/transactions/account/**").hasRole("CLIENT")
-                    .requestMatchers("/api/transactions").hasRole("CLIENT") // Or restricted to super-admin if exists
                     
                     // All other requests require authentication
                     .anyRequest().authenticated()

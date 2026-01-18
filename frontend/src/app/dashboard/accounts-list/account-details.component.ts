@@ -305,17 +305,56 @@ import { catchError, finalize, of, timeout } from 'rxjs';
             </div>
           </div>
 
-          <!-- Removed Transaction History for Admin Privacy -->
-          <div class="bg-amber-50 rounded-2xl border border-amber-200 p-8 text-center space-y-3">
-            <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-              </svg>
+          <!-- Transaction History for Admin -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+              <h3 class="font-bold text-slate-900 text-lg">Dernières Transactions</h3>
+              <button (click)="loadAccountTransactions()" class="p-2 hover:bg-slate-50 rounded-lg transition-colors text-slate-400 hover:text-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+              </button>
             </div>
-            <h4 class="text-amber-900 font-bold">Confidentialité de l'Historique</h4>
-            <p class="text-amber-700 text-sm max-w-md mx-auto">
-              Par mesure de sécurité et de respect de la vie privée des clients, les administrateurs n'ont plus accès à l'historique détaillé des transactions.
-            </p>
+            <div class="p-0">
+              <div *ngIf="loadingTransactions" class="p-12 text-center">
+                <div class="w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mx-auto"></div>
+              </div>
+              <div *ngIf="!loadingTransactions && transactions.length === 0" class="p-12 text-center text-slate-400">
+                <p>Aucune transaction pour ce compte.</p>
+              </div>
+              <div class="overflow-x-auto" *ngIf="!loadingTransactions && transactions.length > 0">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                      <th class="px-6 py-3">Date</th>
+                      <th class="px-6 py-3">Type</th>
+                      <th class="px-6 py-3 text-right">Montant</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-50">
+                    <tr *ngFor="let tx of transactions" class="hover:bg-slate-50/50 transition-colors">
+                      <td class="px-6 py-4">
+                        <div class="text-sm font-medium text-slate-900">{{ tx.transactionDate | date:'dd/MM/yyyy' }}</div>
+                        <div class="text-[10px] text-slate-400">{{ tx.transactionDate | date:'HH:mm' }}</div>
+                      </td>
+                      <td class="px-6 py-4">
+                         <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase"
+                               [ngClass]="{
+                                 'bg-green-100 text-green-700': tx.transactionType === 'DEPOSIT',
+                                 'bg-rose-100 text-rose-700': tx.transactionType === 'WITHDRAWAL',
+                                 'bg-blue-100 text-blue-700': tx.transactionType === 'TRANSFER'
+                               }">
+                           {{ tx.transactionType }}
+                         </span>
+                      </td>
+                      <td class="px-6 py-4 text-right">
+                        <div class="text-sm font-bold" [class.text-green-600]="tx.transactionType === 'DEPOSIT'">
+                          {{ tx.transactionType === 'DEPOSIT' ? '+' : '-' }}{{ tx.amount | number }}
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -421,6 +460,7 @@ export class AccountDetailsComponent implements OnInit {
 
   activeTab = 'deposit';
   submitting = false;
+  loadingTransactions = false;
 
   depositForm: FormGroup = this.fb.group({
     amount: [null, [Validators.required, Validators.min(1)]],
@@ -443,6 +483,24 @@ export class AccountDetailsComponent implements OnInit {
       const id = +params['id'];
       if (id) {
         this.loadAccountDetails(id);
+        this.loadAccountTransactions(id);
+      }
+    });
+  }
+
+  loadAccountTransactions(id?: number) {
+    const accountId = id || this.account?.id;
+    if (!accountId) return;
+
+    this.loadingTransactions = true;
+    this.bankService.getTransactionsByAccount(accountId).pipe(
+      finalize(() => this.loadingTransactions = false)
+    ).subscribe({
+      next: (data) => {
+        this.transactions = data.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime());
+      },
+      error: (err) => {
+        console.error('Error loading account transactions', err);
       }
     });
   }

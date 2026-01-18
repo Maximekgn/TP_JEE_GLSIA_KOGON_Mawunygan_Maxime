@@ -18,13 +18,13 @@ export const jwtInterceptor: HttpInterceptorFn = (
   // We avoid sending the token to external third-party APIs for security
   const isApiUrl = req.url.startsWith('/api');
 
-  // Do not attach ADMIN token to client public/auth endpoints
-  // - register: POST /api/clients
-  // - login/me: /api/client/auth/**
-  const isClientPublicOrAuth =
-    req.url.startsWith('/api/clients') || req.url.startsWith('/api/client/auth');
+  // Do not attach ADMIN token to:
+  // - Client Registration (POST /api/clients)
+  // - Client Auth endpoints (/api/client/auth/**)
+  const isRegistration = (req.url === '/api/clients' || req.url === '/api/clients/') && req.method === 'POST';
+  const isClientAuth = req.url.startsWith('/api/client/auth');
 
-  if (token && isApiUrl && !isClientPublicOrAuth) {
+  if (token && isApiUrl && !isRegistration && !isClientAuth) {
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,

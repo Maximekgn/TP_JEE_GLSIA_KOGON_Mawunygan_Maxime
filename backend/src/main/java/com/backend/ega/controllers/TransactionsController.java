@@ -62,7 +62,7 @@ public class TransactionsController {
         return transactionsService.getTransactionsByAccount(accountId);
     }
 
-    /*@GetMapping("/account/{accountId}/date-range")
+    @GetMapping("/account/{accountId}/date-range")
     public List<Transaction> getTransactionsByAccountAndDate(
             @PathVariable Long accountId,
             @RequestParam("startDate") String startDate,
@@ -72,7 +72,7 @@ public class TransactionsController {
                 java.time.LocalDateTime.parse(startDate),
                 java.time.LocalDateTime.parse(endDate)
         );
-    }*/
+    }
 
     @GetMapping("/account/{accountId}/statement")
     public ResponseEntity<String> getAccountStatement(

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BankService } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
 import { catchError, finalize, of } from 'rxjs';
@@ -25,7 +25,7 @@ import { catchError, finalize, of } from 'rxjs';
         >
           ←
         </button>
-        <h2 class="text-2xl font-bold text-slate-800">Nouveau Client</h2>
+        <h2 class="text-2xl font-bold text-slate-800">{{ isEditMode() ? 'Modifier Client' : 'Nouveau Client' }}</h2>
       </div>
 
       <div class="bg-white border border-slate-200 shadow-sm rounded-xl p-6">
@@ -102,7 +102,7 @@ import { catchError, finalize, of } from 'rxjs';
              </button>
              <button type="submit" [disabled]="form.invalid || submitting()" class="px-6 py-2 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2">
                 <span *ngIf="submitting()" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                Créer le Client
+                {{ isEditMode() ? 'Mettre à jour' : 'Créer le Client' }}
              </button>
           </div>
         </form>
@@ -110,13 +110,16 @@ import { catchError, finalize, of } from 'rxjs';
     </div>
   `
 })
-export class ClientCreateComponent {
+export class ClientCreateComponent implements OnInit {
   private fb = inject(FormBuilder);
   private bankService = inject(BankService);
   private ns = inject(NotificationService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   submitting = signal(false);
+  isEditMode = signal(false);
+  clientId: number | null = null;
 
   form: FormGroup = this.fb.group({
     first_name: ['', Validators.required],
@@ -128,6 +131,40 @@ export class ClientCreateComponent {
     phoneNumber: ['', Validators.required],
     address: ['', Validators.required]
   });
+
+  ngOnInit() {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+          this.isEditMode.set(true);
+          this.clientId = +id;
+          this.loadClient(this.clientId);
+      }
+  }
+
+  loadClient(id: number) {
+      this.bankService.getClientById(id).subscribe({
+          next: (client) => {
+              // Prefer snake_case from backend
+              const birthDateVal = client.birth_date || client.birthDate;
+              const phoneVal = client.phone_number || client.phoneNumber;
+
+              this.form.patchValue({
+                  first_name: client.first_name,
+                  last_name: client.last_name,
+                  birthDate: birthDateVal ? birthDateVal.split('T')[0] : '',
+                  gender: client.gender,
+                  nationality: client.nationality,
+                  email: client.email,
+                  phoneNumber: phoneVal,
+                  address: client.address
+              });
+          },
+          error: (err) => {
+              this.ns.showError('Impossible de charger le client');
+              this.goBack();
+          }
+      });
+  }
 
   goBack() {
     this.router.navigate(['/dashboard/admin/clients']);
@@ -145,17 +182,41 @@ export class ClientCreateComponent {
     }
 
     this.submitting.set(true);
-    this.bankService.createClient(this.form.value)
-      .pipe(finalize(() => this.submitting.set(false)))
-      .subscribe({
-        next: (client) => {
-          this.ns.showSuccess(`Client ${client.first_name} ${client.last_name} créé avec succès`);
-          this.router.navigate(['/dashboard/admin/clients', client.id]);
-        },
-        error: (err) => {
-          console.error(err);
-          this.ns.showError("Erreur lors de la création du client. Vérifiez l'email.");
-        }
-      });
+    
+    // Map form values to backend expected format (snake_case for @JsonProperty fields)
+    const formVal = this.form.value;
+    const payload = {
+        ...formVal,
+        birth_date: formVal.birthDate,    // Map birthDate -> birth_date
+        phone_number: formVal.phoneNumber // Map phoneNumber -> phone_number
+    };
+
+    if (this.isEditMode() && this.clientId) {
+        this.bankService.updateClient(this.clientId, payload)
+            .pipe(finalize(() => this.submitting.set(false)))
+            .subscribe({
+                next: (client) => {
+                    this.ns.showSuccess('Client mis à jour avec succès');
+                    this.router.navigate(['/dashboard/admin/clients']);
+                },
+                error: (err) => {
+                    console.error(err);
+                    this.ns.showError("Erreur lors de la mise à jour");
+                }
+            });
+    } else {
+        this.bankService.createClient(payload)
+            .pipe(finalize(() => this.submitting.set(false)))
+            .subscribe({
+                next: (client) => {
+                    this.ns.showSuccess(`Client ${client.first_name} ${client.last_name} créé avec succès`);
+                    this.router.navigate(['/dashboard/admin/clients', client.id]);
+                },
+                error: (err) => {
+                    console.error(err);
+                    this.ns.showError("Erreur lors de la création du client. Vérifiez l'email.");
+                }
+            });
+    }
   }
 }

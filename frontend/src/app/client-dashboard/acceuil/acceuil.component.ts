@@ -290,8 +290,8 @@ export class AcceuilComponent implements OnInit {
         })
       )
       .subscribe(transactions => {
-        // Take last 4 transactions
-        this.recentTransactions = transactions.slice(0, 4);
+        // Take last 8 transactions
+        this.recentTransactions = transactions.slice(0, 8);
         this.cdr.detectChanges();
       });
   }

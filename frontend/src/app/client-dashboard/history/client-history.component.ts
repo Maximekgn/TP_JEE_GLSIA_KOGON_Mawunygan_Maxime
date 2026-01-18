@@ -7,7 +7,7 @@ import { heroPrinter, heroArrowPath, heroInboxStack, heroFunnel } from '@ng-icon
 import { BankService, Account, Transaction } from '../../../security/core/services/bank.service';
 import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 import { of } from 'rxjs';
-import { finalize, switchMap, take } from 'rxjs/operators';
+import { finalize, switchMap, take, catchError } from 'rxjs/operators';
 
 import type { Transaction as DetailedTransaction } from '../../shared/components/transaction-details/transaction-details.component';
 
@@ -223,24 +223,35 @@ export class ClientHistoryComponent implements OnInit {
     this.cdr.detectChanges();
     const { accountId, startDate, endDate } = this.filterForm.value;
 
+    const finalizeLoading = () => {
+      this.loading = false;
+      this.cdr.detectChanges();
+    };
+
     if (accountId) {
       const id = parseInt(accountId);
       
       this.bankService.getMyAccountStatement(id, startDate || undefined, endDate || undefined)
-        .pipe(finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })).subscribe(data => {
+        .pipe(
+          finalize(finalizeLoading),
+          catchError((err: any) => {
+            console.error('Error loading account statement:', err);
+            return of({ transactions: [] });
+          })
+        ).subscribe((data: any) => {
           this.transactions = data.transactions || [];
           this.cdr.detectChanges();
         });
 
     } else {
       this.bankService.getMyAllTransactions(startDate || undefined, endDate || undefined)
-        .pipe(finalize(() => {
-          this.loading = false;
-          this.cdr.detectChanges();
-        })).subscribe(data => {
+        .pipe(
+          finalize(finalizeLoading),
+          catchError((err: any) => {
+            console.error('Error loading all transactions:', err);
+            return of([]);
+          })
+        ).subscribe((data: Transaction[]) => {
           this.transactions = data || [];
           this.cdr.detectChanges();
         });
@@ -250,6 +261,10 @@ export class ClientHistoryComponent implements OnInit {
   isCredit(tx: Transaction): boolean {
     if (tx.transactionType === 'DEPOSIT') return true;
     if (tx.transactionType === 'WITHDRAWAL') return false;
+    if (tx.transactionType === 'TRANSFER') {
+      // If it's a transfer, it's a credit if the destination account belongs to the current user
+      return !!tx.destinationAccount && tx.destinationAccount.owner?.id === this.CLIENT_ID;
+    }
     return false;
   }
 

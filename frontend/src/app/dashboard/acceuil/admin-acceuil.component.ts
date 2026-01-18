@@ -95,7 +95,7 @@ import { forkJoin, map, catchError, of, finalize } from 'rxjs';
           
           <div class="flex items-end justify-center gap-4 h-64 mb-8 border-b border-slate-100 pb-4">
              <!-- Courant Bar -->
-             <div class="flex flex-col items-center gap-2 group w-16">
+             <div class="flex flex-col items-center gap-2 group w-16 h-full justify-end">
                 <div class="relative w-full bg-blue-100 rounded-t-xl overflow-hidden transition-all duration-500 hover:bg-blue-200" [style.height.%]="getPercentage('COURANT')">
                    <div class="absolute bottom-0 w-full bg-blue-600 transition-all duration-1000 ease-out h-full"></div>
                 </div>
@@ -104,7 +104,7 @@ import { forkJoin, map, catchError, of, finalize } from 'rxjs';
              </div>
 
              <!-- Epargne Bar -->
-             <div class="flex flex-col items-center gap-2 group w-16">
+             <div class="flex flex-col items-center gap-2 group w-16 h-full justify-end">
                 <div class="relative w-full bg-emerald-100 rounded-t-xl overflow-hidden transition-all duration-500 hover:bg-emerald-200" [style.height.%]="getPercentage('EPARGNE')">
                    <div class="absolute bottom-0 w-full bg-emerald-500 transition-all duration-1000 ease-out h-full"></div>
                 </div>
@@ -113,7 +113,7 @@ import { forkJoin, map, catchError, of, finalize } from 'rxjs';
              </div>
 
              <!-- Entreprise Bar -->
-             <div class="flex flex-col items-center gap-2 group w-16">
+             <div class="flex flex-col items-center gap-2 group w-16 h-full justify-end">
                 <div class="relative w-full bg-slate-100 rounded-t-xl overflow-hidden transition-all duration-500 hover:bg-slate-200" [style.height.%]="getPercentage('ENTREPRISE')">
                    <div class="absolute bottom-0 w-full bg-slate-800 transition-all duration-1000 ease-out h-full"></div>
                 </div>
@@ -125,24 +125,24 @@ import { forkJoin, map, catchError, of, finalize } from 'rxjs';
           <div class="space-y-3">
             <div class="flex items-center justify-between text-sm">
                 <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 rounded-full bg-blue-600"></div>
-                    <span class="text-slate-600">Comptes Courants</span>
+                    <div class="w-3 h-3 rounded-full bg-blue-600 font-bold"></div>
+                    <span class="text-slate-600 font-bold">Comptes Courants</span>
                 </div>
-                <span class="font-bold text-slate-900">{{ getPercentage('COURANT') | number:'1.0-0' }}%</span>
+                <span class="font-bold text-slate-900">{{ stats.courant }} ({{ getPercentage('COURANT') | number:'1.0-1' }}%)</span>
             </div>
              <div class="flex items-center justify-between text-sm">
                 <div class="flex items-center gap-2">
                     <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-                    <span class="text-slate-600">Comptes Epargne</span>
+                    <span class="text-slate-600 font-bold">Comptes Epargne</span>
                 </div>
-                <span class="font-bold text-slate-900">{{ getPercentage('EPARGNE') | number:'1.0-0' }}%</span>
+                <span class="font-bold text-slate-900">{{ stats.epargne }} ({{ getPercentage('EPARGNE') | number:'1.0-1' }}%)</span>
             </div>
              <div class="flex items-center justify-between text-sm">
                 <div class="flex items-center gap-2">
                     <div class="w-3 h-3 rounded-full bg-slate-800"></div>
-                    <span class="text-slate-600">Comptes Entreprise</span>
+                    <span class="text-slate-600 font-bold">Comptes Entreprise</span>
                 </div>
-                <span class="font-bold text-slate-900">{{ getPercentage('ENTREPRISE') | number:'1.0-0' }}%</span>
+                <span class="font-bold text-slate-900">{{ stats.entreprise }} ({{ getPercentage('ENTREPRISE') | number:'1.0-1' }}%)</span>
             </div>
           </div>
         </div>
@@ -159,30 +159,32 @@ import { forkJoin, map, catchError, of, finalize } from 'rxjs';
                <p class="text-slate-500">Aucune transaction récente</p>
            </div>
 
-           <div class="space-y-4" *ngIf="!loading && recentTransactions.length > 0">
-               <div *ngFor="let tx of recentTransactions" class="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors border border-transparent hover:border-slate-100">
-                   <div class="flex items-center gap-4">
-                       <div class="p-3 rounded-full" 
-                            [ngClass]="{
-                                'bg-green-100 text-green-600': tx.transactionType === 'DEPOSIT',
-                                'bg-red-100 text-red-600': tx.transactionType === 'WITHDRAWAL',
-                                'bg-blue-100 text-blue-600': tx.transactionType === 'TRANSFER'
-                            }">
-                            <ng-icon [name]="getTransactionIcon(tx)" size="1.25rem"></ng-icon>
+           <div class="h-[400px] overflow-y-auto custom-scrollbar pr-2" *ngIf="!loading && recentTransactions.length > 0">
+               <div class="space-y-4">
+                   <div *ngFor="let tx of recentTransactions" class="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-colors border border-transparent hover:border-slate-100">
+                       <div class="flex items-center gap-4">
+                           <div class="p-3 rounded-full" 
+                                [ngClass]="{
+                                    'bg-green-100 text-green-600': tx.transactionType === 'DEPOSIT',
+                                    'bg-red-100 text-red-600': tx.transactionType === 'WITHDRAWAL',
+                                    'bg-blue-100 text-blue-600': tx.transactionType === 'TRANSFER'
+                                }">
+                                <ng-icon [name]="getTransactionIcon(tx)" size="1.25rem"></ng-icon>
+                           </div>
+                           <div>
+                               <p class="font-bold text-slate-900 text-sm">{{ tx.description || tx.transactionType }}</p>
+                               <p class="text-xs text-slate-400">{{ tx.transactionDate | date:'dd MMM yyyy HH:mm' }}</p>
+                           </div>
                        </div>
-                       <div>
-                           <p class="font-bold text-slate-900 text-sm">{{ tx.description || tx.transactionType }}</p>
-                           <p class="text-xs text-slate-400">{{ tx.transactionDate | date:'dd MMM yyyy HH:mm' }}</p>
+                       <div class="text-right">
+                           <p class="font-black text-sm" 
+                              [ngClass]="{
+                                'text-green-600': tx.transactionType === 'DEPOSIT',
+                                'text-slate-900': tx.transactionType !== 'DEPOSIT'
+                              }">
+                               {{ tx.transactionType === 'DEPOSIT' ? '+' : '-' }}{{ tx.amount | number }} <span class="text-[10px] text-slate-400">FCFA</span>
+                           </p>
                        </div>
-                   </div>
-                   <div class="text-right">
-                       <p class="font-black text-sm" 
-                          [ngClass]="{
-                            'text-green-600': tx.transactionType === 'DEPOSIT',
-                            'text-slate-900': tx.transactionType !== 'DEPOSIT'
-                          }">
-                           {{ tx.transactionType === 'DEPOSIT' ? '+' : '-' }}{{ tx.amount | number }} <span class="text-[10px] text-slate-400">FCFA</span>
-                       </p>
                    </div>
                </div>
            </div>
@@ -246,10 +248,10 @@ export class AdminAcceuilComponent implements OnInit {
       this.stats.epargne = accounts.filter((a: Account) => a.accountType === 'EPARGNE').length;
       this.stats.entreprise = accounts.filter((a: Account) => a.accountType === 'ENTREPRISE').length;
 
-      // Recent Transactions (Sort by date desc and take top 5)
+      // Recent Transactions (Sort by date desc and take top 8)
       this.recentTransactions = transactions
         .sort((a: Transaction, b: Transaction) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime())
-        .slice(0, 5);
+        .slice(0, 8);
         
       this.cdr.detectChanges();
     });
