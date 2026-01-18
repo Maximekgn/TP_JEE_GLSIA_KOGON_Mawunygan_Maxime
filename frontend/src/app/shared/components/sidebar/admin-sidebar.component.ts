@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  heroHome,
   heroUsers,
   heroCreditCard,
   heroBanknotes,
@@ -21,6 +22,7 @@ import { AuthService } from '../../../../security/core/services/auth.service';
   imports: [CommonModule, RouterLink, RouterLinkActive, NgIcon],
   viewProviders: [
     provideIcons({
+      heroHome,
       heroUsers,
       heroCreditCard,
       heroBanknotes,
@@ -116,6 +118,7 @@ export class AdminSidebarComponent {
   private authService = inject(AuthService);
 
   navLinks = [
+    { label: 'Tableau de Bord', href: '/dashboard/acceuil', icon: 'heroHome', exact: true },
     { label: 'Clients', href: '/dashboard/admin/clients', icon: 'heroUsers', exact: false },
     { label: 'Comptes', href: '/dashboard/admin/accounts', icon: 'heroCreditCard', exact: false },
     { label: 'Nouveau Compte', href: '/dashboard/admin/accounts/create', icon: 'heroPlusCircle', exact: true },

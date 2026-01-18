@@ -230,7 +230,7 @@ import { catchError, of } from 'rxjs';
           </ng-template>
         </div>
       </div>
-    </div>
+
   `,
   styles: [],
 })

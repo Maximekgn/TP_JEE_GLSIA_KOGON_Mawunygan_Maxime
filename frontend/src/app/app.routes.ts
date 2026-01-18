@@ -38,8 +38,15 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'admin/clients',
+        redirectTo: 'acceuil',
         pathMatch: 'full',
+      },
+      {
+        path: 'acceuil',
+        loadComponent: () =>
+          import('./dashboard/acceuil/admin-acceuil.component').then(
+            (m) => m.AdminAcceuilComponent,
+          ),
       },
 
       // Admin Routes
