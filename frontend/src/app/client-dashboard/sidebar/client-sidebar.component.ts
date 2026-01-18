@@ -9,7 +9,8 @@ import {
   heroUserCircle,
   heroArrowRightOnRectangle,
   heroBuildingLibrary,
-  heroChevronRight
+  heroChevronRight,
+  heroHome
 } from '@ng-icons/heroicons/outline';
 import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 
@@ -25,20 +26,21 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
       heroUserCircle,
       heroArrowRightOnRectangle,
       heroBuildingLibrary,
-      heroChevronRight
+      heroChevronRight,
+      heroHome
     })
   ],
   template: `
     <div
-      class="h-screen w-64 bg-slate-900 text-white fixed left-0 top-0 flex flex-col shadow-xl z-50 print:hidden"
+      class="h-screen w-64  text-white fixed left-0 top-0 flex flex-col shadow z-50 print:hidden"
     >
       <!-- Logo -->
-      <div class="h-20 flex items-center px-8 border-b border-slate-800">
+      <div class="h-20 flex items-center px-8">
         <div class="flex items-center gap-2">
           <div class="bg-blue-500 text-white p-1.5 rounded-lg">
             <ng-icon name="heroBuildingLibrary" size="1.25rem"></ng-icon>
           </div>
-          <span class="text-xl font-bold tracking-tight"
+          <span class="text font-bold tracking-tight text-black"
             >E-Bank<span class="text-blue-400"> Client</span></span
           >
         </div>
@@ -51,7 +53,7 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
           [routerLink]="link.href"
           routerLinkActive="bg-blue-600 text-white shadow-lg shadow-blue-600/20"
           [routerLinkActiveOptions]="{ exact: link.href === '/client/dashboard' }"
-          class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200"
+          class="flex items-center space-x-3 px-4 py-3 rounded text-black hover:bg-blue-100 hover:text-black transition-all duration-200"
         >
           <ng-icon [name]="link.icon" size="1.25rem"></ng-icon>
           <span class="font-medium text-sm">{{ link.label }}</span>
@@ -59,10 +61,10 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
       </nav>
 
       <!-- User Profile Link / Logout -->
-      <div class="p-4 border-t border-slate-800">
+      <div class="p-4">
         <a
           routerLink="/client/dashboard/profile"
-          class="flex items-center gap-3 mb-4 px-3 py-2 rounded-xl hover:bg-slate-800/50 transition-all duration-200 group cursor-pointer"
+          class="flex items-center gap-3 mb-4 px-3 py-2 rounded hover:bg-slate-800/50 transition-all duration-200 group cursor-pointer"
           title="Voir mon profil"
         >
           <img
@@ -72,7 +74,7 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
           />
           <div class="flex-1 min-w-0">
             <div
-              class="text-sm font-bold text-white truncate group-hover:text-blue-400 transition-colors"
+              class="text-sm font-bold text-black truncate group-hover:text-blue-400 transition-colors"
             >
               {{ clientFullName }}
             </div>
@@ -82,7 +84,7 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
         </a>
         <button
           (click)="logout()"
-          class="flex items-center gap-2 justify-center w-full py-2.5 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg transition-colors text-sm font-medium cursor-pointer"
+          class="flex items-center gap-2 justify-center w-full py-2.5  bg-red-700  text-white rounded-lg transition-colors text-sm font-medium cursor-pointer"
         >
           <ng-icon name="heroArrowRightOnRectangle" size="1rem"></ng-icon>
           Déconnexion
@@ -120,9 +122,9 @@ export class ClientSidebarComponent implements OnInit {
 
   navLinks = [
     {
-      label: 'Mes Comptes',
-      href: '/client/dashboard',
-      icon: 'heroCreditCard',
+      label: 'Acceuil',
+      href: '/client/dashboard/acceuil',
+      icon: 'heroHome',
     },
     {
       label: 'Opérations',

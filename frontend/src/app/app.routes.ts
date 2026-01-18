@@ -115,9 +115,14 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        redirectTo: 'acceuil',
+        pathMatch: 'full',
+      },
+      {
+        path: 'acceuil',
         loadComponent: () =>
-          import('./client-dashboard/my-accounts/my-accounts.component').then(
-            (m) => m.MyAccountsComponent,
+          import('./client-dashboard/acceuil/acceuil.component').then(
+            (m) => m.AcceuilComponent,
           ),
       },
       {
@@ -125,6 +130,27 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./client-dashboard/operations/client-operations.component').then(
             (m) => m.ClientOperationsComponent,
+          ),
+      },
+      {
+        path: 'accounts',
+        loadComponent: () =>
+          import('./client-dashboard/my-accounts/my-accounts.component').then(
+            (m) => m.MyAccountsComponent,
+          ),
+      },
+      {
+        path: 'accounts/:id',
+        loadComponent: () =>
+          import('./client-dashboard/account-details/account-details.component').then(
+            (m) => m.AccountDetailsComponent,
+          ),
+      },
+      {
+        path: 'transactions/:id',
+        loadComponent: () =>
+          import('./shared/components/transaction-details/transaction-details.component').then(
+            (m) => m.TransactionDetailsComponent,
           ),
       },
       {

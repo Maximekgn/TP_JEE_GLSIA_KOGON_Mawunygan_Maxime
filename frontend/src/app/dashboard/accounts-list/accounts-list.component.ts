@@ -12,8 +12,17 @@ import { catchError, of } from 'rxjs';
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
     <div class="space-y-6">
-      <div class="flex flex-col space-y-4">
-        <h2 class="text-2xl font-bold text-slate-800">Gestion des Comptes</h2>
+      <div class="flex items-center gap-4 mb-6">
+        <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl shadow-sm border border-blue-100/50">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-3xl font-black text-slate-900 tracking-tight">Gestion des Comptes</h2>
+          <p class="text-slate-500 text-sm font-medium">Visualisez et gérez l'ensemble des comptes bancaires.</p>
+        </div>
+      </div>
         <div class="flex justify-end">
           <button
             class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm"

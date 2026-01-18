@@ -38,64 +38,62 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto text-center">
+  <section class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+  
+    <!-- Vidéo en arrière-plan -->
+    <video
+      class="absolute inset-0 w-full h-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+    >
+      <source src="vid.mp4" type="video/mp4" />
+      Votre navigateur ne supporte pas la vidéo.
+    </video>
+  
+    <!-- Overlay sombre (lisibilité du texte) -->
+    <div class="absolute inset-0 bg-white/30"></div>
+  
+    <!-- Contenu -->
+    <div class="relative max-w-4xl mx-auto text-center">
       <!-- Badge -->
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-8">
         <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
         <span class="text-sm font-medium text-blue-700">100% en ligne • Sécurisé • Simple</span>
       </div>
-
+  
       <!-- Title -->
       <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-tight">
         La banque pensée pour
-        <span class="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">votre quotidien</span>
+        <span class="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+          votre quotidien
+        </span>
       </h1>
-
+  
       <!-- Subtitle -->
-      <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+      <p class="mt-6 text-lg sm:text-xl text-black max-w-2xl mx-auto leading-relaxed">
         Gérez vos comptes, effectuez vos virements et suivez vos transactions en toute simplicité, 24h/24.
       </p>
-
+  
       <!-- CTA Buttons -->
       <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-        <a 
+        <a
           routerLink="/client/register"
-          class="px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-200"
+          class="px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
         >
           Créer mon compte gratuitement
         </a>
-        <a 
+        <a
           routerLink="/client/login"
-          class="px-8 py-4 text-base font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
+          class="px-8 py-4 text-base font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all duration-200"
         >
           J'ai déjà un compte
         </a>
       </div>
-
-      <!-- Trust Indicators -->
-      <div class="mt-16 flex flex-wrap justify-center gap-8 text-sm text-slate-500">
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-          </svg>
-          <span>Chiffrement SSL</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-          </svg>
-          <span>Accessible 24/7</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-          </svg>
-          <span>Support réactif</span>
-        </div>
-      </div>
     </div>
   </section>
+  
 
   <!-- Features Section -->
   <section class="py-20 px-4 sm:px-6 lg:px-8 bg-white">

@@ -15,4 +15,7 @@ public interface TransactionsRepository extends JpaRepository<Transaction, Long>
     @Modifying
     @Query("DELETE FROM Transaction t WHERE t.sourceAccount.owner.id = :clientId OR t.destinationAccount.owner.id = :clientId")
     void deleteByClientId(@Param("clientId") Long clientId);
+
+    @Query("SELECT t FROM Transaction t WHERE t.sourceAccount.owner.id = :clientId OR t.destinationAccount.owner.id = :clientId ORDER BY t.transactionDate DESC")
+    java.util.List<Transaction> findByClientId(@Param("clientId") Long clientId);
 }

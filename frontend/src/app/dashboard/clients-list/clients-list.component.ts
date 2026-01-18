@@ -43,11 +43,14 @@ import { catchError } from 'rxjs/operators';
     </div>
 
     <div class="space-y-6" *ngIf="!loading() && !error()">
-      <div class="flex items-center gap-3">
-        <div class="p-2 bg-blue-100 rounded-xl">
-          <ng-icon name="heroUsers" size="1.5rem" class="text-blue-600"></ng-icon>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl shadow-sm border border-blue-100/50">
+          <ng-icon name="heroUsers" size="1.5rem"></ng-icon>
         </div>
-        <h2 class="text-2xl font-bold text-slate-800">Gestion des Clients</h2>
+        <div>
+          <h2 class="text-3xl font-black text-slate-900 tracking-tight">Gestion des Clients</h2>
+          <p class="text-slate-500 text-sm font-medium">Administrez la base des clients et leurs informations.</p>
+        </div>
       </div>
 
       <app-data-table

@@ -300,21 +300,21 @@ export class ClientOperationsComponent implements OnInit {
 
     this.isSubmitting = true;
     const val = this.transferForm.value;
+    const sourceId = parseInt(val.sourceAccountId!);
 
     const payload: any = {
-      sourceAccount: { id: parseInt(val.sourceAccountId!) },
       amount: parseFloat(val.amount!),
       description: 'Virement Client Web',
     };
 
     if (this.destinationType === 'own') {
-      payload.destinationAccount = { id: parseInt(val.destinationAccountId!) };
+      payload.destination_account_id = parseInt(val.destinationAccountId!);
     } else {
-      payload.destinationAccount = { accountNumber: val.destinationAccountNumber };
+      payload.destination_account_number = val.destinationAccountNumber;
     }
 
     this.bankService
-      .transfer(payload)
+      .clientTransfer(sourceId, payload)
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: () => {
@@ -325,7 +325,10 @@ export class ClientOperationsComponent implements OnInit {
         },
         error: (e) => {
           console.error(e);
-          const message = e.status === 404 ? 'Compte destinataire inexistant' : 'Echec du virement';
+          let message = 'Echec du virement';
+          if (e.status === 404) message = 'Compte destinataire inexistant';
+          if (e.status === 403) message = 'Solde insuffisant ou accès refusé';
+          if (e.error && e.error.message) message = e.error.message;
           this.ns.showError(message);
         },
       });

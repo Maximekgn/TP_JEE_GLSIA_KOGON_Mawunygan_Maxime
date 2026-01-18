@@ -317,6 +317,9 @@ public class ClientOperationsController {
             String destinationAccountNumber = (String) request.get(
                 "destination_account_number"
             );
+            Number destinationAccountId = (Number) request.get(
+                "destination_account_id"
+            );
 
             if (amount == null || amount <= 0) {
                 return ResponseEntity.badRequest().body(
@@ -328,13 +331,14 @@ public class ClientOperationsController {
             }
 
             if (
-                destinationAccountNumber == null ||
-                destinationAccountNumber.isBlank()
+                (destinationAccountNumber == null ||
+                destinationAccountNumber.isBlank()) && 
+                destinationAccountId == null
             ) {
                 return ResponseEntity.badRequest().body(
                     Map.of(
                         "error", "Compte destination manquant",
-                        "message", "Le numéro de compte destination est requis"
+                        "message", "Le numéro de compte ou l'ID du compte destination est requis"
                     )
                 );
             }
@@ -348,11 +352,20 @@ public class ClientOperationsController {
                 );
             }
 
-            Account destinationAccount = accountsRepository
-                .findByAccountNumber(destinationAccountNumber)
-                .orElseThrow(() ->
-                    new IllegalArgumentException("Compte destination non trouvé")
-                );
+            Account destinationAccount = null;
+            if (destinationAccountId != null) {
+                destinationAccount = accountsRepository
+                    .findById(destinationAccountId.longValue())
+                    .orElseThrow(() ->
+                        new IllegalArgumentException("Compte destination non trouvé")
+                    );
+            } else {
+                destinationAccount = accountsRepository
+                    .findByAccountNumber(destinationAccountNumber)
+                    .orElseThrow(() ->
+                        new IllegalArgumentException("Compte destination non trouvé")
+                    );
+            }
 
             Transaction transaction = new Transaction();
             transaction.setAmount(amount);
@@ -492,6 +505,88 @@ public class ClientOperationsController {
             statement.put("current_balance", account.getBalance());
 
             return ResponseEntity.ok(statement);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                Map.of("error", "Non autorisé", "message", e.getMessage())
+            );
+        } catch (Exception e) {
+            logger.error("Erreur: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                Map.of("error", "Erreur serveur", "message", e.getMessage())
+            );
+        }
+    }
+
+    /**
+     * Récupère toutes les transactions de tous les comptes du client connecté
+     */
+    @GetMapping("/transactions")
+    public ResponseEntity<?> getMyAllTransactions(
+        @RequestHeader("Authorization") String authHeader,
+        @RequestParam(required = false) String startDate,
+        @RequestParam(required = false) String endDate
+    ) {
+        try {
+            Long clientId = clientAuthService.extractClientIdFromToken(authHeader);
+            List<Transaction> transactions = transactionsRepository.findByClientId(clientId);
+
+            if (startDate != null || endDate != null) {
+                LocalDateTime start = startDate != null
+                    ? LocalDate.parse(startDate).atStartOfDay()
+                    : LocalDateTime.now().minusYears(10);
+                LocalDateTime end = endDate != null
+                    ? LocalDate.parse(endDate).atTime(23, 59, 59)
+                    : LocalDateTime.now();
+
+                transactions = transactions.stream()
+                    .filter(t -> t.getTransactionDate().isAfter(start) && t.getTransactionDate().isBefore(end))
+                    .collect(Collectors.toList());
+            }
+
+            return ResponseEntity.ok(transactions);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                Map.of("error", "Non autorisé", "message", e.getMessage())
+            );
+        } catch (Exception e) {
+            logger.error("Erreur: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                Map.of("error", "Erreur serveur", "message", e.getMessage())
+            );
+        }
+    }
+
+    /**
+     * Récupère les détails d'une transaction spécifique
+     */
+    @GetMapping("/transactions/{transactionId}")
+    public ResponseEntity<?> getTransactionDetails(
+        @RequestHeader("Authorization") String authHeader,
+        @PathVariable Long transactionId
+    ) {
+        try {
+            Long clientId = clientAuthService.extractClientIdFromToken(authHeader);
+
+            Transaction transaction = transactionsRepository
+                .findById(transactionId)
+                .orElseThrow(() ->
+                    new IllegalArgumentException("Transaction non trouvée")
+                );
+
+            // Vérifier que la transaction appartient à l'un des comptes du client
+            boolean isOwner = (transaction.getSourceAccount() != null && transaction.getSourceAccount().getOwner().getId().equals(clientId)) ||
+                              (transaction.getDestinationAccount() != null && transaction.getDestinationAccount().getOwner().getId().equals(clientId));
+
+            if (!isOwner) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    Map.of(
+                        "error", "Accès refusé",
+                        "message", "Vous n'avez pas accès à cette transaction"
+                    )
+                );
+            }
+
+            return ResponseEntity.ok(transaction);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                 Map.of("error", "Non autorisé", "message", e.getMessage())

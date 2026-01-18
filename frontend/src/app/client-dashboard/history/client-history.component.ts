@@ -1,12 +1,15 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroPrinter, heroArrowPath, heroInboxStack, heroFunnel } from '@ng-icons/heroicons/outline';
 import { BankService, Account, Transaction } from '../../../security/core/services/bank.service';
 import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 import { of } from 'rxjs';
 import { finalize, switchMap, take } from 'rxjs/operators';
+
+import type { Transaction as DetailedTransaction } from '../../shared/components/transaction-details/transaction-details.component';
 
 @Component({
   selector: 'app-client-history',
@@ -118,7 +121,7 @@ import { finalize, switchMap, take } from 'rxjs/operators';
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-50">
-                <tr *ngFor="let tx of transactions" class="hover:bg-slate-50/50 transition-colors group">
+                <tr *ngFor="let tx of transactions" (click)="viewTransactionDetails(tx)" class="hover:bg-slate-50/50 transition-colors group cursor-pointer">
                   <td class="p-6 text-slate-500 text-sm font-medium">
                     {{ tx.transactionDate | date: 'dd/MM/yyyy HH:mm' }}
                   </td>
@@ -194,6 +197,7 @@ export class ClientHistoryComponent implements OnInit {
   private authService = inject(ClientAuthService);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
   
   readonly CLIENT_ID = this.authService.getUserId() || 1;
   clientFullName: string = '';
@@ -232,20 +236,14 @@ export class ClientHistoryComponent implements OnInit {
         });
 
     } else {
-      this.accounts$.pipe(
-        take(1),
-        switchMap(accounts => {
-          if (accounts.length === 0) return of([]);
-          return of([]);
-        }),
-        finalize(() => {
+      this.bankService.getMyAllTransactions(startDate || undefined, endDate || undefined)
+        .pipe(finalize(() => {
           this.loading = false;
           this.cdr.detectChanges();
-        })
-      ).subscribe(data => {
-        this.transactions = data as Transaction[];
-        this.cdr.detectChanges();
-      });
+        })).subscribe(data => {
+          this.transactions = data || [];
+          this.cdr.detectChanges();
+        });
     }
   }
 
@@ -253,6 +251,10 @@ export class ClientHistoryComponent implements OnInit {
     if (tx.transactionType === 'DEPOSIT') return true;
     if (tx.transactionType === 'WITHDRAWAL') return false;
     return false;
+  }
+
+  viewTransactionDetails(tx: Transaction) {
+    this.router.navigate(['/client/dashboard/transactions', tx.id]);
   }
 
   sort(column: string) {

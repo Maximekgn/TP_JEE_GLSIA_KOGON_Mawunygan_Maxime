@@ -24,7 +24,7 @@ export interface Client {
 export interface Account {
   id?: number;
   accountNumber?: string;
-  accountType: 'COURANT' | 'EPARGNE';
+  accountType: 'COURANT' | 'EPARGNE' | 'ENTREPRISE';
   balance: number;
   owner?: Client;
   creationDate?: string;
@@ -165,6 +165,18 @@ export class BankService {
   }
 
   /**
+   * Secure transfer for client role
+   */
+  clientTransfer(accountId: number, payload: {
+    destination_account_id?: number | null;
+    destination_account_number?: string | null;
+    amount: number;
+    description: string;
+  }): Observable<any> {
+    return this.http.post<any>(`${this.API_BASE}/client/accounts/${accountId}/transfer`, payload);
+  }
+
+  /**
    * List all transactions in the system
    */
   getAllTransactions(): Observable<Transaction[]> {
@@ -226,5 +238,16 @@ export class BankService {
     if (endDate) params = params.set('endDate', endDate);
 
     return this.http.get<any>(`${this.API_BASE}/client/accounts/${accountId}/statement`, { params });
+  }
+
+  getMyAllTransactions(startDate?: string, endDate?: string): Observable<Transaction[]> {
+    let params = new HttpParams();
+    if (startDate) params = params.set('startDate', startDate);
+    if (endDate) params = params.set('endDate', endDate);
+    return this.http.get<Transaction[]>(`${this.API_BASE}/client/transactions`, { params });
+  }
+
+  getMyTransactionDetails(transactionId: number): Observable<Transaction> {
+    return this.http.get<Transaction>(`${this.API_BASE}/client/transactions/${transactionId}`);
   }
 }

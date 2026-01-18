@@ -49,7 +49,7 @@ import { NotificationService } from '../../../../security/core/services/notifica
             >
               <ng-icon name="heroBuildingLibrary" size="1.25rem"></ng-icon>
             </span>
-            <span class="text-lg">GLSIA Bank</span>
+            <span class="text-lg">EGA Bank</span>
           </a>
 
           <!-- Navigation Links -->

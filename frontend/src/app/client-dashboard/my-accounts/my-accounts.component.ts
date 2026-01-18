@@ -76,7 +76,7 @@ interface Transaction {
       <!-- Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
-          class="bg-blue-600 rounded-3xl p-8 text-white shadow-xl shadow-blue-100 relative overflow-hidden group"
+          class="bg-blue-600  p-8 text-white shadow-xl shadow-blue-100 relative overflow-hidden group"
         >
           <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
           <div class="relative z-10">
@@ -89,7 +89,7 @@ interface Transaction {
         </div>
 
         <div
-          class="bg-white rounded-3xl p-8 text-slate-900 shadow-xl shadow-slate-100 border border-slate-100 relative overflow-hidden group"
+          class="bg-white  p-8 text-slate-900 shadow-xl shadow-slate-100 border border-slate-100 relative overflow-hidden group"
         >
           <div class="absolute -right-4 -top-4 w-24 h-24 bg-green-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
           <div class="relative z-10">
@@ -102,7 +102,7 @@ interface Transaction {
         </div>
 
         <div
-          class="bg-slate-900 rounded-3xl p-8 text-white shadow-xl shadow-slate-200 relative overflow-hidden group"
+          class="bg-slate-900  p-8 text-white shadow-xl shadow-slate-200 relative overflow-hidden group"
         >
           <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
           <div class="relative z-10">
@@ -127,7 +127,7 @@ interface Transaction {
       <!-- Error State -->
       <div
         *ngIf="error && !loading"
-        class="bg-red-50 border border-red-100 rounded-3xl p-12 text-center"
+        class="bg-red-50 border border-red-100  p-12 text-center"
       >
         <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
             <ng-icon name="heroExclamationCircle" size="2rem" class="text-red-600"></ng-icon>
@@ -145,7 +145,7 @@ interface Transaction {
       <!-- Empty State -->
       <div
         *ngIf="!loading && !error && accounts.length === 0"
-        class="bg-slate-50 border border-slate-100 rounded-3xl p-24 text-center"
+        class="bg-slate-50 border border-slate-100  p-24 text-center"
       >
         <div class="p-6 bg-white rounded-full w-fit mx-auto mb-6 shadow-sm">
             <ng-icon name="heroInboxStack" size="3rem" class="text-slate-300"></ng-icon>
@@ -244,7 +244,7 @@ interface Transaction {
                         <p class="text-sm text-slate-500 font-mono uppercase tracking-widest">{{ selectedAccount.accountNumber }}</p>
                     </div>
                 </div>
-                <div class="bg-blue-600 p-6 md:px-8 md:py-4 rounded-3xl text-white shadow-xl shadow-blue-100">
+                <div class="bg-blue-600 p-6 md:px-8 md:py-4  text-white shadow-xl shadow-blue-100">
                     <p class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Solde Actuel</p>
                     <p class="text-3xl font-black">{{ selectedAccount.balance | number:'1.0-0' }} <span class="text-sm font-medium opacity-80">FCFA</span></p>
                 </div>
