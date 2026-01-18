@@ -1,15 +1,20 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroPrinter, heroArrowPath, heroInboxStack, heroFunnel } from '@ng-icons/heroicons/outline';
 import { BankService, Account, Transaction } from '../../../security/core/services/bank.service';
 import { ClientAuthService } from '../../../security/core/services/client-auth.service';
-import { Observable, of, combineLatest } from 'rxjs';
-import { finalize, switchMap, map, take } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { finalize, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-client-history',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgIcon],
+  viewProviders: [
+    provideIcons({ heroPrinter, heroArrowPath, heroInboxStack, heroFunnel })
+  ],
   template: `
     <div class="space-y-6">
       <!-- Header -->
@@ -22,20 +27,7 @@ import { finalize, switchMap, map, take } from 'rxjs/operators';
           (click)="print()"
           class="px-6 py-3 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 transition-colors flex items-center gap-2"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z"
-            />
-          </svg>
+          <ng-icon name="heroPrinter" size="1.25rem"></ng-icon>
           Imprimer Relevé
         </button>
       </div>
@@ -76,10 +68,8 @@ import { finalize, switchMap, map, take } from 'rxjs/operators';
             [disabled]="loading"
             class="px-6 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm hover:bg-blue-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-md shadow-blue-100"
           >
-            <svg *ngIf="loading" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
+            <ng-icon *ngIf="loading" name="heroArrowPath" size="1rem" class="animate-spin"></ng-icon>
+            <ng-icon *ngIf="!loading" name="heroFunnel" size="1rem"></ng-icon>
             {{ loading ? 'Chargement...' : 'Filtrer' }}
           </button>
         </form>
@@ -164,9 +154,7 @@ import { finalize, switchMap, map, take } from 'rxjs/operators';
                   <td colspan="4" class="p-24 text-center">
                     <div class="flex flex-col items-center justify-center space-y-3">
                         <div class="p-4 bg-slate-50 rounded-full">
-                            <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
+                            <ng-icon name="heroInboxStack" size="2.5rem" class="text-slate-300"></ng-icon>
                         </div>
                         <p class="text-slate-400 font-medium">Aucune transaction trouvée pour cette période.</p>
                     </div>
@@ -210,7 +198,7 @@ export class ClientHistoryComponent implements OnInit {
   readonly CLIENT_ID = this.authService.getUserId() || 1;
   clientFullName: string = '';
 
-  accounts$: Observable<Account[]> = of([]);
+  accounts$ = this.bankService.getMyAccounts();
   transactions: Transaction[] = [];
   today = new Date();
   loading = false;
@@ -223,7 +211,6 @@ export class ClientHistoryComponent implements OnInit {
 
   ngOnInit() {
     this.clientFullName = this.authService.getUserFullName();
-    this.accounts$ = this.bankService.getMyAccounts();
     this.loadTransactions();
   }
 
@@ -245,18 +232,10 @@ export class ClientHistoryComponent implements OnInit {
         });
 
     } else {
-      // If no account is selected, we could either show nothing or fetch all accounts' statements
-      // For simplicity and matching the user request "can consult HIS statement", 
-      // let's fetch my profile or just my and filter them if we really want "all mine".
-      // But getMyAccountStatement needs an ID. 
-      // Let's just say "Select an account to see history" or use getMyTransactionsByAccount if we want all.
-      
       this.accounts$.pipe(
         take(1),
         switchMap(accounts => {
           if (accounts.length === 0) return of([]);
-          // We could use getAllTransactions button but that's what we want to avoid (admin endpoint)
-          // For now, let's just use the first account if none selected, or show empty
           return of([]);
         }),
         finalize(() => {
@@ -273,15 +252,7 @@ export class ClientHistoryComponent implements OnInit {
   isCredit(tx: Transaction): boolean {
     if (tx.transactionType === 'DEPOSIT') return true;
     if (tx.transactionType === 'WITHDRAWAL') return false;
-    
-    // For transfers, check if the destination is one of my accounts
-    // Since we don't have the list easily here without a separate check, 
-    // let's assume if it's a transfer and source account belongs to someone else 
-    // (detected by sourceAccount != current filtered account if filtered)
-    
-    // Better: If we have multiple accounts, a credit transfer is one where 
-    // destinationAccount.id is one of my account IDs.
-    return false; // Default to debit for now
+    return false;
   }
 
   sort(column: string) {

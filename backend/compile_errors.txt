@@ -1,0 +1,642 @@
+﻿[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.backend:ega:jar:0.0.1-SNAPSHOT
+[WARNING] 'dependencies.dependency.scope' for org.projectlombok:lombok:jar must be one of [provided, compile, runtime, test, system] but is 'annotationProcessor'. @ line 108, column 20
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] --------------------------< com.backend:ega >---------------------------
+[INFO] Building ega 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ ega ---
+[INFO] Deleting C:\Users\kogon\Documents\CODES\TP_JEE_GLSIA_KOGON_Mawunygan_Maxime\backend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ega ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ ega ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 30 source files with javac [debug parameters release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/TransactionsService.java:[7,36] cannot access com.backend.ega.repositories.TransactionsRepository
+  bad source file: C:\Users\kogon\Documents\CODES\TP_JEE_GLSIA_KOGON_Mawunygan_Maxime\backend\src\main\java\com\backend\ega\repositories\TransactionsRepository.java
+    file does not contain class com.backend.ega.repositories.TransactionsRepository
+    Please remove or make sure it appears in the correct subdirectory of the sourcepath.
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/repositories/TransactionsRepository.java:[7,8] duplicate class: TransactionsRepository
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/TransactionsService.java:[20,19] cannot find symbol
+  symbol:   class TransactionsRepository
+  location: class com.backend.ega.services.TransactionsService
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/TransactionsService.java:[24,9] cannot find symbol
+  symbol:   class TransactionsRepository
+  location: class com.backend.ega.services.TransactionsService
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/controllers/ClientOperationsController.java:[45,13] cannot find symbol
+  symbol:   class TransactionsRepository
+  location: class com.backend.ega.controllers.ClientOperationsController
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[35,26] cannot find symbol
+  symbol:   method setUsername(java.lang.String)
+  location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[36,26] cannot find symbol
+  symbol:   method setPassword(java.lang.String)
+  location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[66,26] cannot find symbol
+  symbol:   method setFirst_name(java.lang.String)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[67,26] cannot find symbol
+  symbol:   method setLast_name(java.lang.String)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[68,26] cannot find symbol
+  symbol:   method setEmail(java.lang.String)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[69,26] cannot find symbol
+  symbol:   method setBirthDate(java.time.LocalDate)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[70,26] cannot find symbol
+  symbol:   method setGender(java.lang.String)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[71,26] cannot find symbol
+  symbol:   method setAddress(java.lang.String)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[72,26] cannot find symbol
+  symbol:   method setPhoneNumber(java.lang.String)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[73,26] cannot find symbol
+  symbol:   method setNationality(java.lang.String)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[74,26] cannot find symbol
+  symbol:   method setPassword(java.lang.String)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[75,26] cannot find symbol
+  symbol:   method setCreatedAt(java.time.LocalDateTime)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[76,26] cannot find symbol
+  symbol:   method setUpdatedAt(java.time.LocalDateTime)
+  location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[84,45] cannot find symbol
+  symbol:   method getEmail()
+  location: variable savedAlice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[90,29] cannot find symbol
+  symbol:   method setAccountNumber(java.lang.String)
+  location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[93,29] cannot find symbol
+  symbol:   method setAccountType(com.backend.ega.entities.enums.AccountType)
+  location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[94,29] cannot find symbol
+  symbol:   method setBalance(double)
+  location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[95,29] cannot find symbol
+  symbol:   method setOwner(com.backend.ega.entities.Client)
+  location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[96,29] cannot find symbol
+  symbol:   method setCreatedAt(java.time.LocalDateTime)
+  location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[97,29] cannot find symbol
+  symbol:   method setUpdatedAt(java.time.LocalDateTime)
+  location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[105,50] cannot find symbol
+  symbol:   method getAccountNumber()
+  location: variable createdAcc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[111,36] cannot find symbol
+  symbol:   method setAmount(double)
+  location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[112,36] cannot find symbol
+  symbol:   method setTransactionDate(java.time.LocalDateTime)
+  location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[113,36] cannot find symbol
+  symbol:   method setTransactionType(com.backend.ega.entities.enums.TransactionType)
+  location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[114,36] cannot find symbol
+  symbol:   method setSourceAccount(com.backend.ega.entities.Account)
+  location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[115,36] cannot find symbol
+  symbol:   method setDescription(java.lang.String)
+  location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[116,36] cannot find symbol
+  symbol:   method setCreatedAt(java.time.LocalDateTime)
+  location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[117,36] cannot find symbol
+  symbol:   method setUpdatedAt(java.time.LocalDateTime)
+  location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[131,24] cannot find symbol
+  symbol:   method setFirst_name(java.lang.String)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[132,24] cannot find symbol
+  symbol:   method setLast_name(java.lang.String)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[133,24] cannot find symbol
+  symbol:   method setEmail(java.lang.String)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[134,24] cannot find symbol
+  symbol:   method setBirthDate(java.time.LocalDate)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[135,24] cannot find symbol
+  symbol:   method setGender(java.lang.String)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[136,24] cannot find symbol
+  symbol:   method setAddress(java.lang.String)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[137,24] cannot find symbol
+  symbol:   method setPhoneNumber(java.lang.String)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[138,24] cannot find symbol
+  symbol:   method setNationality(java.lang.String)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[139,24] cannot find symbol
+  symbol:   method setPassword(java.lang.String)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[140,24] cannot find symbol
+  symbol:   method setCreatedAt(java.time.LocalDateTime)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[141,24] cannot find symbol
+  symbol:   method setUpdatedAt(java.time.LocalDateTime)
+  location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[148,57] cannot find symbol
+  symbol:   method getEmail()
+  location: variable savedBob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[153,29] cannot find symbol
+  symbol:   method setAccountNumber(java.lang.String)
+  location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[156,29] cannot find symbol
+  symbol:   method setAccountType(com.backend.ega.entities.enums.AccountType)
+  location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[157,29] cannot find symbol
+  symbol:   method setBalance(double)
+  location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[158,29] cannot find symbol
+  symbol:   method setOwner(com.backend.ega.entities.Client)
+  location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[159,29] cannot find symbol
+  symbol:   method setCreatedAt(java.time.LocalDateTime)
+  location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[160,29] cannot find symbol
+  symbol:   method setUpdatedAt(java.time.LocalDateTime)
+  location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[168,50] cannot find symbol
+  symbol:   method getAccountNumber()
+  location: variable createdAcc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[183,29] cannot find symbol
+  symbol:   method setAmount(double)
+  location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[184,29] cannot find symbol
+  symbol:   method setTransactionDate(java.time.LocalDateTime)
+  location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[185,29] cannot find symbol
+  symbol:   method setTransactionType(com.backend.ega.entities.enums.TransactionType)
+  location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[186,29] cannot find symbol
+  symbol:   method setSourceAccount(com.backend.ega.entities.Account)
+  location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[187,29] cannot find symbol
+  symbol:   method setDestinationAccount(com.backend.ega.entities.Account)
+  location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[188,29] cannot find symbol
+  symbol:   method setDescription(java.lang.String)
+  location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[189,29] cannot find symbol
+  symbol:   method setCreatedAt(java.time.LocalDateTime)
+  location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[190,29] cannot find symbol
+  symbol:   method setUpdatedAt(java.time.LocalDateTime)
+  location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[195,35] cannot find symbol
+  symbol:   method getAccountNumber()
+  location: variable source of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[197,33] cannot find symbol
+  symbol:   method getAccountNumber()
+  location: variable dest of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/AdminsService.java:[35,52] cannot find symbol
+  symbol:   method getUsername()
+  location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/AdminsService.java:[36,66] cannot find symbol
+  symbol:   method getUsername()
+  location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/AdminsService.java:[40,32] cannot find symbol
+  symbol:   method getUsername()
+  location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/AdminsService.java:[42,55] cannot find symbol
+  symbol:   method getPassword()
+  location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[71,41] cannot find symbol
+  symbol:   method getEmail()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[73,21] cannot find symbol
+  symbol:   method getEmail()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[80,19] cannot find symbol
+  symbol:   method getFirst_name()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[81,19] cannot find symbol
+  symbol:   method getFirst_name()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[82,19] cannot find symbol
+  symbol:   method getLast_name()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[83,19] cannot find symbol
+  symbol:   method getLast_name()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[84,19] cannot find symbol
+  symbol:   method getBirthDate()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[85,19] cannot find symbol
+  symbol:   method getGender()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[86,19] cannot find symbol
+  symbol:   method getGender()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[87,19] cannot find symbol
+  symbol:   method getNationality()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[88,19] cannot find symbol
+  symbol:   method getNationality()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[89,19] cannot find symbol
+  symbol:   method getPhoneNumber()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[90,19] cannot find symbol
+  symbol:   method getPhoneNumber()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[91,19] cannot find symbol
+  symbol:   method getAddress()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[92,19] cannot find symbol
+  symbol:   method getAddress()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[98,15] cannot find symbol
+  symbol:   method setEmail(java.lang.String)
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[106,19] cannot find symbol
+  symbol:   method getPassword()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[107,20] cannot find symbol
+  symbol:   method getPassword()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[110,46] cannot find symbol
+  symbol:   method getPassword()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[115,15] cannot find symbol
+  symbol:   method setCreatedAt(java.time.LocalDateTime)
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[116,15] cannot find symbol
+  symbol:   method setUpdatedAt(java.time.LocalDateTime)
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[138,40] cannot find symbol
+  symbol:   method getEmail()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[139,56] cannot find symbol
+  symbol:   method getEmail()
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[143,19] cannot find symbol
+  symbol:   method setEmail(java.lang.String)
+  location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[147,26] cannot find symbol
+  symbol:   method getFirst_name()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[148,26] cannot find symbol
+  symbol:   method getFirst_name()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[150,26] cannot find symbol
+  symbol:   method getLast_name()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[151,26] cannot find symbol
+  symbol:   method getLast_name()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[153,26] cannot find symbol
+  symbol:   method getBirthDate()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[154,26] cannot find symbol
+  symbol:   method getBirthDate()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[156,26] cannot find symbol
+  symbol:   method getGender()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[157,26] cannot find symbol
+  symbol:   method getGender()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[159,26] cannot find symbol
+  symbol:   method getAddress()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[160,26] cannot find symbol
+  symbol:   method getAddress()
+  location: variable clientDetails of type com.backend.ega.entities.Client
+[INFO] 100 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.868 s
+[INFO] Finished at: 2026-01-17T18:35:44Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:compile (default-compile) on project ega: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/TransactionsService.java:[7,36] cannot access com.backend.ega.repositories.TransactionsRepository
+[ERROR]   bad source file: C:\Users\kogon\Documents\CODES\TP_JEE_GLSIA_KOGON_Mawunygan_Maxime\backend\src\main\java\com\backend\ega\repositories\TransactionsRepository.java
+[ERROR]     file does not contain class com.backend.ega.repositories.TransactionsRepository
+[ERROR]     Please remove or make sure it appears in the correct subdirectory of the sourcepath.
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/repositories/TransactionsRepository.java:[7,8] duplicate class: TransactionsRepository
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/TransactionsService.java:[20,19] cannot find symbol
+[ERROR]   symbol:   class TransactionsRepository
+[ERROR]   location: class com.backend.ega.services.TransactionsService
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/TransactionsService.java:[24,9] cannot find symbol
+[ERROR]   symbol:   class TransactionsRepository
+[ERROR]   location: class com.backend.ega.services.TransactionsService
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/controllers/ClientOperationsController.java:[45,13] cannot find symbol
+[ERROR]   symbol:   class TransactionsRepository
+[ERROR]   location: class com.backend.ega.controllers.ClientOperationsController
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[35,26] cannot find symbol
+[ERROR]   symbol:   method setUsername(java.lang.String)
+[ERROR]   location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[36,26] cannot find symbol
+[ERROR]   symbol:   method setPassword(java.lang.String)
+[ERROR]   location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[66,26] cannot find symbol
+[ERROR]   symbol:   method setFirst_name(java.lang.String)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[67,26] cannot find symbol
+[ERROR]   symbol:   method setLast_name(java.lang.String)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[68,26] cannot find symbol
+[ERROR]   symbol:   method setEmail(java.lang.String)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[69,26] cannot find symbol
+[ERROR]   symbol:   method setBirthDate(java.time.LocalDate)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[70,26] cannot find symbol
+[ERROR]   symbol:   method setGender(java.lang.String)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[71,26] cannot find symbol
+[ERROR]   symbol:   method setAddress(java.lang.String)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[72,26] cannot find symbol
+[ERROR]   symbol:   method setPhoneNumber(java.lang.String)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[73,26] cannot find symbol
+[ERROR]   symbol:   method setNationality(java.lang.String)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[74,26] cannot find symbol
+[ERROR]   symbol:   method setPassword(java.lang.String)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[75,26] cannot find symbol
+[ERROR]   symbol:   method setCreatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[76,26] cannot find symbol
+[ERROR]   symbol:   method setUpdatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable alice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[84,45] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable savedAlice of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[90,29] cannot find symbol
+[ERROR]   symbol:   method setAccountNumber(java.lang.String)
+[ERROR]   location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[93,29] cannot find symbol
+[ERROR]   symbol:   method setAccountType(com.backend.ega.entities.enums.AccountType)
+[ERROR]   location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[94,29] cannot find symbol
+[ERROR]   symbol:   method setBalance(double)
+[ERROR]   location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[95,29] cannot find symbol
+[ERROR]   symbol:   method setOwner(com.backend.ega.entities.Client)
+[ERROR]   location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[96,29] cannot find symbol
+[ERROR]   symbol:   method setCreatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[97,29] cannot find symbol
+[ERROR]   symbol:   method setUpdatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable acc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[105,50] cannot find symbol
+[ERROR]   symbol:   method getAccountNumber()
+[ERROR]   location: variable createdAcc1 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[111,36] cannot find symbol
+[ERROR]   symbol:   method setAmount(double)
+[ERROR]   location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[112,36] cannot find symbol
+[ERROR]   symbol:   method setTransactionDate(java.time.LocalDateTime)
+[ERROR]   location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[113,36] cannot find symbol
+[ERROR]   symbol:   method setTransactionType(com.backend.ega.entities.enums.TransactionType)
+[ERROR]   location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[114,36] cannot find symbol
+[ERROR]   symbol:   method setSourceAccount(com.backend.ega.entities.Account)
+[ERROR]   location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[115,36] cannot find symbol
+[ERROR]   symbol:   method setDescription(java.lang.String)
+[ERROR]   location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[116,36] cannot find symbol
+[ERROR]   symbol:   method setCreatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[117,36] cannot find symbol
+[ERROR]   symbol:   method setUpdatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable deposit of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[131,24] cannot find symbol
+[ERROR]   symbol:   method setFirst_name(java.lang.String)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[132,24] cannot find symbol
+[ERROR]   symbol:   method setLast_name(java.lang.String)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[133,24] cannot find symbol
+[ERROR]   symbol:   method setEmail(java.lang.String)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[134,24] cannot find symbol
+[ERROR]   symbol:   method setBirthDate(java.time.LocalDate)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[135,24] cannot find symbol
+[ERROR]   symbol:   method setGender(java.lang.String)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[136,24] cannot find symbol
+[ERROR]   symbol:   method setAddress(java.lang.String)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[137,24] cannot find symbol
+[ERROR]   symbol:   method setPhoneNumber(java.lang.String)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[138,24] cannot find symbol
+[ERROR]   symbol:   method setNationality(java.lang.String)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[139,24] cannot find symbol
+[ERROR]   symbol:   method setPassword(java.lang.String)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[140,24] cannot find symbol
+[ERROR]   symbol:   method setCreatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[141,24] cannot find symbol
+[ERROR]   symbol:   method setUpdatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable bob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[148,57] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable savedBob of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[153,29] cannot find symbol
+[ERROR]   symbol:   method setAccountNumber(java.lang.String)
+[ERROR]   location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[156,29] cannot find symbol
+[ERROR]   symbol:   method setAccountType(com.backend.ega.entities.enums.AccountType)
+[ERROR]   location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[157,29] cannot find symbol
+[ERROR]   symbol:   method setBalance(double)
+[ERROR]   location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[158,29] cannot find symbol
+[ERROR]   symbol:   method setOwner(com.backend.ega.entities.Client)
+[ERROR]   location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[159,29] cannot find symbol
+[ERROR]   symbol:   method setCreatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[160,29] cannot find symbol
+[ERROR]   symbol:   method setUpdatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable acc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[168,50] cannot find symbol
+[ERROR]   symbol:   method getAccountNumber()
+[ERROR]   location: variable createdAcc2 of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[183,29] cannot find symbol
+[ERROR]   symbol:   method setAmount(double)
+[ERROR]   location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[184,29] cannot find symbol
+[ERROR]   symbol:   method setTransactionDate(java.time.LocalDateTime)
+[ERROR]   location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[185,29] cannot find symbol
+[ERROR]   symbol:   method setTransactionType(com.backend.ega.entities.enums.TransactionType)
+[ERROR]   location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[186,29] cannot find symbol
+[ERROR]   symbol:   method setSourceAccount(com.backend.ega.entities.Account)
+[ERROR]   location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[187,29] cannot find symbol
+[ERROR]   symbol:   method setDestinationAccount(com.backend.ega.entities.Account)
+[ERROR]   location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[188,29] cannot find symbol
+[ERROR]   symbol:   method setDescription(java.lang.String)
+[ERROR]   location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[189,29] cannot find symbol
+[ERROR]   symbol:   method setCreatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[190,29] cannot find symbol
+[ERROR]   symbol:   method setUpdatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable transfer of type com.backend.ega.entities.Transaction
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[195,35] cannot find symbol
+[ERROR]   symbol:   method getAccountNumber()
+[ERROR]   location: variable source of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/EgaApplication.java:[197,33] cannot find symbol
+[ERROR]   symbol:   method getAccountNumber()
+[ERROR]   location: variable dest of type com.backend.ega.entities.Account
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/AdminsService.java:[35,52] cannot find symbol
+[ERROR]   symbol:   method getUsername()
+[ERROR]   location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/AdminsService.java:[36,66] cannot find symbol
+[ERROR]   symbol:   method getUsername()
+[ERROR]   location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/AdminsService.java:[40,32] cannot find symbol
+[ERROR]   symbol:   method getUsername()
+[ERROR]   location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/AdminsService.java:[42,55] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable admin of type com.backend.ega.entities.Admin
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[71,41] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[73,21] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[80,19] cannot find symbol
+[ERROR]   symbol:   method getFirst_name()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[81,19] cannot find symbol
+[ERROR]   symbol:   method getFirst_name()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[82,19] cannot find symbol
+[ERROR]   symbol:   method getLast_name()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[83,19] cannot find symbol
+[ERROR]   symbol:   method getLast_name()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[84,19] cannot find symbol
+[ERROR]   symbol:   method getBirthDate()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[85,19] cannot find symbol
+[ERROR]   symbol:   method getGender()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[86,19] cannot find symbol
+[ERROR]   symbol:   method getGender()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[87,19] cannot find symbol
+[ERROR]   symbol:   method getNationality()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[88,19] cannot find symbol
+[ERROR]   symbol:   method getNationality()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[89,19] cannot find symbol
+[ERROR]   symbol:   method getPhoneNumber()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[90,19] cannot find symbol
+[ERROR]   symbol:   method getPhoneNumber()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[91,19] cannot find symbol
+[ERROR]   symbol:   method getAddress()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[92,19] cannot find symbol
+[ERROR]   symbol:   method getAddress()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[98,15] cannot find symbol
+[ERROR]   symbol:   method setEmail(java.lang.String)
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[106,19] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[107,20] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[110,46] cannot find symbol
+[ERROR]   symbol:   method getPassword()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[115,15] cannot find symbol
+[ERROR]   symbol:   method setCreatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[116,15] cannot find symbol
+[ERROR]   symbol:   method setUpdatedAt(java.time.LocalDateTime)
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[138,40] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[139,56] cannot find symbol
+[ERROR]   symbol:   method getEmail()
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[143,19] cannot find symbol
+[ERROR]   symbol:   method setEmail(java.lang.String)
+[ERROR]   location: variable client of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[147,26] cannot find symbol
+[ERROR]   symbol:   method getFirst_name()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[148,26] cannot find symbol
+[ERROR]   symbol:   method getFirst_name()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[150,26] cannot find symbol
+[ERROR]   symbol:   method getLast_name()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[151,26] cannot find symbol
+[ERROR]   symbol:   method getLast_name()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[153,26] cannot find symbol
+[ERROR]   symbol:   method getBirthDate()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[154,26] cannot find symbol
+[ERROR]   symbol:   method getBirthDate()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[156,26] cannot find symbol
+[ERROR]   symbol:   method getGender()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[157,26] cannot find symbol
+[ERROR]   symbol:   method getGender()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[159,26] cannot find symbol
+[ERROR]   symbol:   method getAddress()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] /C:/Users/kogon/Documents/CODES/TP_JEE_GLSIA_KOGON_Mawunygan_Maxime/backend/src/main/java/com/backend/ega/services/ClientsService.java:[160,26] cannot find symbol
+[ERROR]   symbol:   method getAddress()
+[ERROR]   location: variable clientDetails of type com.backend.ega.entities.Client
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

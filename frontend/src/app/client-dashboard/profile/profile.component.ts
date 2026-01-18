@@ -1,14 +1,19 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroShieldCheck, heroCheckCircle } from '@ng-icons/heroicons/outline';
 import { ClientAuthService, ClientInfo } from '../../../security/core/services/client-auth.service';
 import { transition, trigger, style, animate } from '@angular/animations';
-import { finalize, tap } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgIcon],
+  viewProviders: [
+    provideIcons({ heroShieldCheck, heroCheckCircle })
+  ],
   template: `
     <div class="max-w-4xl mx-auto py-8 px-4" [@fadeInUp]>
       <!-- Header -->
@@ -38,9 +43,7 @@ import { finalize, tap } from 'rxjs';
 
           <div class="bg-indigo-600 rounded-3xl p-8 text-white shadow-lg shadow-indigo-200">
             <h3 class="font-bold mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-              </svg>
+              <ng-icon name="heroShieldCheck" size="1.25rem"></ng-icon>
               Sécurité du compte
             </h3>
             <p class="text-indigo-100 text-sm mb-6">Votre compte est protégé par une authentification forte et un chiffrement de bout en bout.</p>
@@ -123,9 +126,7 @@ import { finalize, tap } from 'rxjs';
 
             <div class="p-8">
               <div *ngIf="message" [class]="messageType === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'" class="p-4 rounded-2xl mb-6 text-sm flex items-center gap-3 animate-slide-in">
-                <svg *ngIf="messageType === 'success'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                </svg>
+                <ng-icon *ngIf="messageType === 'success'" name="heroCheckCircle" size="1.25rem"></ng-icon>
                 {{ message }}
               </div>
 
@@ -172,16 +173,9 @@ import { finalize, tap } from 'rxjs';
     .animate-slide-in {
       animation: slideIn 0.3s ease-out;
     }
-    .animate-slide-up {
-      animation: slideUp 0.3s ease-out;
-    }
     @keyframes slideIn {
       from { opacity: 0; transform: translateX(-10px); }
       to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   `],
   animations: [

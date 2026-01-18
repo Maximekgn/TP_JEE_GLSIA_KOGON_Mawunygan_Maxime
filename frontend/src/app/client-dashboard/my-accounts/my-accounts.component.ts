@@ -2,9 +2,21 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  heroCreditCard,
+  heroCurrencyDollar,
+  heroShieldCheck,
+  heroArrowPath,
+  heroExclamationCircle,
+  heroInboxStack,
+  heroChevronLeft,
+  heroInformationCircle,
+  heroArrowsRightLeft
+} from '@ng-icons/heroicons/outline';
 import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 import { finalize, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 
 interface Account {
   id: number;
@@ -32,7 +44,20 @@ interface Transaction {
 @Component({
   selector: 'app-my-accounts',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgIcon],
+  viewProviders: [
+    provideIcons({
+      heroCreditCard,
+      heroCurrencyDollar,
+      heroShieldCheck,
+      heroArrowPath,
+      heroExclamationCircle,
+      heroInboxStack,
+      heroChevronLeft,
+      heroInformationCircle,
+      heroArrowsRightLeft
+    })
+  ],
   template: `
     <div class="space-y-8">
       <!-- Header -->
@@ -43,9 +68,7 @@ interface Transaction {
         </div>
         <div class="flex gap-2">
             <button (click)="loadAccounts()" class="p-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
-                <svg [class.animate-spin]="loading" class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
+                <ng-icon name="heroArrowPath" [class.animate-spin]="loading" size="1.25rem" class="text-slate-600"></ng-icon>
             </button>
         </div>
       </header>
@@ -58,9 +81,7 @@ interface Transaction {
           <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
           <div class="relative z-10">
               <div class="p-3 bg-white/10 rounded-2xl w-fit mb-6">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
+                <ng-icon name="heroCreditCard" size="1.5rem" class="text-white"></ng-icon>
               </div>
               <div class="text-sm font-medium text-blue-100 mb-1">Nombre de comptes</div>
               <div class="text-4xl font-bold">{{ totalAccounts }}</div>
@@ -73,9 +94,7 @@ interface Transaction {
           <div class="absolute -right-4 -top-4 w-24 h-24 bg-green-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
           <div class="relative z-10">
               <div class="p-3 bg-green-50 rounded-2xl w-fit mb-6">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <ng-icon name="heroCurrencyDollar" size="1.5rem" class="text-green-600"></ng-icon>
               </div>
               <div class="text-sm font-medium text-slate-400 mb-1">Solde Total</div>
               <div class="text-3xl font-bold text-slate-900">{{ totalBalance | number: '1.0-0' }} <span class="text-lg font-medium text-slate-400">FCFA</span></div>
@@ -88,9 +107,7 @@ interface Transaction {
           <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
           <div class="relative z-10">
               <div class="p-3 bg-white/10 rounded-2xl w-fit mb-6">
-                <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
+                <ng-icon name="heroShieldCheck" size="1.5rem" class="text-blue-400"></ng-icon>
               </div>
               <div class="text-sm font-medium text-slate-400 mb-1">Compte Principal</div>
               <div class="text-xl font-bold truncate">{{ mainAccountType }}</div>
@@ -113,9 +130,7 @@ interface Transaction {
         class="bg-red-50 border border-red-100 rounded-3xl p-12 text-center"
       >
         <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <ng-icon name="heroExclamationCircle" size="2rem" class="text-red-600"></ng-icon>
         </div>
         <h3 class="text-xl font-bold text-red-900 mb-2">Erreur de chargement</h3>
         <p class="text-red-700 mb-8 max-w-sm mx-auto">{{ error }}</p>
@@ -133,9 +148,7 @@ interface Transaction {
         class="bg-slate-50 border border-slate-100 rounded-3xl p-24 text-center"
       >
         <div class="p-6 bg-white rounded-full w-fit mx-auto mb-6 shadow-sm">
-            <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
+            <ng-icon name="heroInboxStack" size="3rem" class="text-slate-300"></ng-icon>
         </div>
         <h3 class="text-xl font-bold text-slate-900 mb-2">Aucun compte bancaire</h3>
         <p class="text-slate-500 mb-0 max-w-sm mx-auto">
@@ -168,20 +181,7 @@ interface Transaction {
                   [class.bg-amber-50]="acc.accountType === 'ENTREPRISE'"
                   [class.text-amber-600]="acc.accountType === 'ENTREPRISE'"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-7 h-7"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
-                    />
-                  </svg>
+                  <ng-icon name="heroCreditCard" size="1.75rem"></ng-icon>
                 </div>
                 <span
                   class="px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors shadow-sm"
@@ -219,9 +219,10 @@ interface Transaction {
                   Détails
                 </button>
                 <button
-                  class="flex-1 px-4 py-3 text-xs font-bold text-white bg-slate-900 rounded-2xl hover:bg-black transition shadow-lg"
+                  class="flex-1 px-4 py-3 text-xs font-bold text-white bg-slate-900 rounded-2xl hover:bg-black transition shadow-lg flex items-center justify-center gap-2"
                   (click)="$event.stopPropagation(); gotoOperations(acc)"
                 >
+                  <ng-icon name="heroArrowsRightLeft" size="0.875rem"></ng-icon>
                   Virement
                 </button>
               </div>
@@ -236,9 +237,7 @@ interface Transaction {
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div class="flex items-center gap-6">
                     <button (click)="selectedAccount = null" class="p-3 bg-white hover:bg-slate-50 rounded-2xl transition shadow-sm border border-slate-100">
-                        <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
-                        </svg>
+                        <ng-icon name="heroChevronLeft" size="1.5rem" class="text-slate-600"></ng-icon>
                     </button>
                     <div class="space-y-1">
                         <h2 class="text-2xl font-black text-slate-900">Détails du Compte</h2>
@@ -256,7 +255,8 @@ interface Transaction {
         <div class="p-8">
           <div class="flex items-center justify-between mb-8">
               <h3 class="text-xl font-black text-slate-900">Activité Récente</h3>
-              <button (click)="loadTransactions(selectedAccount.id)" class="text-xs font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-xl hover:bg-blue-100 transition">
+              <button (click)="loadTransactions(selectedAccount.id)" class="text-xs font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-xl hover:bg-blue-100 transition flex items-center gap-2">
+                  <ng-icon name="heroArrowPath" size="0.875rem"></ng-icon>
                   Rafraîchir
               </button>
           </div>
@@ -271,9 +271,7 @@ interface Transaction {
 
           <div *ngIf="!loadingTransactions && transactions.length === 0" class="py-20 text-center bg-slate-50/50 rounded-[2rem] border-2 border-dashed border-slate-100 mx-auto max-w-lg">
              <div class="p-4 bg-white rounded-full w-fit mx-auto mb-4 shadow-sm">
-                <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <ng-icon name="heroInformationCircle" size="2rem" class="text-slate-300"></ng-icon>
              </div>
              <p class="text-slate-500 font-medium">Aucune activité enregistrée sur ce compte.</p>
           </div>
@@ -352,7 +350,6 @@ export class MyAccountsComponent implements OnInit {
 
   get mainAccountType(): string {
     if (this.accounts.length === 0) return 'Aucun';
-    // Return the first account type or the one with highest balance
     const mainAccount = this.accounts.reduce((max, acc) => (acc.balance > max.balance ? acc : max));
     return mainAccount.accountType;
   }
@@ -417,7 +414,6 @@ export class MyAccountsComponent implements OnInit {
   }
 
   gotoOperations(account: Account): void {
-    // Navigate to operations with selected account
     this.router.navigate(['/client/dashboard/operations'], {
       queryParams: { accountId: account.id },
     });

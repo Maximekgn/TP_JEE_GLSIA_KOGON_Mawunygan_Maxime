@@ -1,12 +1,33 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  heroCreditCard,
+  heroArrowsRightLeft,
+  heroClock,
+  heroUserCircle,
+  heroArrowRightOnRectangle,
+  heroBuildingLibrary,
+  heroChevronRight
+} from '@ng-icons/heroicons/outline';
 import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 
 @Component({
   selector: 'app-client-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, NgIcon],
+  viewProviders: [
+    provideIcons({
+      heroCreditCard,
+      heroArrowsRightLeft,
+      heroClock,
+      heroUserCircle,
+      heroArrowRightOnRectangle,
+      heroBuildingLibrary,
+      heroChevronRight
+    })
+  ],
   template: `
     <div
       class="h-screen w-64 bg-slate-900 text-white fixed left-0 top-0 flex flex-col shadow-xl z-50 print:hidden"
@@ -15,20 +36,7 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
       <div class="h-20 flex items-center px-8 border-b border-slate-800">
         <div class="flex items-center gap-2">
           <div class="bg-blue-500 text-white p-1.5 rounded-lg">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-              class="w-5 h-5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"
-              />
-            </svg>
+            <ng-icon name="heroBuildingLibrary" size="1.25rem"></ng-icon>
           </div>
           <span class="text-xl font-bold tracking-tight"
             >E-Bank<span class="text-blue-400"> Client</span></span
@@ -45,16 +53,7 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
           [routerLinkActiveOptions]="{ exact: link.href === '/client/dashboard' }"
           class="flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="link.icon" />
-          </svg>
+          <ng-icon [name]="link.icon" size="1.25rem"></ng-icon>
           <span class="font-medium text-sm">{{ link.label }}</span>
         </a>
       </nav>
@@ -79,37 +78,13 @@ import { ClientAuthService } from '../../../security/core/services/client-auth.s
             </div>
             <div class="text-xs text-slate-500 truncate">{{ clientEmail }}</div>
           </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            class="w-4 h-4 text-slate-600 group-hover:text-blue-400 transition-colors"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-              clip-rule="evenodd"
-            />
-          </svg>
+          <ng-icon name="heroChevronRight" size="1rem" class="text-slate-600 group-hover:text-blue-400 transition-colors"></ng-icon>
         </a>
         <button
           (click)="logout()"
           class="flex items-center gap-2 justify-center w-full py-2.5 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg transition-colors text-sm font-medium cursor-pointer"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-4 h-4"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-            />
-          </svg>
+          <ng-icon name="heroArrowRightOnRectangle" size="1rem"></ng-icon>
           Déconnexion
         </button>
       </div>
@@ -147,22 +122,22 @@ export class ClientSidebarComponent implements OnInit {
     {
       label: 'Mes Comptes',
       href: '/client/dashboard',
-      icon: 'M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z',
+      icon: 'heroCreditCard',
     },
     {
       label: 'Opérations',
       href: '/client/dashboard/operations',
-      icon: 'M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5',
+      icon: 'heroArrowsRightLeft',
     },
     {
       label: 'Historique',
       href: '/client/dashboard/history',
-      icon: 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+      icon: 'heroClock',
     },
     {
       label: 'Mon Profil',
       href: '/client/dashboard/profile',
-      icon: 'M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z',
+      icon: 'heroUserCircle',
     },
   ];
 

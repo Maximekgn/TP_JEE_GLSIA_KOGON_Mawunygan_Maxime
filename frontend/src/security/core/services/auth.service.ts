@@ -146,15 +146,7 @@ export class AuthService {
    * Logout user, clear token and redirect
    */
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_ID_KEY);
-    localStorage.removeItem(this.USER_EMAIL_KEY);
-    localStorage.removeItem(this.EXPIRES_AT_KEY);
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
-      this.tokenExpirationTimer = null;
-    }
-    this.authStatusSub.next(false);
+    this.clearAuthData();
     this.router.navigate(['/login']);
   }
 
@@ -216,15 +208,39 @@ export class AuthService {
   private initializeAuth(): void {
     const token = this.getToken();
     const expiresAt = localStorage.getItem(this.EXPIRES_AT_KEY);
+
     if (token && expiresAt) {
       const exp = parseInt(expiresAt, 10);
       if (Date.now() < exp) {
+        // Token is valid - set user as authenticated and setup auto-logout
         this.authStatusSub.next(true);
         this.setAutoLogout(exp - Date.now());
         return;
+      } else {
+        // Token expired - clean up localStorage without redirecting
+        this.clearAuthData();
       }
-      this.logout();
     }
+
+    // Token missing or expired - just set status to false
+    this.authStatusSub.next(false);
+  }
+
+  /**
+   * Clear authentication data from localStorage without redirecting
+   */
+  private clearAuthData(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_ID_KEY);
+    localStorage.removeItem(this.USER_EMAIL_KEY);
+    localStorage.removeItem(this.EXPIRES_AT_KEY);
+
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = null;
+    }
+
+    this.authStatusSub.next(false);
   }
 }
   

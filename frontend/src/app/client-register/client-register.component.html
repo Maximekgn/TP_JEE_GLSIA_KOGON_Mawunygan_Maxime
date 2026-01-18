@@ -1,33 +1,76 @@
-<div class="flex min-h-screen w-full bg-white overflow-hidden">
-  <!-- Left Side Image -->
-  <div class="w-1/3 hidden lg:block sticky top-0 h-screen">
-    <img
-      class="h-full w-full object-cover"
-      src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2026&auto=format&fit=crop"
-      alt="Banking Registration"
-    />
-    <div class="absolute inset-0 bg-indigo-600/10 backdrop-blur-[2px]"></div>
-    <div class="absolute bottom-12 left-12 right-12 text-white">
-      <h3 class="text-3xl font-bold mb-4">Rejoignez l'avenir de la banque</h3>
-      <p class="text-indigo-50 font-medium opacity-90">
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex">
+  <!-- Left Side - Branding -->
+  <div class="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-blue-600 to-blue-700 p-12 flex-col justify-between relative overflow-hidden sticky top-0 h-screen">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-20 left-20 w-64 h-64 rounded-full bg-white/20 blur-3xl"></div>
+      <div class="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-white/10 blur-3xl"></div>
+    </div>
+    
+    <!-- Logo -->
+    <div class="flex items-center gap-3 relative z-10">
+      <div class="h-10 w-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+        </svg>
+      </div>
+      <span class="font-bold text-white text-xl">EGA Bank</span>
+    </div>
+    
+    <!-- Message -->
+    <div class="relative z-10">
+      <h2 class="text-4xl font-bold text-white leading-tight mb-4">
+        Rejoignez l'avenir<br/>de la banque
+      </h2>
+      <p class="text-blue-100 text-lg">
         Une expérience bancaire moderne, sécurisée et intuitive vous attend.
       </p>
     </div>
+    
+    <!-- Features -->
+    <div class="flex gap-6 relative z-10">
+      <div class="flex items-center gap-2 text-blue-100 text-sm">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>Gratuit</span>
+      </div>
+      <div class="flex items-center gap-2 text-blue-100 text-sm">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>Rapide</span>
+      </div>
+      <div class="flex items-center gap-2 text-blue-100 text-sm">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>Sécurisé</span>
+      </div>
+    </div>
   </div>
 
-  <!-- Right Side Content -->
-  <div class="flex-1 flex flex-col items-center justify-start p-8 md:p-12 bg-white overflow-y-auto">
-    <div class="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <!-- Header -->
-      <div class="mb-10">
-        <h2 class="text-4xl text-gray-900 font-medium">Inscription Client</h2>
-        <p class="text-sm text-gray-500/90 mt-3">
-          Créez votre compte en quelques étapes simples pour accéder à nos services.
-        </p>
+  <!-- Right Side - Form -->
+  <div class="flex-1 flex flex-col items-center p-8 md:p-12 overflow-y-auto">
+    <div class="w-full max-w-xl">
+      <!-- Mobile Logo -->
+      <div class="lg:hidden flex items-center gap-3 mb-8">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-600/25">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+          </svg>
+        </div>
+        <span class="font-bold text-slate-900 text-xl">EGA Bank</span>
       </div>
 
-      <!-- Progress Navigator -->
-      <div class="flex items-center gap-4 mb-10 overflow-x-auto pb-4 no-scrollbar">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-slate-900">Créer un compte</h1>
+        <p class="mt-2 text-slate-600">Remplissez vos informations pour ouvrir votre compte</p>
+      </div>
+
+      <!-- Progress Steps -->
+      <div class="flex items-center gap-4 mb-10">
         <div 
           *ngFor="let step of [1, 2, 3]" 
           class="flex items-center gap-3 transition-all duration-300"
@@ -36,154 +79,174 @@
         >
           <div 
             class="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all duration-300 shadow-sm"
-            [class.bg-indigo-500]="currentStep >= step"
+            [class.bg-gradient-to-br]="currentStep >= step"
+            [class.from-blue-600]="currentStep >= step"
+            [class.to-blue-700]="currentStep >= step"
             [class.text-white]="currentStep >= step"
-            [class.bg-gray-100]="currentStep < step"
-            [class.text-gray-500]="currentStep < step"
+            [class.shadow-blue-600/25]="currentStep >= step"
+            [class.bg-slate-100]="currentStep < step"
+            [class.text-slate-500]="currentStep < step"
           >
-            {{ step }}
+            <svg *ngIf="currentStep > step" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            <span *ngIf="currentStep <= step">{{ step }}</span>
           </div>
-          <div class="whitespace-nowrap transition-all duration-300">
-            <span class="text-[10px] uppercase tracking-widest text-gray-400 block font-bold">Étape 0{{step}}</span>
-            <span class="text-sm font-medium text-gray-700">
+          <div class="whitespace-nowrap">
+            <span class="text-xs uppercase tracking-wider text-slate-400 block font-medium">Étape {{step}}</span>
+            <span class="text-sm font-medium text-slate-700">
               <span *ngIf="step === 1">Informations</span>
               <span *ngIf="step === 2">Contact</span>
               <span *ngIf="step === 3">Sécurité</span>
             </span>
           </div>
-          <div *ngIf="step < 3" class="w-12 h-px bg-gray-200 ml-4 hidden md:block"></div>
+          <div *ngIf="step < 3" class="w-8 h-px bg-slate-200 ml-2 hidden md:block"></div>
         </div>
       </div>
 
-      <!-- Success/Error Alerts -->
-      <div *ngIf="success" class="mb-8 p-4 rounded-2xl bg-green-50 text-green-700 text-sm border border-green-100 flex items-center gap-3 animate-in fade-in zoom-in duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <span class="font-medium">{{ success }}</span>
+      <!-- Alerts -->
+      <div *ngIf="success" class="mb-6 p-4 rounded-xl bg-green-50 text-green-700 text-sm border border-green-100 flex items-center gap-3">
+        <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        {{ success }}
       </div>
 
-      <div *ngIf="error" class="mb-8 p-4 rounded-2xl bg-red-50 text-red-700 text-sm border border-red-100 flex items-center gap-3 animate-in fade-in zoom-in duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span class="font-medium">{{ error }}</span>
+      <div *ngIf="error" class="mb-6 p-4 rounded-xl bg-red-50 text-red-700 text-sm border border-red-100 flex items-center gap-3">
+        <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+        </svg>
+        {{ error }}
       </div>
 
+      <!-- Form -->
       <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="space-y-8">
         
         <!-- Step 1: Personal Information -->
-        <div *ngIf="currentStep === 1" class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in slide-in-from-right-4 duration-500">
+        <div *ngIf="currentStep === 1" class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <!-- First Name -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Prénom</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <input type="text" formControlName="first_name" placeholder="Ex: Jean" class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" />
+            <label class="text-sm font-medium text-slate-700">Prénom</label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <input type="text" formControlName="first_name" placeholder="Ex: Jean" class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm" />
             </div>
-            <p *ngIf="first_name?.invalid && first_name?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Requis (min 2 car.)</p>
+            <p *ngIf="first_name?.invalid && first_name?.touched" class="text-xs text-red-500 ml-1">Requis (min 2 car.)</p>
           </div>
 
           <!-- Last Name -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Nom</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <input type="text" formControlName="last_name" placeholder="Ex: Dupont" class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" />
+            <label class="text-sm font-medium text-slate-700">Nom</label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <input type="text" formControlName="last_name" placeholder="Ex: Dupont" class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm" />
             </div>
-            <p *ngIf="last_name?.invalid && last_name?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Requis (min 2 car.)</p>
+            <p *ngIf="last_name?.invalid && last_name?.touched" class="text-xs text-red-500 ml-1">Requis (min 2 car.)</p>
           </div>
 
           <!-- Birth Date -->
           <div class="space-y-2 md:col-span-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Date de naissance (Min 18 ans)</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <input type="date" formControlName="birth_date" [max]="minBirthDate" class="bg-transparent text-gray-700 outline-none text-sm w-full h-full" />
+            <label class="text-sm font-medium text-slate-700">Date de naissance <span class="text-slate-400 font-normal">(min 18 ans)</span></label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <input type="date" formControlName="birth_date" [max]="minBirthDate" class="flex-1 bg-transparent text-slate-900 outline-none text-sm" />
             </div>
-            <p *ngIf="birth_date?.invalid && birth_date?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Date requise</p>
+            <p *ngIf="birth_date?.invalid && birth_date?.touched" class="text-xs text-red-500 ml-1">Date requise</p>
           </div>
 
           <!-- Gender -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Genre</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <select formControlName="gender" class="bg-transparent text-gray-700 outline-none text-sm w-full h-full appearance-none">
+            <label class="text-sm font-medium text-slate-700">Genre</label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <select formControlName="gender" class="flex-1 bg-transparent text-slate-900 outline-none text-sm appearance-none">
                 <option value="">Sélectionnez</option>
                 <option value="M">Masculin</option>
                 <option value="F">Féminin</option>
               </select>
             </div>
-            <p *ngIf="gender?.invalid && gender?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Requis</p>
+            <p *ngIf="gender?.invalid && gender?.touched" class="text-xs text-red-500 ml-1">Requis</p>
           </div>
 
           <!-- Nationality -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Nationalité</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <input type="text" formControlName="nationality" placeholder="Ex: Française" class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" />
+            <label class="text-sm font-medium text-slate-700">Nationalité</label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <input type="text" formControlName="nationality" placeholder="Ex: Française" class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm" />
             </div>
-            <p *ngIf="nationality?.invalid && nationality?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Requis</p>
+            <p *ngIf="nationality?.invalid && nationality?.touched" class="text-xs text-red-500 ml-1">Requis</p>
           </div>
         </div>
 
         <!-- Step 2: Contact Information -->
-        <div *ngIf="currentStep === 2" class="space-y-6 animate-in slide-in-from-right-4 duration-500">
+        <div *ngIf="currentStep === 2" class="space-y-5">
           <!-- Email -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Adresse Email</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <svg width="16" height="11" viewBox="0 0 16 11" fill="none" class="opacity-50"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 .55.571 0H15.43l.57.55v9.9l-.571.55H.57L0 10.45zm1.143 1.138V9.9h13.714V1.69l-6.503 4.8h-.697zM13.749 1.1H2.25L8 5.356z" fill="#6B7280"/></svg>
-              <input type="email" formControlName="email" placeholder="votre@email.com" class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" />
+            <label class="text-sm font-medium text-slate-700">Adresse Email</label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <input type="email" formControlName="email" placeholder="votre@email.com" class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm" />
             </div>
-            <p *ngIf="email?.invalid && email?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Email valide requis</p>
+            <p *ngIf="email?.invalid && email?.touched" class="text-xs text-red-500 ml-1">Email valide requis</p>
           </div>
 
           <!-- Phone -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Numéro de téléphone</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              <input type="tel" formControlName="phone_number" placeholder="Ex: +336..." class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" />
+            <label class="text-sm font-medium text-slate-700">Numéro de téléphone</label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+              <input type="tel" formControlName="phone_number" placeholder="Ex: +336..." class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm" />
             </div>
-            <p *ngIf="phone_number?.invalid && phone_number?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Numéro requis</p>
+            <p *ngIf="phone_number?.invalid && phone_number?.touched" class="text-xs text-red-500 ml-1">Numéro requis</p>
           </div>
 
           <!-- Address -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Adresse complète</label>
-            <div class="w-full bg-gray-50/50 border border-gray-200 rounded-2xl overflow-hidden p-4 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <textarea formControlName="address" rows="3" placeholder="Votre adresse..." class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full resize-none"></textarea>
+            <label class="text-sm font-medium text-slate-700">Adresse complète</label>
+            <div class="px-4 py-3 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <textarea formControlName="address" rows="3" placeholder="Votre adresse..." class="w-full bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm resize-none"></textarea>
             </div>
-            <p *ngIf="address?.invalid && address?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Min 10 caractères</p>
+            <p *ngIf="address?.invalid && address?.touched" class="text-xs text-red-500 ml-1">Min 10 caractères</p>
           </div>
         </div>
 
         <!-- Step 3: Security -->
-        <div *ngIf="currentStep === 3" class="space-y-6 animate-in slide-in-from-right-4 duration-500">
+        <div *ngIf="currentStep === 3" class="space-y-5">
           <!-- Password -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Mot de passe</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <svg width="13" height="17" viewBox="0 0 13 17" fill="none" class="opacity-50"><path d="M13 8.5c0-.938-.729-1.7-1.625-1.7h-.812V4.25C10.563 1.907 8.74 0 6.5 0S2.438 1.907 2.438 4.25V6.8h-.813C.729 6.8 0 7.562 0 8.5v6.8c0 .938.729 1.7 1.625 1.7h9.75c.896 0 1.625-.762 1.625-1.7zM4.063 4.25c0-1.406 1.093-2.55 2.437-2.55s2.438 1.144 2.438 2.55V6.8H4.061z" fill="#6B7280"/></svg>
-              <input type="password" formControlName="password" placeholder="Min 6 caractères" class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" />
+            <label class="text-sm font-medium text-slate-700">Mot de passe</label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+              <input type="password" formControlName="password" placeholder="Min 6 caractères" class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm" />
             </div>
-            <p *ngIf="password?.invalid && password?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">Min 6 car. requis</p>
+            <p *ngIf="password?.invalid && password?.touched" class="text-xs text-red-500 ml-1">Min 6 car. requis</p>
           </div>
 
           <!-- Confirm Password -->
           <div class="space-y-2">
-            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 ml-1">Confirmer</label>
-            <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-2xl overflow-hidden px-4 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-              <svg width="13" height="17" viewBox="0 0 13 17" fill="none" class="opacity-50"><path d="M13 8.5c0-.938-.729-1.7-1.625-1.7h-.812V4.25C10.563 1.907 8.74 0 6.5 0S2.438 1.907 2.438 4.25V6.8h-.813C.729 6.8 0 7.562 0 8.5v6.8c0 .938.729 1.7 1.625 1.7h9.75c.896 0 1.625-.762 1.625-1.7zM4.063 4.25c0-1.406 1.093-2.55 2.437-2.55s2.438 1.144 2.438 2.55V6.8H4.061z" fill="#6B7280"/></svg>
-              <input type="password" formControlName="confirmPassword" placeholder="Confirmer mot de passe" class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" />
+            <label class="text-sm font-medium text-slate-700">Confirmer le mot de passe</label>
+            <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-200">
+              <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+              <input type="password" formControlName="confirmPassword" placeholder="Confirmer mot de passe" class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm" />
             </div>
-            <p *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="text-[10px] text-red-500 font-bold uppercase ml-2">
+            <p *ngIf="confirmPassword?.invalid && confirmPassword?.touched" class="text-xs text-red-500 ml-1">
               <span *ngIf="confirmPassword?.errors?.['required']">Confirmation requise</span>
               <span *ngIf="confirmPassword?.errors?.['passwordMismatch']">Mots de passe différents</span>
             </p>
           </div>
 
-          <div class="bg-indigo-50/50 rounded-2xl p-5 border border-indigo-100/50">
+          <!-- Terms -->
+          <div class="bg-blue-50 rounded-xl p-5 border border-blue-100">
             <div class="flex gap-3">
-              <div class="mt-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              </div>
-              <p class="text-xs text-indigo-900/70 leading-relaxed font-medium">
-                En créant un compte, vous acceptez nos <a href="#" class="text-indigo-600 underline">conditions d'utilisation</a>. 
+              <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                En créant un compte, vous acceptez nos <a href="#" class="text-blue-600 underline">conditions d'utilisation</a>. 
                 Vos données sont protégées par notre politique de sécurité.
               </p>
             </div>
@@ -191,12 +254,12 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex items-center gap-4 pt-6">
+        <div class="flex items-center gap-4 pt-4">
           <button
             type="button"
             *ngIf="currentStep > 1"
             (click)="previousStep()"
-            class="h-12 px-8 rounded-full border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 transition-all duration-300"
+            class="h-12 px-8 rounded-xl border border-slate-200 text-slate-700 font-medium hover:bg-slate-50 transition-all duration-200"
           >
             Retour
           </button>
@@ -205,7 +268,7 @@
             type="button"
             *ngIf="currentStep < totalSteps"
             (click)="nextStep()"
-            class="flex-1 h-12 rounded-full bg-indigo-500 text-white font-medium hover:bg-indigo-600 shadow-lg shadow-indigo-100 transition-all duration-300"
+            class="flex-1 h-12 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-200"
           >
             Suivant
           </button>
@@ -214,12 +277,12 @@
             type="submit"
             *ngIf="currentStep === totalSteps"
             [disabled]="submitting || registerForm.invalid"
-            class="flex-1 h-12 rounded-full bg-indigo-500 text-white font-medium hover:bg-indigo-600 disabled:bg-indigo-300 shadow-lg shadow-indigo-100 transition-all duration-300 flex items-center justify-center gap-2"
+            class="flex-1 h-12 rounded-xl text-white font-semibold bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2"
           >
             <span *ngIf="!submitting">Créer mon compte</span>
             <span *ngIf="submitting" class="flex items-center gap-2">
-              <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
               Création...
@@ -228,17 +291,19 @@
         </div>
       </form>
 
-      <div class="mt-12 pt-8 border-t border-gray-100 text-center">
-        <p class="text-sm text-gray-500">
+      <!-- Footer -->
+      <div class="mt-10 pt-8 border-t border-slate-100 text-center">
+        <p class="text-slate-600">
           Vous avez déjà un compte ? 
-          <a routerLink="/client/login" class="text-indigo-500 font-semibold hover:underline">Connectez-vous</a>
+          <a routerLink="/client/login" class="text-blue-600 font-semibold hover:underline">Connectez-vous</a>
         </p>
       </div>
 
-      <p class="mt-12 text-[10px] text-gray-400 uppercase tracking-[0.2em] text-center font-bold">
-        © 2024 Système Bancaire - Plateforme Sécurisée
-      </p>
+      <div class="mt-6 text-center">
+        <a routerLink="/" class="text-sm text-slate-500 hover:text-slate-700 transition-colors">
+          ← Retour à l'accueil
+        </a>
+      </div>
     </div>
   </div>
 </div>
-

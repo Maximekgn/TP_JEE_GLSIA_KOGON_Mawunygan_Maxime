@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroArrowsRightLeft, heroChevronDown } from '@ng-icons/heroicons/outline';
 import { BankService, Account } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
 import { finalize, catchError } from 'rxjs/operators';
@@ -9,11 +11,19 @@ import { Observable, of } from 'rxjs';
 @Component({
   selector: 'app-admin-transfer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgIcon],
+  viewProviders: [
+    provideIcons({ heroArrowsRightLeft, heroChevronDown })
+  ],
   template: `
     <div class="max-w-2xl mx-auto space-y-8" *ngIf="accounts$ | async as accounts">
       <div class="space-y-2">
-        <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Virement Bancaire</h2>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-blue-100 rounded-xl">
+            <ng-icon name="heroArrowsRightLeft" size="1.5rem" class="text-blue-600"></ng-icon>
+          </div>
+          <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Virement Bancaire</h2>
+        </div>
         <p class="text-slate-500">Transférez des fonds entre deux comptes clients.</p>
       </div>
 
@@ -42,20 +52,7 @@ import { Observable, of } from 'rxjs';
                 <div
                   class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
+                  <ng-icon name="heroChevronDown" size="1.25rem"></ng-icon>
                 </div>
               </div>
               <p
@@ -69,9 +66,7 @@ import { Observable, of } from 'rxjs';
               </p>
             </div>
 
-            <!-- Destination Account (Dropdown or Input? Dropdown for admin is easier but user might want Input) -->
-            <!-- Let's provide Dropdown as 'Select from list' and an optional text input if list is huge?
-                 Simple admin panel: Dropdown is safer to avoid typos. -->
+            <!-- Destination Account -->
             <div class="space-y-2">
               <label class="block text-sm font-semibold text-slate-700"
                 >Compte Créditeur (Destination)</label
@@ -92,20 +87,7 @@ import { Observable, of } from 'rxjs';
                 <div
                   class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
+                  <ng-icon name="heroChevronDown" size="1.25rem"></ng-icon>
                 </div>
               </div>
               <p
@@ -203,7 +185,6 @@ export class TransferComponent implements OnInit {
       this.sourceBalance = account.balance;
       this.transferForm.updateValueAndValidity();
 
-      // If destination is same as source, reset destination
       if (this.transferForm.get('destinationAccountId')?.value == accountId) {
         this.transferForm.patchValue({ destinationAccountId: '' });
       }
@@ -227,7 +208,7 @@ export class TransferComponent implements OnInit {
     this.bankService
       .transfer({
         sourceAccount: { id: parseInt(sourceAccountId) },
-        destinationAccount: { id: parseInt(destinationAccountId) }, // Using ID for simplicity as we have dropdown
+        destinationAccount: { id: parseInt(destinationAccountId) },
         amount: parseFloat(amount),
         description: 'Virement Admin',
       })
@@ -236,7 +217,7 @@ export class TransferComponent implements OnInit {
         next: (tx) => {
           this.notificationService.showSuccess(`Virement de ${amount} FCFA effectué avec succès.`);
           this.transferForm.reset();
-          this.ngOnInit(); // Refresh to update balances
+          this.ngOnInit();
         },
         error: (err) => {
           this.notificationService.showError('Echec du virement. ' + (err.error?.message || ''));

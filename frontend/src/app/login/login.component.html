@@ -1,103 +1,165 @@
-<div class="flex h-screen w-full bg-white overflow-hidden">
-  <!-- Left Side Image -->
-  <div class="w-1/2 hidden lg:block overflow-hidden relative">
-    <img
-      class="h-full w-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-1000"
-      src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
-      alt="Admin Dashboard"
-    />
-    <div class="absolute inset-0 bg-indigo-900/10 backdrop-blur-[1px]"></div>
-    <div class="absolute top-12 left-12">
-      <div class="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
-        <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
-        <span class="text-white text-xs font-bold uppercase tracking-widest">Administration EGA BANK</span>
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex">
+  <!-- Left Side - Branding -->
+  <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-800 to-slate-900 p-12 flex-col justify-between relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-20">
+      <div class="absolute top-20 left-20 w-64 h-64 rounded-full bg-blue-500/20 blur-3xl"></div>
+      <div class="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-slate-500/20 blur-3xl"></div>
+    </div>
+    
+    <!-- Logo -->
+    <div class="flex items-center gap-3 relative z-10">
+      <div class="h-10 w-10 rounded-xl bg-white/10 backdrop-blur flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+        </svg>
+      </div>
+      <span class="font-bold text-white text-xl">EGA Bank</span>
+    </div>
+    
+    <!-- Message -->
+    <div class="relative z-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-500/30 mb-6">
+        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+        <span class="text-xs font-medium text-blue-300 uppercase tracking-wider">Accès sécurisé</span>
+      </div>
+      <h2 class="text-4xl font-bold text-white leading-tight mb-4">
+        Portail<br/>d'administration
+      </h2>
+      <p class="text-slate-400 text-lg">
+        Gestion des comptes, clients et opérations bancaires.
+      </p>
+    </div>
+    
+    <!-- Features -->
+    <div class="flex gap-6 relative z-10">
+      <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>Sécurisé</span>
+      </div>
+      <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>Traçabilité</span>
+      </div>
+      <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>Contrôle</span>
       </div>
     </div>
   </div>
 
-  <!-- Right Side Form -->
-  <div class="flex-1 flex flex-col items-center justify-center p-8 bg-white overflow-y-auto">
-    <div class="w-full max-w-sm animate-in fade-in slide-in-from-right-8 duration-1000">
-      
+  <!-- Right Side - Form -->
+  <div class="flex-1 flex items-center justify-center p-8 bg-white">
+    <div class="w-full max-w-md">
+      <!-- Mobile Logo -->
+      <div class="lg:hidden flex items-center gap-3 mb-8">
+        <div class="h-10 w-10 rounded-xl bg-slate-900 flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+          </svg>
+        </div>
+        <span class="font-bold text-slate-900 text-xl">EGA Bank</span>
+      </div>
+
       <!-- Back Link -->
-      <a routerLink="/" class="inline-flex items-center gap-2 text-xs text-gray-400 hover:text-indigo-500 transition-all duration-300 mb-8 font-bold uppercase tracking-widest group">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform"><path d="m15 18-6-6 6-6"/></svg>
-        Retour accueil
+      <a routerLink="/" class="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 transition-colors mb-8">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Retour à l'accueil
       </a>
 
       <!-- Header -->
-      <div class="mb-10">
-        <div class="w-12 h-12 bg-indigo-500 rounded-2xl rotate-3 flex items-center justify-center mb-6 shadow-xl shadow-indigo-100">
-          <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-          </svg>
-        </div>
-        <h2 class="text-4xl text-gray-900 font-medium">Administration</h2>
-        <p class="text-sm text-gray-500/90 mt-3">
-          Portail de gestion interne EGA BANK. Authentification requise.
-        </p>
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-slate-900">Administration</h1>
+        <p class="mt-2 text-slate-600">Portail de gestion interne EGA Bank</p>
       </div>
 
       <!-- Alerts -->
-      <div *ngIf="success" class="mb-6 p-4 rounded-xl bg-green-50 text-green-700 text-sm border border-green-100 flex items-center gap-2 animate-in zoom-in-95 duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <div *ngIf="success" class="mb-6 p-4 rounded-xl bg-green-50 text-green-700 text-sm border border-green-100 flex items-center gap-3">
+        <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
         {{ success }}
       </div>
 
-      <div *ngIf="error" class="mb-6 p-4 rounded-xl bg-red-50 text-red-700 text-sm border border-red-100 flex items-center gap-2 animate-in zoom-in-95 duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div *ngIf="error" class="mb-6 p-4 rounded-xl bg-red-50 text-red-700 text-sm border border-red-100 flex items-center gap-3">
+        <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+        </svg>
         {{ error }}
       </div>
 
-      <form [formGroup]="form" (ngSubmit)="login()" class="space-y-6">
+      <!-- Form -->
+      <form [formGroup]="form" (ngSubmit)="login()" class="space-y-5">
         <!-- Username -->
         <div class="space-y-2">
-          <label class="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400 ml-4">Utilisateur</label>
-          <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-full overflow-hidden px-6 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <input type="text" formControlName="username" placeholder="admin_username" class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" required />
+          <label class="text-sm font-medium text-slate-700">Utilisateur</label>
+          <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-slate-400 focus-within:ring-2 focus-within:ring-slate-100 transition-all duration-200">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <input 
+              type="text" 
+              formControlName="username" 
+              placeholder="admin_username"
+              class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm"
+            />
           </div>
-          <p *ngIf="form.get('username')?.touched && form.get('username')?.hasError('required')" class="text-[10px] text-red-500 font-bold uppercase ml-6">Requis</p>
+          <p *ngIf="form.get('username')?.touched && form.get('username')?.hasError('required')" class="text-xs text-red-500 ml-1">Requis</p>
         </div>
 
         <!-- Password -->
         <div class="space-y-2">
-          <label class="text-[10px] font-bold uppercase tracking-[0.15em] text-gray-400 ml-4">Mot de passe</label>
-          <div class="flex items-center w-full bg-gray-50/50 border border-gray-200 h-12 rounded-full overflow-hidden px-6 gap-3 focus-within:border-indigo-400 focus-within:ring-4 focus-within:ring-indigo-100 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <input type="password" formControlName="password" placeholder="••••••••" class="bg-transparent text-gray-700 placeholder-gray-400 outline-none text-sm w-full h-full" required />
+          <label class="text-sm font-medium text-slate-700">Mot de passe</label>
+          <div class="flex items-center gap-3 px-4 h-12 rounded-xl border border-slate-200 bg-white focus-within:border-slate-400 focus-within:ring-2 focus-within:ring-slate-100 transition-all duration-200">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            <input 
+              type="password" 
+              formControlName="password" 
+              placeholder="••••••••"
+              class="flex-1 bg-transparent text-slate-900 placeholder-slate-400 outline-none text-sm"
+            />
           </div>
-          <p *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')" class="text-[10px] text-red-500 font-bold uppercase ml-6">Requis</p>
+          <p *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')" class="text-xs text-red-500 ml-1">Requis</p>
         </div>
 
-        <!-- Submit -->
+        <!-- Submit Button -->
         <button
           type="submit"
           [disabled]="submitting || form.invalid"
-          class="w-full h-12 rounded-full bg-gray-900 text-white font-medium hover:bg-black disabled:bg-gray-300 shadow-xl shadow-gray-100 transition-all duration-300 flex items-center justify-center gap-2 mt-4"
+          class="w-full h-12 rounded-xl text-white font-semibold bg-slate-900 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
         >
           <span *ngIf="!submitting">Authentification</span>
           <span *ngIf="submitting" class="flex items-center gap-2">
-            <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             Vérification...
           </span>
         </button>
-
-        <div class="text-center pt-8 border-t border-gray-100">
-          <p class="text-xs text-gray-500">
-            Besoin d'accéder à vos comptes ? 
-            <a routerLink="/client/login" class="text-indigo-500 font-bold hover:underline">Espace Client</a>
-          </p>
-        </div>
       </form>
 
-      <p class="mt-20 text-[10px] text-gray-300 uppercase tracking-[0.3em] text-center font-bold">
+      <!-- Footer -->
+      <div class="mt-10 pt-8 border-t border-slate-100 text-center">
+        <p class="text-slate-600 text-sm">
+          Besoin d'accéder à vos comptes ? 
+          <a routerLink="/client/login" class="text-blue-600 font-semibold hover:underline">Espace Client</a>
+        </p>
+      </div>
+
+      <p class="mt-12 text-xs text-slate-400 text-center uppercase tracking-wider">
         Système de Sécurité - Accès Restreint
       </p>
     </div>
   </div>
 </div>
-

@@ -2,16 +2,21 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroArrowsRightLeft } from '@ng-icons/heroicons/outline';
 import { BankService, Account } from '../../../security/core/services/bank.service';
 import { ClientAuthService } from '../../../security/core/services/client-auth.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
 import { finalize, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-client-operations',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgIcon],
+  viewProviders: [
+    provideIcons({ heroArrowsRightLeft })
+  ],
   template: `
     <div class="space-y-8" *ngIf="!loadingAccounts; else loadingTemplate">
       <div
@@ -19,7 +24,12 @@ import { Observable, of } from 'rxjs';
       >
         <!-- Header -->
         <div class="p-8 border-b border-slate-100 bg-slate-50/30">
-          <h3 class="text-2xl font-bold text-slate-900">Virement Bancaire</h3>
+          <div class="flex items-center gap-3 mb-2">
+            <div class="p-2 bg-blue-100 rounded-xl">
+              <ng-icon name="heroArrowsRightLeft" size="1.25rem" class="text-blue-600"></ng-icon>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-900">Virement Bancaire</h3>
+          </div>
           <p class="text-slate-500 mt-1">
             Transférez des fonds en toute sécurité entre vos comptes ou vers un autre bénéficiaire.
           </p>
@@ -144,10 +154,7 @@ import { Observable, of } from 'rxjs';
               [disabled]="transferForm.invalid || isSubmitting"
               class="w-full py-4 mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-200 flex items-center justify-center gap-2"
             >
-              <svg *ngIf="isSubmitting" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
+              <div *ngIf="isSubmitting" class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
               {{ isSubmitting ? 'Traitement en cours...' : 'Confirmer le Virement' }}
             </button>
           </form>
@@ -201,7 +208,6 @@ export class ClientOperationsComponent implements OnInit {
       if (accountId) {
         this.transferForm.patchValue({ sourceAccountId: accountId });
         
-        // If accounts are already loaded, update balance immediately
         if (this.accounts.length > 0) {
           const acc = this.accounts.find((a: Account) => a.id == accountId);
           if (acc) this.currentBalance = acc.balance;
@@ -225,7 +231,6 @@ export class ClientOperationsComponent implements OnInit {
         next: (data) => {
           this.accounts = data;
           
-          // If we had a sourceAccountId from query params, update balance
           const sourceId = this.transferForm.get('sourceAccountId')?.value;
           if (sourceId) {
             const acc = this.accounts.find((a: Account) => a.id == sourceId);

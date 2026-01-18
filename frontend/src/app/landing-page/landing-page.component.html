@@ -1,386 +1,199 @@
-<!-- Landing Page (/) -->
-<a
-  class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:rounded-md focus:bg-white focus:text-slate-900 focus:ring-2 focus:ring-blue-300"
-  href="#main"
->
-  Aller au contenu
-</a>
-
-<div class="min-h-screen bg-white text-slate-900">
+<!-- Landing Page - Client Focused -->
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+  
   <!-- Header -->
-  <header class="border-b border-slate-200/70 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
         <div class="flex items-center gap-3">
-          <div
-            class="h-9 w-9 rounded-lg bg-blue-600 text-white grid place-items-center shadow-lg shadow-blue-600/20"
-            aria-hidden="true"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-600/25">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
             </svg>
           </div>
-          <div class="leading-tight">
-            <p class="font-bold tracking-wide text-lg">E-Bank Système</p>
-            <p class="text-xs text-slate-500">Votre banque en ligne sécurisée</p>
+          <div>
+            <p class="font-bold text-slate-900 text-lg tracking-tight">EGA Bank</p>
+            <p class="text-xs text-slate-500 hidden sm:block">Votre banque digitale</p>
           </div>
         </div>
 
-        <nav class="hidden md:flex items-center gap-8" aria-label="Navigation principale">
-          <a class="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors" href="#features">
-            Fonctionnalités
-          </a>
-          <a class="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors" href="#security">
-            Sécurité
-          </a>
-          <a class="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors" href="#faq">
-            FAQ
-          </a>
-        </nav>
-
+        <!-- Navigation -->
         <div class="flex items-center gap-3">
-          <a
-            routerLink="/login"
-            aria-label="Espace Admin"
-            class="hidden sm:inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
-          >
-            Espace Admin
-          </a>
-
-          <a
+          <a 
             routerLink="/client/login"
-            aria-label="Espace Client"
-            class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-600/30 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+            class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors"
           >
-            Espace Client
+            Connexion
+          </a>
+          <a 
+            routerLink="/client/register"
+            class="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-200"
+          >
+            Ouvrir un compte
           </a>
         </div>
       </div>
     </div>
   </header>
 
-  <main id="main">
-    <!-- Hero -->
-    <section class="relative overflow-hidden">
-      <div class="absolute inset-0 -z-10">
-        <div class="absolute -top-24 -right-24 h-80 w-80 rounded-full bg-blue-600/10 blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-sky-400/10 blur-3xl"></div>
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto text-center">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-8">
+        <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+        <span class="text-sm font-medium text-blue-700">100% en ligne • Sécurisé • Simple</span>
       </div>
 
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-          <div>
-            <p
-              class="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-100 px-3 py-1 text-xs font-semibold text-blue-700"
-              role="note"
-            >
-              <span class="h-2 w-2 rounded-full bg-blue-600" aria-hidden="true"></span>
-              Service bancaire moderne, simple et sécurisé
-            </p>
+      <!-- Title -->
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-tight">
+        La banque pensée pour
+        <span class="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">votre quotidien</span>
+      </h1>
 
-            <h1 class="mt-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
-              Votre banque nouvelle génération
-            </h1>
+      <!-- Subtitle -->
+      <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+        Gérez vos comptes, effectuez vos virements et suivez vos transactions en toute simplicité, 24h/24.
+      </p>
 
-            <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-xl">
-              Gérez vos comptes, vos opérations et votre historique en toute confiance. Une expérience claire,
-              rapide et accessible, pensée pour le quotidien.
-            </p>
+      <!-- CTA Buttons -->
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          routerLink="/client/register"
+          class="px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-200"
+        >
+          Créer mon compte gratuitement
+        </a>
+        <a 
+          routerLink="/client/login"
+          class="px-8 py-4 text-base font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
+        >
+          J'ai déjà un compte
+        </a>
+      </div>
 
-            <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <a
-                routerLink="/login"
-                aria-label="Se connecter"
-                class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/30 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all hover:-translate-y-0.5 active:translate-y-0"
-              >
-                Accéder à mon compte
-              </a>
-
-              <a
-                href="#features"
-                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
-              >
-                Découvrir plus
-              </a>
-            </div>
-
-            <dl class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div class="rounded-xl border border-slate-200 bg-white p-4">
-                <dt class="text-xs font-semibold text-slate-500">Disponibilité</dt>
-                <dd class="mt-1 text-sm font-bold text-slate-900">24/7</dd>
-              </div>
-              <div class="rounded-xl border border-slate-200 bg-white p-4">
-                <dt class="text-xs font-semibold text-slate-500">Transactions</dt>
-                <dd class="mt-1 text-sm font-bold text-slate-900">Suivi en temps réel</dd>
-              </div>
-              <div class="rounded-xl border border-slate-200 bg-white p-4">
-                <dt class="text-xs font-semibold text-slate-500">Sécurité</dt>
-                <dd class="mt-1 text-sm font-bold text-slate-900">Protection renforcée</dd>
-              </div>
-            </dl>
-          </div>
-
-          <!-- Visual -->
-          <div class="relative">
-            <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-xl">
-              <img
-                src="/service_client.jpg"
-                alt="Illustration d'une expérience bancaire digitale sécurisée"
-                class="w-full h-[320px] sm:h-[380px] lg:h-[460px] object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-
-            <div
-              class="absolute -bottom-6 left-6 right-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg"
-              role="group"
-              aria-label="Informations de confiance"
-            >
-              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div class="flex items-start gap-3">
-                  <div class="mt-0.5 h-9 w-9 rounded-lg bg-green-50 border border-green-200 grid place-items-center">
-                    <span class="text-green-700 font-bold" aria-hidden="true">✓</span>
-                  </div>
-                  <div>
-                    <p class="text-sm font-semibold text-slate-900">Connexion sécurisée</p>
-                    <p class="text-xs text-slate-600">
-                      Vérifications & contrôle d’accès pour protéger vos données.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="flex gap-2">
-                  <span class="inline-flex items-center rounded-full bg-slate-50 border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">
-                    Chiffrement
-                  </span>
-                  <span class="inline-flex items-center rounded-full bg-slate-50 border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">
-                    Audit
-                  </span>
-                  <span class="inline-flex items-center rounded-full bg-slate-50 border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">
-                    Traçabilité
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+      <!-- Trust Indicators -->
+      <div class="mt-16 flex flex-wrap justify-center gap-8 text-sm text-slate-500">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Chiffrement SSL</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Accessible 24/7</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>Support réactif</span>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Features / Values -->
-    <section id="features" class="bg-slate-50 border-y border-slate-200/70">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
-        <div class="max-w-2xl">
-          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-            Des fonctionnalités utiles, au bon endroit
-          </h2>
-          <p class="mt-3 text-slate-600">
-            Une interface cohérente et rapide pour gérer vos opérations bancaires essentielles.
+  <!-- Features Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+          Tout ce dont vous avez besoin
+        </h2>
+        <p class="mt-4 text-lg text-slate-600">
+          Une expérience bancaire moderne et intuitive
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-slate-900 mb-3">Gestion de comptes</h3>
+          <p class="text-slate-600 leading-relaxed">
+            Consultez vos soldes et suivez l'évolution de vos comptes en temps réel.
           </p>
         </div>
 
-        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- Card 1 -->
-          <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="h-11 w-11 rounded-xl bg-blue-50 border border-blue-100 grid place-items-center">
-              <span class="text-blue-700 font-bold" aria-hidden="true">≡</span>
-            </div>
-            <h3 class="mt-4 font-bold text-slate-900">Tableau de bord</h3>
-            <p class="mt-2 text-sm text-slate-600">
-              Accédez rapidement à vos comptes, soldes et dernières opérations.
-            </p>
-          </article>
-
-          <!-- Card 2 -->
-          <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="h-11 w-11 rounded-xl bg-green-50 border border-green-100 grid place-items-center">
-              <span class="text-green-700 font-bold" aria-hidden="true">⇄</span>
-            </div>
-            <h3 class="mt-4 font-bold text-slate-900">Transferts</h3>
-            <p class="mt-2 text-sm text-slate-600">
-              Effectuez vos transferts en quelques étapes, avec confirmation claire.
-            </p>
-          </article>
-
-          <!-- Card 3 -->
-          <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="h-11 w-11 rounded-xl bg-sky-50 border border-sky-100 grid place-items-center">
-              <span class="text-sky-700 font-bold" aria-hidden="true">⟳</span>
-            </div>
-            <h3 class="mt-4 font-bold text-slate-900">Historique</h3>
-            <p class="mt-2 text-sm text-slate-600">
-              Consultez vos transactions et filtrez pour retrouver l’essentiel.
-            </p>
-          </article>
-
-          <!-- Card 4 -->
-          <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="h-11 w-11 rounded-xl bg-red-50 border border-red-100 grid place-items-center">
-              <span class="text-red-700 font-bold" aria-hidden="true">!</span>
-            </div>
-            <h3 class="mt-4 font-bold text-slate-900">Notifications</h3>
-            <p class="mt-2 text-sm text-slate-600">
-              Restez informé grâce à des messages système accessibles et explicites.
-            </p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Security -->
-    <section id="security" class="bg-white">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-          <div>
-            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-              Sécurité et confiance institutionnelle
-            </h2>
-            <p class="mt-3 text-slate-600">
-              Vos données et vos opérations sont protégées par des contrôles d’accès et des mécanismes de sécurité
-              adaptés à un usage bancaire.
-            </p>
-
-            <ul class="mt-8 space-y-4">
-              <li class="flex gap-3">
-                <span class="mt-0.5 h-6 w-6 rounded-full bg-green-50 border border-green-200 grid place-items-center" aria-hidden="true">
-                  <span class="text-green-700 text-xs font-bold">✓</span>
-                </span>
-                <p class="text-sm text-slate-700">
-                  <span class="font-semibold text-slate-900">Accès contrôlé</span> via authentification et autorisations.
-                </p>
-              </li>
-              <li class="flex gap-3">
-                <span class="mt-0.5 h-6 w-6 rounded-full bg-blue-50 border border-blue-200 grid place-items-center" aria-hidden="true">
-                  <span class="text-blue-700 text-xs font-bold">✓</span>
-                </span>
-                <p class="text-sm text-slate-700">
-                  <span class="font-semibold text-slate-900">Traçabilité</span> des opérations importantes.
-                </p>
-              </li>
-              <li class="flex gap-3">
-                <span class="mt-0.5 h-6 w-6 rounded-full bg-slate-50 border border-slate-200 grid place-items-center" aria-hidden="true">
-                  <span class="text-slate-700 text-xs font-bold">✓</span>
-                </span>
-                <p class="text-sm text-slate-700">
-                  <span class="font-semibold text-slate-900">Conformité UX</span> : messages clairs et composants cohérents.
-                </p>
-              </li>
-            </ul>
+        <!-- Feature 2 -->
+        <div class="p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+            </svg>
           </div>
-
-          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
-            <h3 class="text-lg font-bold text-slate-900">Badges & certifications</h3>
-            <p class="mt-2 text-sm text-slate-600">
-              Indicateurs de confiance (exemples) — à adapter selon vos normes internes.
-            </p>
-
-            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="rounded-xl border border-slate-200 bg-white p-4">
-                <p class="text-sm font-semibold text-slate-900">Chiffrement des échanges</p>
-                <p class="mt-1 text-xs text-slate-600">Protection des données en transit.</p>
-              </div>
-
-              <div class="rounded-xl border border-slate-200 bg-white p-4">
-                <p class="text-sm font-semibold text-slate-900">Contrôles d’accès</p>
-                <p class="mt-1 text-xs text-slate-600">Rôles & autorisations selon le profil.</p>
-              </div>
-
-              <div class="rounded-xl border border-slate-200 bg-white p-4">
-                <p class="text-sm font-semibold text-slate-900">Journalisation</p>
-                <p class="mt-1 text-xs text-slate-600">Surveillance et audit des actions.</p>
-              </div>
-
-              <div class="rounded-xl border border-slate-200 bg-white p-4">
-                <p class="text-sm font-semibold text-slate-900">Disponibilité</p>
-                <p class="mt-1 text-xs text-slate-600">Service stable et résilient.</p>
-              </div>
-            </div>
-
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
-              <a
-                routerLink="/login"
-                aria-label="Se connecter"
-                class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/30 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
-              >
-                Se connecter
-              </a>
-              <a
-                href="#faq"
-                class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
-              >
-                Consulter la FAQ
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Optional: FAQ -->
-    <section id="faq" class="bg-white border-t border-slate-200/70">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
-        <div class="max-w-2xl">
-          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">FAQ</h2>
-          <p class="mt-3 text-slate-600">
-            Quelques réponses rapides. (À compléter selon votre périmètre fonctionnel.)
+          <h3 class="text-xl font-semibold text-slate-900 mb-3">Virements instantanés</h3>
+          <p class="text-slate-600 leading-relaxed">
+            Effectuez vos transferts en quelques clics, de manière sécurisée.
           </p>
         </div>
 
-        <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <details class="group rounded-2xl border border-slate-200 bg-white p-6">
-            <summary class="cursor-pointer list-none font-semibold text-slate-900 flex items-center justify-between">
-              Comment accéder à mon compte ?
-              <span class="ml-4 text-slate-500 group-open:rotate-180 transition-transform" aria-hidden="true">⌄</span>
-            </summary>
-            <p class="mt-3 text-sm text-slate-600">
-              Cliquez sur “Accéder à mon compte” ou “Se connecter” pour être redirigé vers la page de connexion.
-            </p>
-          </details>
-
-          <details class="group rounded-2xl border border-slate-200 bg-white p-6">
-            <summary class="cursor-pointer list-none font-semibold text-slate-900 flex items-center justify-between">
-              Mes données sont-elles protégées ?
-              <span class="ml-4 text-slate-500 group-open:rotate-180 transition-transform" aria-hidden="true">⌄</span>
-            </summary>
-            <p class="mt-3 text-sm text-slate-600">
-              L’application met en place des contrôles d’accès et des mesures de sécurité adaptées au contexte bancaire.
-            </p>
-          </details>
+        <!-- Feature 3 -->
+        <div class="p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-slate-900 mb-3">Historique détaillé</h3>
+          <p class="text-slate-600 leading-relaxed">
+            Accédez à l'ensemble de vos transactions avec des filtres avancés.
+          </p>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl p-10 sm:p-14 text-center shadow-2xl shadow-blue-600/20">
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">
+          Prêt à simplifier votre quotidien bancaire ?
+        </h2>
+        <p class="text-blue-100 text-lg mb-8">
+          Rejoignez EGA Bank et profitez d'une gestion financière sans effort.
+        </p>
+        <a 
+          routerLink="/client/register"
+          class="inline-flex px-8 py-4 text-base font-semibold text-blue-600 bg-white rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+        >
+          Commencer maintenant
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
-  <footer class="border-t border-slate-200 bg-slate-50">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-      <div class="flex flex-col sm:flex-row gap-6 sm:items-center sm:justify-between">
-        <div>
-          <p class="font-bold text-slate-900">EGA BANK</p>
-          <p class="text-sm text-slate-600">Une expérience bancaire claire et sécurisée.</p>
+  <footer class="py-10 px-4 sm:px-6 lg:px-8 border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+            </svg>
+          </div>
+          <span class="font-semibold text-slate-900">EGA Bank</span>
         </div>
-
-        <div class="flex flex-wrap gap-4">
-          <a class="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors" href="#features">
-            Fonctionnalités
-          </a>
-          <a class="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors" href="#security">
-            Sécurité
-          </a>
-          <a
-            class="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors"
-            routerLink="/login"
-            aria-label="Se connecter"
-          >
-            Connexion
-          </a>
+        
+        <div class="flex items-center gap-6 text-sm text-slate-600">
+          <a routerLink="/client/login" class="hover:text-slate-900 transition-colors">Connexion</a>
+          <a routerLink="/client/register" class="hover:text-slate-900 transition-colors">Inscription</a>
         </div>
       </div>
-
-      <p class="mt-8 text-xs text-slate-500">
-        © {{ currentYear }} EGA BANK — Tous droits réservés.
-      </p>
+      
+      <div class="mt-8 pt-6 border-t border-slate-100 text-center text-sm text-slate-500">
+        © {{ currentYear }} EGA Bank. Tous droits réservés.
+      </div>
     </div>
   </footer>
 </div>

@@ -2,6 +2,8 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroExclamationCircle, heroUsers } from '@ng-icons/heroicons/outline';
 import { BankService, Client } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
 import { DataTableComponent, DataTableColumn } from '../../shared/components/ui/data-table/data-table.component';
@@ -11,7 +13,10 @@ import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-admin-clients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, DataTableComponent],
+  imports: [CommonModule, FormsModule, DataTableComponent, NgIcon],
+  viewProviders: [
+    provideIcons({ heroExclamationCircle, heroUsers })
+  ],
   template: `
     <div *ngIf="loading()" class="flex flex-col items-center justify-center py-32 space-y-4">
       <div
@@ -24,20 +29,9 @@ import { catchError } from 'rxjs/operators';
       *ngIf="error()"
       class="bg-red-50 border border-red-200 text-red-700 p-6 rounded-2xl max-w-2xl mx-auto my-12 text-center"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="w-12 h-12 mx-auto mb-4"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-        />
-      </svg>
+      <div class="mb-4 flex justify-center">
+        <ng-icon name="heroExclamationCircle" size="3rem"></ng-icon>
+      </div>
       <h3 class="text-lg font-bold mb-2">Erreur de chargement</h3>
       <p class="mb-6">{{ error() }}</p>
       <button
@@ -49,7 +43,10 @@ import { catchError } from 'rxjs/operators';
     </div>
 
     <div class="space-y-6" *ngIf="!loading() && !error()">
-      <div class="flex flex-col space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-blue-100 rounded-xl">
+          <ng-icon name="heroUsers" size="1.5rem" class="text-blue-600"></ng-icon>
+        </div>
         <h2 class="text-2xl font-bold text-slate-800">Gestion des Clients</h2>
       </div>
 

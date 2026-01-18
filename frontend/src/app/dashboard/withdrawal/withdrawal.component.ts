@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroArrowDownTray, heroChevronDown } from '@ng-icons/heroicons/outline';
 import { BankService, Account } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
 import { finalize, catchError } from 'rxjs/operators';
@@ -9,11 +11,19 @@ import { Observable, of } from 'rxjs';
 @Component({
   selector: 'app-admin-withdrawal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgIcon],
+  viewProviders: [
+    provideIcons({ heroArrowDownTray, heroChevronDown })
+  ],
   template: `
     <div class="max-w-2xl mx-auto space-y-8" *ngIf="accounts$ | async as accounts">
       <div class="space-y-2">
-        <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Retrait sur Compte</h2>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-orange-100 rounded-xl">
+            <ng-icon name="heroArrowDownTray" size="1.5rem" class="text-orange-600"></ng-icon>
+          </div>
+          <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Retrait sur Compte</h2>
+        </div>
         <p class="text-slate-500">Effectuez un retrait depuis un compte client.</p>
       </div>
 
@@ -40,20 +50,7 @@ import { Observable, of } from 'rxjs';
                 <div
                   class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
+                  <ng-icon name="heroChevronDown" size="1.25rem"></ng-icon>
                 </div>
               </div>
               <p
@@ -183,7 +180,6 @@ export class WithdrawalComponent implements OnInit {
         next: (tx) => {
           this.notificationService.showSuccess(`Retrait de ${amount} FCFA effectué avec succès.`);
           this.withdrawalForm.reset();
-          // Refresh accounts to show new balance
           this.ngOnInit();
         },
         error: (err) => {

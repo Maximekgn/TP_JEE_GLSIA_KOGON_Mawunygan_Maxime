@@ -1,13 +1,38 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  heroBuildingLibrary,
+  heroBell,
+  heroArrowRightOnRectangle,
+  heroUsers,
+  heroCreditCard,
+  heroBanknotes,
+  heroArrowDownTray,
+  heroArrowsRightLeft,
+  heroClipboardDocumentList
+} from '@ng-icons/heroicons/outline';
 import { AuthService } from '../../../../security/core/services/auth.service';
 import { NotificationService } from '../../../../security/core/services/notification.service';
 
 @Component({
   selector: 'app-dashboard-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, RouterLinkActive, NgIcon],
+  viewProviders: [
+    provideIcons({
+      heroBuildingLibrary,
+      heroBell,
+      heroArrowRightOnRectangle,
+      heroUsers,
+      heroCreditCard,
+      heroBanknotes,
+      heroArrowDownTray,
+      heroArrowsRightLeft,
+      heroClipboardDocumentList
+    })
+  ],
   template: `
     <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-slate-200">
       <div class="mx-auto max-w-7xl px-6 py-3">
@@ -22,23 +47,28 @@ import { NotificationService } from '../../../../security/core/services/notifica
               class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white"
               aria-hidden="true"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-5 w-5"
-              >
-                <path
-                  d="M12 2 3 7v2h18V7l-9-5ZM4 10v9h4v-9H4Zm6 0v9h4v-9h-4Zm6 0v9h4v-9h-4ZM3 21h18v-1H3v1Z"
-                />
-              </svg>
+              <ng-icon name="heroBuildingLibrary" size="1.25rem"></ng-icon>
             </span>
             <span class="text-lg">GLSIA Bank</span>
           </a>
 
+          <!-- Navigation Links -->
+          <nav class="hidden md:flex items-center gap-1">
+            <a
+              *ngFor="let link of navLinks"
+              [routerLink]="link.href"
+              routerLinkActive="bg-blue-50 text-blue-600"
+              [routerLinkActiveOptions]="{ exact: link.exact }"
+              class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors text-sm font-medium"
+            >
+              <ng-icon [name]="link.icon" size="1.125rem"></ng-icon>
+              <span>{{ link.label }}</span>
+            </a>
+          </nav>
+
           <!-- Right side controls -->
           <div class="flex items-center gap-3">
-            <!-- Notifications (simple icon; uses NotificationService count) -->
+            <!-- Notifications -->
             <button
               type="button"
               class="relative inline-flex h-10 w-10 items-center justify-center rounded-xl hover:bg-slate-100 transition-colors text-slate-700"
@@ -46,20 +76,7 @@ import { NotificationService } from '../../../../security/core/services/notifica
               title="Notifications"
               aria-label="Notifications"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.7"
-                stroke="currentColor"
-                class="h-5 w-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M14.857 17.082A23.848 23.848 0 0018 18.75V12a6 6 0 10-12 0v6.75c1.03-.38 2.11-.69 3.214-.918m5.643-.75a3 3 0 11-5.714 0"
-                />
-              </svg>
+              <ng-icon name="heroBell" size="1.25rem"></ng-icon>
 
               <span
                 *ngIf="notificationCount > 0"
@@ -93,20 +110,7 @@ import { NotificationService } from '../../../../security/core/services/notifica
                 title="Déconnexion"
               >
                 <span class="hidden sm:inline">Déconnexion</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.8"
-                  stroke="currentColor"
-                  class="h-5 w-5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l-3-3m3 3l-3 3m3-3H9"
-                  />
-                </svg>
+                <ng-icon name="heroArrowRightOnRectangle" size="1.25rem"></ng-icon>
               </button>
             </div>
           </div>
@@ -114,7 +118,7 @@ import { NotificationService } from '../../../../security/core/services/notifica
 
         <!-- Optional hint (non-invasive) -->
         <div *ngIf="showNotificationsHint" class="mt-3 text-xs text-slate-500">
-          Les notifications s’affichent automatiquement en haut à droite lorsque l’application en envoie.
+          Les notifications s'affichent automatiquement en haut à droite lorsque l'application en envoie.
         </div>
       </div>
     </header>
@@ -126,6 +130,15 @@ export class DashboardNavbarComponent {
   private notificationService = inject(NotificationService);
 
   showNotificationsHint = false;
+
+  navLinks = [
+    { label: 'Clients', href: '/dashboard/admin/clients', icon: 'heroUsers', exact: false },
+    { label: 'Comptes', href: '/dashboard/admin/accounts', icon: 'heroCreditCard', exact: false },
+    { label: 'Dépôt', href: '/dashboard/admin/deposit', icon: 'heroBanknotes', exact: true },
+    { label: 'Retrait', href: '/dashboard/admin/withdraw', icon: 'heroArrowDownTray', exact: true },
+    { label: 'Virement', href: '/dashboard/admin/transfer', icon: 'heroArrowsRightLeft', exact: true },
+    { label: 'Transactions', href: '/dashboard/admin/transactions', icon: 'heroClipboardDocumentList', exact: true },
+  ];
 
   get notificationCount(): number {
     try {
@@ -158,8 +171,6 @@ export class DashboardNavbarComponent {
   }
 
   toggleNotificationsHint(): void {
-    // Since toast notifications already render via NotificationComponent (fixed position),
-    // this is just a lightweight UX feedback for the bell icon.
     this.showNotificationsHint = !this.showNotificationsHint;
   }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroBanknotes, heroChevronDown, heroPlus, heroInformationCircle } from '@ng-icons/heroicons/outline';
 import { BankService, Account } from '../../../security/core/services/bank.service';
 import { NotificationService } from '../../../security/core/services/notification.service';
 import { finalize, catchError } from 'rxjs/operators';
@@ -9,11 +11,19 @@ import { Observable, of } from 'rxjs';
 @Component({
   selector: 'app-admin-deposit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgIcon],
+  viewProviders: [
+    provideIcons({ heroBanknotes, heroChevronDown, heroPlus, heroInformationCircle })
+  ],
   template: `
     <div class="max-w-2xl mx-auto space-y-8" *ngIf="accounts$ | async as accounts">
       <div class="space-y-2">
-        <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Dépôt sur Compte</h2>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-green-100 rounded-xl">
+            <ng-icon name="heroBanknotes" size="1.5rem" class="text-green-600"></ng-icon>
+          </div>
+          <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Dépôt sur Compte</h2>
+        </div>
         <p class="text-slate-500">Effectuez un dépôt direct sur n'importe quel compte client.</p>
       </div>
 
@@ -39,20 +49,7 @@ import { Observable, of } from 'rxjs';
                 <div
                   class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-5 h-5"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
+                  <ng-icon name="heroChevronDown" size="1.25rem"></ng-icon>
                 </div>
               </div>
               <p
@@ -121,17 +118,7 @@ import { Observable, of } from 'rxjs';
             >
               <span *ngIf="!submitting">Confirmer le Dépôt</span>
               <span *ngIf="submitting">Traitement en cours...</span>
-              <svg
-                *ngIf="!submitting"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
+              <ng-icon *ngIf="!submitting" name="heroPlus" size="1.25rem"></ng-icon>
             </button>
           </form>
         </div>
@@ -140,20 +127,7 @@ import { Observable, of } from 'rxjs';
       <!-- Quick Info Card -->
       <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6 flex items-start space-x-4">
         <div class="bg-blue-100 p-2 rounded-lg shrink-0">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6 text-blue-600"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-            />
-          </svg>
+          <ng-icon name="heroInformationCircle" size="1.5rem" class="text-blue-600"></ng-icon>
         </div>
         <div class="space-y-1">
           <h4 class="text-sm font-bold text-blue-900 uppercase tracking-tight">Attention</h4>
@@ -164,7 +138,7 @@ import { Observable, of } from 'rxjs';
         </div>
       </div>
 
-      <!-- Logs Panel: Request / Response -->
+      <!-- Logs Panel -->
       <div class="mt-6 bg-slate-50 border border-slate-100 rounded-2xl p-4">
         <div class="flex items-center justify-between mb-2">
           <h4 class="text-sm font-semibold">Logs Requête / Réponse</h4>
@@ -202,8 +176,6 @@ export class AdminDepositComponent implements OnInit {
   depositForm: FormGroup;
   accounts$: Observable<Account[]> = of([]);
   submitting = false;
-
-  // In-memory logs shown in UI (most recent first)
   logs: string[] = [];
 
   private appendLog(message: string) {
@@ -251,7 +223,6 @@ export class AdminDepositComponent implements OnInit {
       sourceAccount: { id: parseInt(accountId) },
     };
 
-    // Log request payload in UI
     try {
       this.appendLog(
         `REQUEST -> POST /api/transactions/deposit payload=${JSON.stringify(payload)}`,
@@ -271,7 +242,7 @@ export class AdminDepositComponent implements OnInit {
             amount: null,
             description: 'Dépôt administratif',
           });
-          this.loadAccounts(); // Refresh balances
+          this.loadAccounts();
 
           try {
             const status = res?.status;

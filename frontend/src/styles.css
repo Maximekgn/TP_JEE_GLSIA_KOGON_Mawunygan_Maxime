@@ -66,3 +66,7 @@
 .duration-1000 {
   animation-duration: 1s;
 }
+
+html, body {
+  font-family: 'Roboto', sans-serif;
+}
