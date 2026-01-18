@@ -57,6 +57,13 @@ export const routes: Routes = [
             (m) => m.AdminClientsListComponent,
           ),
       },
+      {
+        path: 'admin/clients/create',
+        loadComponent: () =>
+          import('./dashboard/clients-create/client-create.component').then(
+            (m) => m.ClientCreateComponent,
+          ),
+      },
 
       {
         path: 'admin/clients/:id',

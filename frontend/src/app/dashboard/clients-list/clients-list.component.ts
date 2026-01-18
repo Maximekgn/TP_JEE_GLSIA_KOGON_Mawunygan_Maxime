@@ -43,14 +43,23 @@ import { catchError } from 'rxjs/operators';
     </div>
 
     <div class="space-y-6" *ngIf="!loading() && !error()">
-      <div class="flex items-center gap-4 mb-8">
-        <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl shadow-sm border border-blue-100/50">
-          <ng-icon name="heroUsers" size="1.5rem"></ng-icon>
+      <div class="flex items-center justify-between gap-4 mb-8">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl shadow-sm border border-blue-100/50">
+            <ng-icon name="heroUsers" size="1.5rem"></ng-icon>
+          </div>
+          <div>
+            <h2 class="text-3xl font-black text-slate-900 tracking-tight">Gestion des Clients</h2>
+            <p class="text-slate-500 text-sm font-medium">Administrez la base des clients et leurs informations.</p>
+          </div>
         </div>
-        <div>
-          <h2 class="text-3xl font-black text-slate-900 tracking-tight">Gestion des Clients</h2>
-          <p class="text-slate-500 text-sm font-medium">Administrez la base des clients et leurs informations.</p>
-        </div>
+        <button
+          (click)="goToCreate()"
+          class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all flex items-center gap-2"
+        >
+          <span class="text-xl leading-none">+</span>
+          Ajouter un client
+        </button>
       </div>
 
       <app-data-table
@@ -207,6 +216,10 @@ export class AdminClientsListComponent implements OnInit {
     this.router.navigate(['/dashboard/admin/clients', event.row.id]);
   }
 
+
+  goToCreate() {
+    this.router.navigate(['/dashboard/admin/clients/create']);
+  }
 
   deleteClient(id: number) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
